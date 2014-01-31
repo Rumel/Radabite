@@ -38,6 +38,18 @@ namespace Radabite
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            #region Foundation Bundles
+                bundles.Add(new StyleBundle("~/Content/foundation/css").Include(
+                    "~/Content/foundation/foundation.css",
+                    "~/Content/foundation/foundation.mvc.css",
+                    "~/Content/foundation/app.css"));
+
+                bundles.Add(new ScriptBundle("~/bundles/foundation").Include(
+                    "~/Scripts/foundation/foundation.js",
+                    "~/Scripts/foundation/foundation.*",
+                    "~/Scripts/foundation/app.js"));
+            #endregion
         }
     }
 }
