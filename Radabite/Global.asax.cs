@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Radabite.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,18 @@ namespace Radabite
     {
         protected void Application_Start()
         {
+            ViewEngines.Engines.Clear();
+
+            ExtendedRazor engine = new ExtendedRazor();
+            engine.AddViewLocationFormat("~/Client/WebClient/Views/{1}/{0}.cshtml");
+            engine.AddViewLocationFormat("~/Client/WebClient/Views/{1}/{0}.html");
+            engine.AddViewLocationFormat("~/Client/WebClient/Views/Shared/{1}/{0}.html");
+            // Add a shared location too, as the lines above are controller specific
+            engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{0}.cshtml");
+            engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{0}.vbhtml");
+
+            ViewEngines.Engines.Add(engine);
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -23,6 +36,8 @@ namespace Radabite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+
         }
     }
 }
