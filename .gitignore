@@ -233,6 +233,7 @@ $RECYCLE.BIN/
 
 ### Nuget ###
 packages/
+NuGet.exe
 
 ### Databases
 *.mdf
