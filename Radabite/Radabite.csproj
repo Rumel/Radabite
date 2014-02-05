@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
+    <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\BundleConfig.cs" />
