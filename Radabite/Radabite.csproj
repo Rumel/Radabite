@@ -194,7 +194,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accessors\EventAccessor.cs" />
+    <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\BundleConfig.cs" />
@@ -205,7 +205,7 @@
     <Compile Include="Client\WebClient\Controllers\HomeController.cs" />
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
-    <Compile Include="GlimpseSecurityPolicy.cs" />
+    <Compile Include="Client\WebClient\GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
