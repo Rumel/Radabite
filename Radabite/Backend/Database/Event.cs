@@ -8,7 +8,7 @@ namespace Radabite.Backend.Database
 {
     public class Event
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Title { get; set; }
 
