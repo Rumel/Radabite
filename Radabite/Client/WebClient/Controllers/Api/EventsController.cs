@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Radabite.Database;
-using Radabite.Managers;
+using Radabite.Backend.Database;
+using Radabite.Backend.Managers;
 
 namespace Radabite.Controllers.Api
 {
