@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Radabite.Database;
+using Radabite.Backend.Database;
 
-namespace Radabite.Interfaces
+namespace Radabite.Backend.Interfaces
 {
     interface IEventManager
     {

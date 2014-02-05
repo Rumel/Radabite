@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Radabite.Accessors;
-using Radabite.Database;
-using Radabite.Interfaces;
+using Radabite.Backend.Accessors;
+using Radabite.Backend.Database;
+using Radabite.Backend.Interfaces;
 
-namespace Radabite.Managers
+namespace Radabite.Backend.Managers
 {
     public class EventManager : IEventManager
     {

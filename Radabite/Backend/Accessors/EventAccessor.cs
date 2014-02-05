@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.Ajax.Utilities;
-using Radabite.Database;
-using Radabite.Interfaces;
+using Radabite.Backend.Database;
+using Radabite.Backend.Interfaces;
 
-namespace Radabite.Accessors
+namespace Radabite.Backend.Accessors
 {
     public class EventAccessor : IEventAccessor
     {
