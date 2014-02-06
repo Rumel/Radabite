@@ -6,23 +6,19 @@ using System.Net.Http;
 using System.Web.Http;
 using Radabite.Backend.Database;
 using Radabite.Backend.Managers;
+using Ninject;
+using Radabite.Backend.Interfaces;
 
 namespace Radabite.Controllers.Api
 {
     public class EventsController : ApiController
     {
-        private EventManager _eventManager
-        {
-            get
-            {
-                return new EventManager();
-            }
-        }
+      
 
         // GET api/<controller>
         public IEnumerable<Event> Get()
         {
-            return _eventManager.GetAll();
+            return ServiceManager.Kernel.Get<IEventManager>().GetAll();
         }
 
         // GET api/<controller>/5
