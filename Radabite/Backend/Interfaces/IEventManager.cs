@@ -9,7 +9,7 @@ namespace Radabite.Backend.Interfaces
 {
     interface IEventManager
     {
-        void Save(Event e);
+        SaveResult<Event> Save(Event e);
 
         IEnumerable<Event> GetAll();
     }

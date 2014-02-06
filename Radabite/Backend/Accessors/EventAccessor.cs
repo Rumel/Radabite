@@ -6,17 +6,19 @@ using Microsoft.Ajax.Utilities;
 using Radabite.Backend.Database;
 using Radabite.Backend.Interfaces;
 
+
 namespace Radabite.Backend.Accessors
 {
     public class EventAccessor : IEventAccessor
     {
-        public void Save(Event e)
+        public SaveResult<Event> Save(Event e)
         {
             using (var db = new Db())
             {
                 db.Events.Add(e);
                 db.SaveChanges();
-            }           
+            }
+            return new SaveResult<Event>(true, e);
         }
 
         public IEnumerable<Event> GetAll()

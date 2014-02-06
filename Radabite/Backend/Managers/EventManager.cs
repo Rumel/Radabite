@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Radabite.Backend.Accessors;
 using Radabite.Backend.Database;
+using Radabite.Backend.Accessors;
 using Radabite.Backend.Interfaces;
 
 namespace Radabite.Backend.Managers
@@ -18,9 +18,9 @@ namespace Radabite.Backend.Managers
             }
         }
 
-        public void Save(Event e)
+        public SaveResult<Event> Save(Event e)
         {
-            _eventAccessor.Save(e);
+            return _eventAccessor.Save(e);
         }
 
         public IEnumerable<Event> GetAll()
