@@ -4,27 +4,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Ninject;
 
 namespace Radabite.Backend.Managers
 {
     public class UserManager : IUserManager
     {
-        private UserAccessor _userAccessor
-        {
-            get
-            {
-                return new UserAccessor();
-            }
-        }
-
+     
         public Database.User GetById(long id)
         {
-            return _userAccessor.GetById(id);
+            return ServiceManager.Kernel.Get<IUserManager>().GetById(id);
         }
 
         public void Save(Database.User user)
         {
-            _userAccessor.Save(user);
+            ServiceManager.Kernel.Get<IUserManager>().Save(user);
         }
     }
 }
