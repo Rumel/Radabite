@@ -10,11 +10,13 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
     @Styles.Render("~/Content/foundation/css")
+    @Styles.Render("~/Content/Radabite")
 
     @RenderSection("head", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @Html.Partial("~/Client/WebClient/Views/Shared/_NavigationBar.cshtml", Request.Params)
     @RenderBody()
 
     @Scripts.Render("~/bundles/jquery")

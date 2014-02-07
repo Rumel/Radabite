@@ -226,6 +226,7 @@
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
+    <Content Include="Client\WebClient\Content\Radabite.css" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -350,6 +351,10 @@
     <Content Include="Client\WebClient\Views\Web.config" />
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
     <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\UserProfile.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\CreateEvent.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\DiscoverEvent.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\WebClient\App_Data\" />

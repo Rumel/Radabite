@@ -1,0 +1,17 @@
+﻿ul.navbar {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+li.navbar{
+    float:left;
+}
+
+a.navbar{
+    display:block;
+    width:80px;
+    text-align:center;
+    text-decoration:none;
+}
+
