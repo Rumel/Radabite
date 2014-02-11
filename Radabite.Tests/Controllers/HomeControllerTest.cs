@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Radabite;
-using Radabite.Controllers;
+using Radabite.Client.WebClient.Controllers;
 
 namespace Radabite.Tests.Controllers
 {

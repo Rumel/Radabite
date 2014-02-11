@@ -21,8 +21,9 @@ namespace Radabite
 
             ExtendedRazor engine = new ExtendedRazor();
             engine.AddViewLocationFormat("~/Client/WebClient/Views/{1}/{0}.cshtml");
-            engine.AddViewLocationFormat("~/Client/WebClient/Views/{1}/{0}.html");
-            engine.AddViewLocationFormat("~/Client/WebClient/Views/Shared/{1}/{0}.html");
+            engine.AddViewLocationFormat("~/Client/WebClient/Views/{1}/{0}.cshtml");
+            engine.AddViewLocationFormat("~/Client/WebClient/Views/{0}.cshtml");
+            engine.AddViewLocationFormat("~/Client/WebClient/Views/Shared/{1}/{0}.cshtml");
             // Add a shared location too, as the lines above are controller specific
             engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{0}.cshtml");
             engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{0}.vbhtml");

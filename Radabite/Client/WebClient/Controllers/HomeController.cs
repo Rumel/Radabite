@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Radabite.Controllers
+namespace Radabite.Client.WebClient.Controllers
 {
     public class HomeController : Controller
     {
@@ -29,5 +29,28 @@ namespace Radabite.Controllers
             return View();
         }
 
+        public ActionResult UserProfile(long userId)
+        {
+            ViewBag.Message = userId.ToString() + "'s profile page.";
+            ViewBag.userId = userId;
+
+            return View();
+        }
+
+        public ActionResult CreateEvent(long userId)
+        {
+            ViewBag.Message = userId.ToString() + "'s Create Event page.";
+            ViewBag.userId = userId;
+
+            return View();
+        }
+        
+        public ActionResult DiscoverEvent(long userId)
+        {
+            ViewBag.Message = userId.ToString() + "'s Discover Event page.";
+            ViewBag.userId = userId;
+
+            return View();
+        }
     }
 }

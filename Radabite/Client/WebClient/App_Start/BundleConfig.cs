@@ -50,6 +50,9 @@ namespace Radabite
                     "~/Client/WebClient/Scripts/foundation/foundation.*",
                     "~/Client/WebClient/Scripts/foundation/app.js"));
             #endregion
+
+                bundles.Add(new StyleBundle("~/Content/Radabite").Include(
+                    "~/Client/WebClient/Content/Radabite.css"));
         }
     }
 }
