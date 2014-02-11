@@ -8,8 +8,8 @@ using TweetSharp;
 namespace Radabite.Backend.Managers
 {
     public class TwitterManager
-    {   
-
+    {
+        
 
     }
 }
