@@ -61,6 +61,9 @@
       <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Newtonsoft.Json.dll</HintPath>
@@ -211,6 +214,7 @@
     <Compile Include="Backend\Managers\TwitterManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\SocialMediaController.cs" />
+    <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\BundleConfig.cs" />
@@ -230,11 +234,13 @@
     <Compile Include="Backend\Managers\EventManager.cs" />
     <Compile Include="Client\WebClient\Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
+    <Content Include="Client\WebClient\Content\Radabite.css" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -361,6 +367,10 @@
     <Content Include="Client\WebClient\Views\Web.config" />
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
     <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\UserProfile.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\CreateEvent.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\DiscoverEvent.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\WebClient\App_Data\" />
