@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hammock;
+using Hammock.Authentication.OAuth;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -15,22 +17,28 @@ namespace Radabite.Client.WebClient.Controllers
 
         public ActionResult Authorize()
         {
-            // Step 1 - Retrieve an OAuth Request Token
-            TwitterService service = new TwitterService("consumerKey", "consumerSecret");
+            string _consumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+            string _consumerSecret = ConfigurationManager.AppSettings["twitterSecretKey"];
 
+            // Step 1 - Retrieve an OAuth Request Token
+            TwitterService service = new TwitterService(_consumerKey, _consumerSecret);
+            
             // This is the registered callback URL
-            OAuthRequestToken requestToken = service.GetRequestToken("http://localhost:8080/SocialMediaController/AuthorizeTwitterCallback");
+            OAuthRequestToken requestToken = service.GetRequestToken("http://localhost:3000/SocialMedia/AuthorizeTwitterCallback");
 
             // Step 2 - Redirect to the OAuth Authorization URL
             Uri uri = service.GetAuthorizationUri(requestToken);
             return new RedirectResult(uri.ToString(), false /*permanent*/);
+
+
         }
+
 
         // This URL is registered as the application's callback at http://dev.twitter.com
         public ActionResult AuthorizeTwitterCallback(string oauth_token, string oauth_verifier)
         {
             string _consumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
-            string _consumerSecret = ConfigurationManager.AppSettings["twitterSecretKey"];        
+            string _consumerSecret = ConfigurationManager.AppSettings["twitterSecretKey"];
 
             var requestToken = new OAuthRequestToken { Token = oauth_token };
 
@@ -42,7 +50,7 @@ namespace Radabite.Client.WebClient.Controllers
             service.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
             TwitterUser user = service.VerifyCredentials(new VerifyCredentialsOptions());
             //ViewModel.Message = string.Format("Your username is {0}", user.ScreenName);
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
     }
