@@ -29,12 +29,5 @@ namespace Radabite.Client.WebClient.Controllers
             return View();
         }
 
-        public ActionResult UserProfile(long userId)
-        {
-            ViewBag.Message = userId.ToString() + "'s profile page.";
-            ViewBag.userId = userId;
-
-            return View();
-        }
     }
 }

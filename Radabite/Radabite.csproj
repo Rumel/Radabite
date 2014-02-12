@@ -207,6 +207,7 @@
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\Controllers\EventController.cs" />
+    <Compile Include="Client\WebClient\Controllers\UserProfileController.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\BundleConfig.cs" />
@@ -357,7 +358,7 @@
     <Content Include="Client\WebClient\Views\Web.config" />
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
     <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Home\UserProfile.cshtml" />
+    <Content Include="Client\WebClient\Views\UserProfile\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Event\CreateEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
