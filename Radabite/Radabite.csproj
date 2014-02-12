@@ -361,7 +361,7 @@
     <Content Include="Client\WebClient\Views\Event\CreateEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
-    <Content Include="Client\WebClient\Views\Event\Event.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\WebClient\App_Data\" />

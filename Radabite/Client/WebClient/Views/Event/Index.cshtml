@@ -1,0 +1,50 @@
+﻿@using Radabite.Backend.Database
+
+
+@{
+	ViewBag.Title = "Event";
+}
+
+@model Event
+
+<div class="row">
+	<hgroup class="title">
+		<h2>@ViewBag.Message</h2>
+	</hgroup>
+</div>
+
+<div class="row">
+	<h3>@Model.Title</h3>
+</div>
+
+<div class="row">
+	<ul>
+		<li>
+			<h5>Time:</h5>
+			<ul class="inline-list">
+				<li>@Model.StartTime</li>
+				<li>-</li>
+				<li>@Model.EndTime</li>
+			</ul>
+		</li>
+		<li>
+			<h5>Location:</h5>
+			<span>@Model.Location.LocationName</span>
+		</li>
+		<li>
+			<h5>Privacy:</h5>
+			@{
+				if(Model.IsPrivate)
+				{
+					<span style="color: blue" class="inline">Private</span>	
+					<span style="color: gray" class="inline">Public</span>
+				}
+				else
+				{
+					<span style="color: gray" class="inline">Private</span>	
+					<span style="color: blue" class="inline">Public</span>
+				}
+			}
+		</li>
+	</ul>
+</div>
