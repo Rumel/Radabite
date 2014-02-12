@@ -36,21 +36,5 @@ namespace Radabite.Client.WebClient.Controllers
 
             return View();
         }
-
-        public ActionResult CreateEvent(long userId)
-        {
-            ViewBag.Message = userId.ToString() + "'s Create Event page.";
-            ViewBag.userId = userId;
-
-            return View();
-        }
-        
-        public ActionResult DiscoverEvent(long userId)
-        {
-            ViewBag.Message = userId.ToString() + "'s Discover Event page.";
-            ViewBag.userId = userId;
-
-            return View();
-        }
     }
 }
