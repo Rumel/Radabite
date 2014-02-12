@@ -300,6 +300,7 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
+    <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config" />
@@ -370,7 +371,6 @@
     <Content Include="Client\WebClient\Views\Shared\_Layout.cshtml" />
     <Content Include="Client\WebClient\Views\Web.config" />
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
-    <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
     <Content Include="Client\WebClient\Views\UserProfile\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Event\CreateEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
