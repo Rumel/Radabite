@@ -11,10 +11,11 @@ namespace Radabite.Client.WebClient.Controllers
     {
         //
         // GET: /Event/
-        public ActionResult Index(long eventId)
+        public ActionResult Index(long eventId, long userId)
         {
 			ViewBag.Message = "Event " + eventId.ToString();
 			ViewBag.eventId = eventId;
+			ViewBag.userId = userId;
 
 			Event dummy = new Event()
 			{

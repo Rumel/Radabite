@@ -28,9 +28,10 @@
     <div class="large-8 medium-8 columns">
         <h3>Your Events</h3>
         @foreach (var item in Model){
-            <div class="panel" style="width:600px;height:100px;border:1px solid #000;">
+            <div class="panel" style="width:600px;height:150px;border:1px solid #000;">
                 <p>@item.Title</p>
                 <p>@item.Description</p>
+				@Html.ActionLink("Event", "../Event", new { eventId = item.Id, userId = ViewBag.userId })
             </div>
         }
     </div>

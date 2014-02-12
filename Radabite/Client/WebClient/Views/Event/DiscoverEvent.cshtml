@@ -19,9 +19,9 @@
     </div>
     <div class="large-8 medium-8 columns">
         <h3>Find Events</h3>
-        <div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 1 })</div>
-        <div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 2 })</div>
-        <div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 3 })</div>
+        <div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 1 , userId = ViewBag.userId })</div>
+        <div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 2 , userId = ViewBag.userId })</div>
+        <div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 3 , userId = ViewBag.userId })</div>
     </div>
 </div>
 
