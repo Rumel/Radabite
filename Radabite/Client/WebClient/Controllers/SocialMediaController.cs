@@ -15,7 +15,7 @@ namespace Radabite.Client.WebClient.Controllers
         //
         // GET: /SocialMedia/
 
-        public ActionResult Authorize()
+        public ActionResult AuthorizeTwitter()
         {
             string _consumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
             string _consumerSecret = ConfigurationManager.AppSettings["twitterSecretKey"];
@@ -49,8 +49,11 @@ namespace Radabite.Client.WebClient.Controllers
             // Step 4 - User authenticates using the Access Token
             service.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
             TwitterUser user = service.VerifyCredentials(new VerifyCredentialsOptions());
-            //ViewModel.Message = string.Format("Your username is {0}", user.ScreenName);
-            return RedirectToAction("Index", "Home");
+
+            // create/get a user here
+            // add user id as the third argument to RedirectToAction below
+            long _userId = 001;
+            return RedirectToAction("UserProfile", "Home", new { userId = _userId });
         }
 
     }
