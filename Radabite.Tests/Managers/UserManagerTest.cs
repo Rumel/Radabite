@@ -20,6 +20,7 @@ namespace Radabite.Tests.Managers
         {
             return new User
             {
+                Id = 1,
                 Age = 21,
                 DisplayName = "Bilbo Baggins",
                 Email = "bilbo@hobbiton.com",
@@ -44,27 +45,20 @@ namespace Radabite.Tests.Managers
         {
             var u = CreateUser();
             var result = ServiceManager.Kernel.Get<IUserManager>().Save(u);
-            Assert.AreEqual(true, result.Success);
+            Assert.IsTrue(result.Success);
             Assert.IsTrue(result.Result.Id > 0);
         }
 
         [TestMethod]
         public void GetAllTest()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                var u = CreateUser();
-                ServiceManager.Kernel.Get<IUserManager>().Save(u);
-            }
-            Assert.AreEqual(10, ServiceManager.Kernel.Get<IUserManager>().GetAll().Count());
+            Assert.AreEqual(5, ServiceManager.Kernel.Get<IUserManager>().GetAll().Count());
         }
 
         [TestMethod]
         public void GetByIdTest()
         {
-            var u = CreateUser();
-            var result = ServiceManager.Kernel.Get<IUserManager>().Save(u);
-            Assert.AreEqual(result.Result, ServiceManager.Kernel.Get<IUserManager>().GetById(result.Result.Id));
+            Assert.AreEqual(1, ServiceManager.Kernel.Get<IUserManager>().GetById(1).Id);
         }
     }
 }

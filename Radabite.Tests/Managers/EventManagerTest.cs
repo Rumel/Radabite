@@ -18,7 +18,7 @@ namespace Radabite.Tests.Managers
     {
         private Event CreateNewEvent()
         {
-           return new Event
+            return new Event
             {
                 Description = "My cool description",
                 EndTime = DateTime.Now + TimeSpan.FromHours(2),
@@ -46,27 +46,20 @@ namespace Radabite.Tests.Managers
         {
             var e = CreateNewEvent();
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(e);
-            Assert.AreEqual(result.Success, true);
-            Assert.IsTrue(result.Result.Id > 0);
+            Assert.IsTrue(result.Success);
+            Assert.IsTrue(result.Result.Id == 1);
         }
 
         [TestMethod]
         public void GetAllTest()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                var e = CreateNewEvent();
-                ServiceManager.Kernel.Get<IEventManager>().Save(e);
-            }
-            Assert.AreEqual(10, ServiceManager.Kernel.Get<IEventManager>().GetAll().Count());
+            Assert.AreEqual(5, ServiceManager.Kernel.Get<IEventManager>().GetAll().Count());
         }
 
         [TestMethod]
         public void GetById()
         {
-            var e = CreateNewEvent();
-            var result = ServiceManager.Kernel.Get<IEventManager>().Save(e);
-            Assert.AreEqual(result.Result, ServiceManager.Kernel.Get<IEventManager>().GetById(result.Result.Id));
+            Assert.AreEqual(1, ServiceManager.Kernel.Get<IEventManager>().GetById(1).Id);
         }
     }
 }

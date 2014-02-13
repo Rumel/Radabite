@@ -37,6 +37,9 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
@@ -121,7 +124,6 @@
   <ItemGroup>
     <Compile Include="Managers\EventManagerTest.cs" />
     <Compile Include="Managers\UserManagerTest.cs" />
-    <Compile Include="Mocks\Accessors\GenericAccessor.cs" />
     <Compile Include="Mocks\Accessors\MockEventAccessor.cs" />
     <Compile Include="Mocks\Accessors\MockUserAccessor.cs" />
     <Compile Include="Mocks\Managers\MockEventManager.cs" />

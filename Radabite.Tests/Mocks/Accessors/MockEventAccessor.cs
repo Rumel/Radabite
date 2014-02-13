@@ -10,26 +10,30 @@ namespace Radabite.Tests.Mocks.Accessors
 {
     public class MockEventAccessor : IEventAccessor
     {
-        private GenericAccessor<Event> Event;
-
-        public MockEventAccessor()
-        {
-            Event = new GenericAccessor<Event>();
-        }
-
         public SaveResult<Event> Save(Event t)
         {
-            return Event.Save(t);
+            t.Id = 1;
+            return new SaveResult<Event>(true, t);
         }
 
         public Event GetById(long id)
         {
-            return Event.GetById(id);
+            return new Event()
+            {
+                Id = id
+            };
         }
 
         public IEnumerable<Event> GetAll()
         {
-            return Event.GetAll();
+            return new List<Event>
+            {
+                new Event(),
+                new Event(),
+                new Event(),
+                new Event(),
+                new Event()
+            };
         }
     }
 }

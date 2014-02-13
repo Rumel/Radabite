@@ -10,26 +10,30 @@ namespace Radabite.Tests.Mocks.Accessors
 {
     public class MockUserAccessor : IUserAccessor
     {
-        private GenericAccessor<User> User;
-
-        public MockUserAccessor()
-        {
-            User = new GenericAccessor<User>();    
-        }
-
         public SaveResult<User> Save(User t)
         {
-            return User.Save(t);
+            t.Id = 1;
+            return new SaveResult<User>(true, t);
         }
 
         public User GetById(long id)
         {
-            return User.GetById(id);
+            return new User
+            {
+                Id = 1
+            };
         }
 
         public IEnumerable<User> GetAll()
         {
-            return User.GetAll();
+            return new List<User>
+            {
+                new User(),
+                new User(),
+                new User(),
+                new User(),
+                new User()
+            };
         }
     }
 }
