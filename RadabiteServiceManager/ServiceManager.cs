@@ -1,15 +1,15 @@
-﻿using Ninject;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
+using Ninject;
 
-namespace Radabite
+namespace RadabiteServiceManager
 {
     public class ServiceManager
     {
-
         private static IKernel _kernel;
         public static IKernel Kernel
         {
@@ -18,7 +18,6 @@ namespace Radabite
                 if (_kernel == null)
                 {
                     _kernel = new StandardKernel();
-                    _kernel.Load(Assembly.GetExecutingAssembly());
                 }
                 return _kernel;
             }

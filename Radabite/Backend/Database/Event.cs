@@ -6,10 +6,8 @@ using System.Web;
 
 namespace Radabite.Backend.Database
 {
-    public class Event
+    public class Event : DataObject
     {
-        public long Id { get; set; }
-
         public string Title { get; set; }
 
         public DateTime StartTime { get; set; }

@@ -28,5 +28,14 @@ namespace Radabite.Backend.Accessors
                 return db.Events.ToList();
             }
         }
+
+
+        public Event GetById(long id)
+        {
+            using (var db = new Db())
+            {
+                return db.Events.FirstOrDefault(x => x.Id == id);
+            }
+        }
     }
 }
