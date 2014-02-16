@@ -50,7 +50,22 @@ namespace Radabite.Client.WebClient.Controllers
 			ViewBag.Message = userId.ToString() + "'s Discover Event page.";
 			ViewBag.userId = userId;
 
-			return View();
+			//change this to actually get the user's friends
+
+			List<User> friends = new List<User>();
+
+			//dummy friends
+			for (int i = 0; i < 5; i++)
+			{
+				friends.Add(new User()
+				{
+					Id = i,
+					DisplayName = "Person " + i
+				});
+			}
+
+
+			return View(friends);
 		}
 
     }

@@ -12,6 +12,7 @@ namespace Radabite.Client.WebClient.Controllers
 
         public ActionResult Index(long userId)
         {
+
             //Get list of events that user is involved in
             List<Event> eventList = new List<Event>();
 

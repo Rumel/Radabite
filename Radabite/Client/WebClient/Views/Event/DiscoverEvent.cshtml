@@ -1,6 +1,10 @@
-﻿@{
+﻿@using Radabite.Backend.Database
+
+@{
     ViewBag.Title = "Discover Event";
 }
+
+@model List<User>
 
 <div class="row">
 <hgroup class="title">
@@ -12,10 +16,19 @@
 <div class="row">
     <div class="large-4 medium-4 columns">
         <h3>Friends</h3>
-        <div style="width:300px;height:30px;border:1px solid #000;">This is a friend's profile!</div>
-        <div style="width:300px;height:30px;border:1px solid #000;">This is a friend's profile!</div>
-        <div style="width:300px;height:30px;border:1px solid #000;">This is a friend's profile!</div>
-        <div style="width:300px;height:30px;border:1px solid #000;">This is a friend's profile!</div>
+		@{
+			if(Model.Count() == 0)
+			{
+				<div style="width:300px;height:30px;border:1px solid #000;">You don't have any friends :(</div>
+			}
+			else
+			{
+				foreach(User friend in Model)
+				{
+					<div style="width:300px;height:30px;border:1px solid #000;">@Html.ActionLink(friend.DisplayName, "../UserProfile", new { userId = friend.Id } )</div>
+				}
+			}
+		}
     </div>
     <div class="large-8 medium-8 columns">
         <h3>Find Events</h3>
