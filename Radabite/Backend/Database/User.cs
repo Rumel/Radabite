@@ -19,6 +19,6 @@ namespace Radabite.Backend.Database
         public string PhotoLink { get; set; }
         public string SelfDescription { get; set; }
         public int Age { get; set; }
-
+		public IList<User> Friends { get; set; }
     }
 }
