@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Radabite.Backend.Database;
-using Radabite.Backend.Accessors;
 using Radabite.Backend.Interfaces;
 using Ninject;
+using RadabiteServiceManager;
 
 namespace Radabite.Backend.Managers
 {
@@ -14,12 +14,18 @@ namespace Radabite.Backend.Managers
 
         public SaveResult<Event> Save(Event e)
         {
-            return ServiceManager.Kernel.Get<IEventManager>().Save(e);
+            return ServiceManager.Kernel.Get<IEventAccessor>().Save(e);
         }
 
         public IEnumerable<Event> GetAll()
         {
-            return ServiceManager.Kernel.Get<IEventManager>().GetAll();
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetAll();
+        }
+
+
+        public Event GetById(long id)
+        {
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetById(id);
         }
     }
 }

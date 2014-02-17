@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Radabite.Models;
 
 namespace Radabite.Backend.Accessors
 {
@@ -14,18 +15,26 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.Find(id);
+                return db.Users.FirstOrDefault(x => x.Id == id);
             } 
         }
 
-        public void Save(Database.User user)
+        public SaveResult<User> Save(User t)
         {
             using (var db = new Db())
             {
-                db.Users.Add(user);
+                db.Users.Add(t);
                 db.SaveChanges();
             }
+            return new SaveResult<User>(true, t);
         }
 
+        public IEnumerable<User> GetAll()
+        {
+            using (var db = new Db())
+            {
+                return db.Users.ToList();
+            }
+        }
     }
 }

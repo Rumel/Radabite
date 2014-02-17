@@ -1,27 +1,28 @@
-﻿using Radabite.Backend.Accessors;
+﻿using Ninject;
 using Radabite.Backend.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Radabite.Backend.Interfaces;
+using RadabiteServiceManager;
 
 namespace Radabite.Client.WebClient.Controllers
 {
     public class EventController : Controller
     {
-        EventAccessor eventAccessor = new EventAccessor();
-
         //
         // GET: /Event/
         public ActionResult Index(long eventId, long userId)
         {
-			ViewBag.Message = "Event " + eventId.ToString();
+            ViewBag.Message = "Event " + eventId;
 			ViewBag.eventId = eventId;
 			ViewBag.userId = userId;
 
-            Event eventRequest = (Event) eventAccessor.GetAll().Where(userEvent => userEvent.Id == eventId);
+            var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
+            // I assume this is being used to test the UI
             if (eventRequest == null)
             {
                 eventRequest = new Event()
@@ -47,7 +48,7 @@ namespace Radabite.Client.WebClient.Controllers
 
 		public ActionResult CreateEvent(long userId)
 		{
-			ViewBag.Message = userId.ToString() + "'s Create Event page.";
+			ViewBag.Message = userId + "'s Create Event page.";
 			ViewBag.userId = userId;
 
 			return View();
@@ -55,7 +56,7 @@ namespace Radabite.Client.WebClient.Controllers
 
 		public ActionResult DiscoverEvent(long userId)
 		{
-			ViewBag.Message = userId.ToString() + "'s Discover Event page.";
+			ViewBag.Message = userId + "'s Discover Event page.";
 			ViewBag.userId = userId;
 
 			return View();
@@ -64,24 +65,30 @@ namespace Radabite.Client.WebClient.Controllers
         [HttpPost]
         public RedirectToRouteResult Create(string title, long startTime, long endTime/*, Location location*/)
         {
-            Event newEvent = new Event();
-            newEvent.Id = 321;
-            newEvent.StartTime = new DateTime(startTime);
-            newEvent.EndTime = new DateTime(endTime);
-            newEvent.Location = new Location()
+            var newEvent = new Event()
             {
-                LocationId = 1,
-                LocationName = "My house",
-                Latitude = 1.01,
-                Longitude = 1.01
+                StartTime = new DateTime(startTime),
+                EndTime = new DateTime(endTime),
+                Location = new Location()
+                {
+                    LocationName = "My house",
+                    Latitude = 1.01,
+                    Longitude = 1.01
+                },
+                IsPrivate = false,
+                Title = title
             };
-            newEvent.IsPrivate = false;
-            newEvent.Title = title;
 
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-            //eventAccessor.Save(newEvent);
-
-            return RedirectToAction("Index", new { userId = 123, eventId = 321 });
+            if (result.Success)
+            {
+                return RedirectToAction("Index", new {userId = 123, eventId = result.Result.Id});
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
     }
 }

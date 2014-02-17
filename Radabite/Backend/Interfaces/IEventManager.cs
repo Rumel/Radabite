@@ -7,10 +7,7 @@ using Radabite.Backend.Database;
 
 namespace Radabite.Backend.Interfaces
 {
-    interface IEventManager
+    public interface IEventManager : IGenericManager<Event>
     {
-        SaveResult<Event> Save(Event e);
-
-        IEnumerable<Event> GetAll();
     }
 }

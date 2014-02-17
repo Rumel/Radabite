@@ -8,6 +8,7 @@ using Radabite.Backend.Database;
 using Radabite.Backend.Managers;
 using Ninject;
 using Radabite.Backend.Interfaces;
+using RadabiteServiceManager;
 
 namespace Radabite.Controllers.Api
 {
