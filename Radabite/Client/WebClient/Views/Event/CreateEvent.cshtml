@@ -8,32 +8,47 @@
 </hgroup>
 
 </div>
-
 <div class="row">
-    <h3>Step 1: Pick a Time!</h3>
     <div class="large-6 medium-6 columns">
+        <h3>Step 1: Pick a Time!</h3>
         <div class="callout panel">
             <p>
                 <a href="http://www.google.com/calendar/render?pli=1">Use Google Calendar</a>
             </p>
         </div>
-    </div>
-    <div class="large-6 medium-6 columns">
         <div class="callout panel">
             <p>
                 <a href="http://www.doodle.com">Ask your Friends! (Doodle)</a>
             </p>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <h3>Step 2: Pick a Place!</h3>
-    <div class="large-6 medium-6 columns">
+        <h3>Step 2: Pick a Place!</h3>
         <div class="callout panel">
             <p>
                 <a href="http://maps.google.com">Pick from a map!</a>
             </p>
+        </div>
+
+    </div>
+
+    <div class="large-6 medium-6 columns">
+        <div class="callout panel">
+            <form action="/Event/Create" method="post">
+                <input type="text" placeholder="Event Title" name="title" />
+                <input type="text" placeholder="Start Time" name="startTime" />
+                <input type="text" placeholder="End Time" name="endTime" />
+                <input type="text" placeholder="Location" name="location" />
+                
+                <div class="row">
+                    <div class="large-6 medium-6 columns">
+                    <input type="radio" name="publicEvent">
+                    <label for="red">Public</label>
+                    <input type="radio" name="privateEvent">
+                    <label for="blue">Private</label>
+                    </div>
+                </div>
+                
+                <input type="submit" value="Submit" />
+            </form>
         </div>
     </div>
 </div>
