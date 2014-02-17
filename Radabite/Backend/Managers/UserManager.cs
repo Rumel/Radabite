@@ -1,24 +1,31 @@
 ﻿using Radabite.Backend.Accessors;
+using Radabite.Backend.Database;
 using Radabite.Backend.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Ninject;
+using RadabiteServiceManager;
 
 namespace Radabite.Backend.Managers
 {
     public class UserManager : IUserManager
     {
      
-        public Database.User GetById(long id)
+        public User GetById(long id)
         {
-            return ServiceManager.Kernel.Get<IUserManager>().GetById(id);
+            return ServiceManager.Kernel.Get<IUserAccessor>().GetById(id);
         }
 
-        public void Save(Database.User user)
+        public SaveResult<User> Save(User t)
         {
-            ServiceManager.Kernel.Get<IUserManager>().Save(user);
+            return ServiceManager.Kernel.Get<IUserAccessor>().Save(t);
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            return ServiceManager.Kernel.Get<IUserAccessor>().GetAll();
         }
     }
 }
