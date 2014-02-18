@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace Radabite.Backend.Interfaces
 {
-    interface IUserAccessor
+    public interface IUserAccessor : IGenericAccessor<User>
     {
-        User GetById(long id);
-        void Save(User user);
     }
 }
