@@ -215,7 +215,7 @@
     <Compile Include="Client\WebClient\App_Start\FilterConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\RouteConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\WebApiConfig.cs" />
-    <Compile Include="Client\WebClient\Controllers\Api\EventsController.cs" />
+    <Compile Include="Client\WebClient\Controllers\Api\v1\EventsController.cs" />
     <Compile Include="Client\WebClient\Controllers\HomeController.cs" />
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
