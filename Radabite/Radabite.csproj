@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Glimpse.Ado">
       <HintPath>..\packages\Glimpse.Ado.1.7.0\lib\net45\Glimpse.Ado.dll</HintPath>
     </Reference>
@@ -205,31 +208,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
+    <Compile Include="Backend\Database\DataObject.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
     <Compile Include="Backend\Database\User.cs" />
-    <Compile Include="Backend\Database\DataObject.cs" />
     <Compile Include="Backend\Interfaces\IGenericAccessor.cs" />
     <Compile Include="Backend\Interfaces\IGenericManager.cs" />
     <Compile Include="Backend\Interfaces\IUserAccessor.cs" />
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
     <Compile Include="Backend\Managers\TwitterManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
-    <Compile Include="Bindings.cs" />
-    <Compile Include="Client\WebClient\Controllers\EventController.cs" />
-    <Compile Include="Client\WebClient\Controllers\UserProfileController.cs" />
+    <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
+    <Compile Include="Client\WebClient\Controllers\Api\EventsController.cs" />
+    <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
     <Compile Include="Client\WebClient\Controllers\SocialMediaController.cs" />
+    <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\BundleConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\FilterConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\RouteConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\WebApiConfig.cs" />
-    <Compile Include="Client\WebClient\Controllers\Api\v1\EventsController.cs" />
     <Compile Include="Client\WebClient\Controllers\HomeController.cs" />
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
+    <Compile Include="Client\WebClient\Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Client\WebClient\GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -300,10 +304,10 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
-    <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config" />
+    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
     <None Include="ConnectionStrings.config" />
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
@@ -371,15 +375,14 @@
     <Content Include="Client\WebClient\Views\Shared\_Layout.cshtml" />
     <Content Include="Client\WebClient\Views\Web.config" />
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
-    <Content Include="Client\WebClient\Views\UserProfile\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Event\CreateEvent.cshtml" />
-    <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\UserProfile.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\CreateEvent.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
-    <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\WebClient\App_Data\" />
-    <Folder Include="Client\WebClient\Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
