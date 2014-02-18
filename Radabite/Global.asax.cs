@@ -1,4 +1,6 @@
-﻿using Radabite.Client;
+﻿using System.Reflection;
+using Ninject.Modules;
+using Radabite.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using RadabiteServiceManager;
 
 namespace Radabite
 {
@@ -38,7 +41,10 @@ namespace Radabite
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-
+            ServiceManager.Kernel.Load(new List<NinjectModule>
+            {
+                new Bindings()
+            });
         }
     }
 }

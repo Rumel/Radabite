@@ -25,6 +25,7 @@
 			{
 				foreach(User friend in Model)
 				{
+					<!--These links currently link to the friend's personal profile - should be a different page?-->
 					<div style="width:300px;height:30px;border:1px solid #000;">@Html.ActionLink(friend.DisplayName, "../UserProfile", new { userId = friend.Id } )</div>
 				}
 			}

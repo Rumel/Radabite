@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Radabite.Backend.Interfaces;
+//using RadabiteServiceManager
 
 namespace Radabite.Client.WebClient.Controllers
 {
     public class EventController : Controller
     {
+
         //
         // GET: /Event/
         public ActionResult Index(long eventId, long userId)
@@ -50,19 +53,20 @@ namespace Radabite.Client.WebClient.Controllers
 			ViewBag.Message = userId.ToString() + "'s Discover Event page.";
 			ViewBag.userId = userId;
 
+			IList<User> friends = new List<User>();
+
 			//change this to actually get the user's friends
+			//friends = ServiceManager.Kernel.Get<IEventManager>().GetById(userId);
 
-			List<User> friends = new List<User>();
-
-			//dummy friends
-			for (int i = 0; i < 5; i++)
-			{
-				friends.Add(new User()
-				{
-					Id = i,
-					DisplayName = "Person " + i
-				});
-			}
+			////dummy friends
+			//for (int i = 0; i < 5; i++)
+			//{
+			//	friends.Add(new User()
+			//	{
+			//		Id = i,
+			//		DisplayName = "Person " + i
+			//	});
+			//}
 
 
 			return View(friends);
