@@ -208,11 +208,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
-    <Compile Include="Backend\Database\DataObject.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
     <Compile Include="Backend\Database\User.cs" />
+    <Compile Include="Backend\Database\DataObject.cs" />
     <Compile Include="Backend\Interfaces\IGenericAccessor.cs" />
     <Compile Include="Backend\Interfaces\IGenericManager.cs" />
     <Compile Include="Backend\Interfaces\IUserAccessor.cs" />
@@ -220,9 +220,7 @@
     <Compile Include="Backend\Managers\TwitterManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
-    <Compile Include="Client\WebClient\Controllers\Api\EventsController.cs" />
     <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
-    <Compile Include="Client\WebClient\Controllers\SocialMediaController.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
@@ -230,6 +228,7 @@
     <Compile Include="Client\WebClient\App_Start\FilterConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\RouteConfig.cs" />
     <Compile Include="Client\WebClient\App_Start\WebApiConfig.cs" />
+    <Compile Include="Client\WebClient\Controllers\Api\v1\EventsController.cs" />
     <Compile Include="Client\WebClient\Controllers\HomeController.cs" />
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
