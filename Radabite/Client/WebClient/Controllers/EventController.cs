@@ -1,11 +1,12 @@
-﻿using Radabite.Backend.Database;
+﻿using Ninject;
+using Radabite.Backend.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Radabite.Backend.Interfaces;
-//using RadabiteServiceManager
+using RadabiteServiceManager;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -55,19 +56,18 @@ namespace Radabite.Client.WebClient.Controllers
 
 			IList<User> friends = new List<User>();
 
-			//change this to actually get the user's friends
-			//friends = ServiceManager.Kernel.Get<IEventManager>().GetById(userId);
+			//needs database to work
+			//friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
 
-			////dummy friends
-			//for (int i = 0; i < 5; i++)
-			//{
-			//	friends.Add(new User()
-			//	{
-			//		Id = i,
-			//		DisplayName = "Person " + i
-			//	});
-			//}
-
+			//dummy friends
+			for (int i = 0; i < 5; i++)
+			{
+				friends.Add(new User()
+				{
+					Id = i,
+					DisplayName = "Person " + i
+				});
+			}
 
 			return View(friends);
 		}
