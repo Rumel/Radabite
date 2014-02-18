@@ -221,7 +221,6 @@
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
     <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
-    <Compile Include="Client\WebClient\Controllers\SocialMediaController.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
