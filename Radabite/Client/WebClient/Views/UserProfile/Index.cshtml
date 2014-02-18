@@ -24,6 +24,7 @@
                 <span>Location: Test Location</span>
             </p>
         </div>
+		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", (List<User>)ViewBag.Friends);}
     </div>
     <div class="large-8 medium-8 columns">
         <h3>Your Events</h3>
