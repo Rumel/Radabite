@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
 using Radabite.Models;
+using System.Configuration;
 
 namespace Radabite
 {
@@ -18,13 +19,13 @@ namespace Radabite
             //    clientId: "",
             //    clientSecret: "");
 
-            //OAuthWebSecurity.RegisterTwitterClient(
-            //    consumerKey: "",
-            //    consumerSecret: "");
+            OAuthWebSecurity.RegisterTwitterClient(
+                consumerKey: ConfigurationManager.AppSettings["twitterConsumerKey"],
+                consumerSecret: ConfigurationManager.AppSettings["twitterSecretKey"]);
 
-            //OAuthWebSecurity.RegisterFacebookClient(
-            //    appId: "",
-            //    appSecret: "");
+            OAuthWebSecurity.RegisterFacebookClient(
+                appId: ConfigurationManager.AppSettings["facebookAppId"],
+                appSecret: ConfigurationManager.AppSettings["facebookAppSecret"]);
 
             //OAuthWebSecurity.RegisterGoogleClient();
         }

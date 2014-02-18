@@ -1,4 +1,5 @@
-﻿using Hammock;
+﻿using Facebook;
+using Hammock;
 using Hammock.Authentication.OAuth;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,7 @@ namespace Radabite.Client.WebClient.Controllers
 {
     public class SocialMediaController : Controller
     {
-        //
-        // GET: /SocialMedia/
-
+        
         public ActionResult AuthorizeTwitter()
         {
             string _consumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];

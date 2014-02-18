@@ -27,7 +27,7 @@ namespace Radabite
             // Add a shared location too, as the lines above are controller specific
             engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{0}.cshtml");
             engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{0}.vbhtml");
-
+            engine.AddPartialViewLocationFormat("~/Client/WebClient/Views/{1}/{0}.cshtml");
             ViewEngines.Engines.Add(engine);
 
             AreaRegistration.RegisterAllAreas();
