@@ -5,6 +5,10 @@ using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Radabite.Client.WebClient.Controllers;
+using RadabiteServiceManager;
+using Radabite.Backend.Interfaces;
+using Radabite.Backend.Managers;
+using Radabite.Tests.Mocks.Accessors;
 
 namespace Radabite.Tests.Controllers
 {
@@ -19,6 +23,15 @@ namespace Radabite.Tests.Controllers
             ViewResult result = controller.Index() as ViewResult;
 
             Assert.IsNotNull(result);
+        }
+
+        [TestInitialize]
+        public void Setup()
+        {
+            ServiceManager.Kernel.Rebind<IEventManager>().To<EventManager>();
+            ServiceManager.Kernel.Rebind<IEventAccessor>().To<MockEventAccessor>().InSingletonScope();
+            ServiceManager.Kernel.Rebind<IUserManager>().To<UserManager>();
+            ServiceManager.Kernel.Rebind<IUserAccessor>().To<MockUserAccessor>().InSingletonScope();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Radabite.Client.WebClient.Controllers
             ViewBag.Message = "Event " + eventId;
 			ViewBag.eventId = eventId;
 			ViewBag.userId = userId;
-
+            
             var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
             // I assume this is being used to test the UI
