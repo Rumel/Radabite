@@ -68,16 +68,20 @@ namespace Radabite.Client.WebClient.Controllers
         [HttpPost]
         public RedirectToRouteResult Create(string title, long startTime, long endTime/*, Location location*/)
         {
+            var newLocation = new Location()
+            {
+                LocationName = "My house",
+                Latitude = 1.01,
+                Longitude = 1.01
+            };
+            
+
+            
             var newEvent = new Event()
             {
-                StartTime = new DateTime(startTime),
-                EndTime = new DateTime(endTime),
-                Location = new Location()
-                {
-                    LocationName = "My house",
-                    Latitude = 1.01,
-                    Longitude = 1.01
-                },
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                Location =  
                 IsPrivate = false,
                 Title = title
             };
