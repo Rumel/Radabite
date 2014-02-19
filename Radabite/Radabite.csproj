@@ -217,7 +217,6 @@
     <Compile Include="Backend\Interfaces\IGenericManager.cs" />
     <Compile Include="Backend\Interfaces\IUserAccessor.cs" />
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
-    <Compile Include="Backend\Managers\TwitterManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
     <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
