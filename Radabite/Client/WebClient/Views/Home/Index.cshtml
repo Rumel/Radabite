@@ -2,28 +2,6 @@
 <h3 style="text-align:center;">Show Everyone Just How Rad You Are!</h3>
 <br>
 <div class="row">
-    <div class="large-8 large-offset-2 columns">
-        <div class="large-6 columns">
-            <div class="panel" style="text-align:center;">
-                <p>
-                    Connect With Facebook
-                </p>
-                <input type="text" placeholder="Email Address">
-                <input type="text" placeholder="Password">
-                <a class="medium success button" href="/Home/UserProfile?userId=123">Let's Get Started!</a>
-            </div>
-        </div>
-        
-        <div class="large-6 columns">
-            <div class="panel" style="text-align:center;">
-                <p>
-                    Connect With Twitter
-                </p>
-                <input type="text" placeholder="Email Address">
-                <input type="text" placeholder="Password">
-                <a class="medium success button" href="/Home/UserProfile?userId=123">Let's Get Started!</a>
-            </div>
-        </div>
-    </div>
-    
+    @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
+
 </div>

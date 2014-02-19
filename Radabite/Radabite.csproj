@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Glimpse.Ado">
       <HintPath>..\packages\Glimpse.Ado.1.7.0\lib\net45\Glimpse.Ado.dll</HintPath>
     </Reference>
@@ -57,9 +60,16 @@
     <Reference Include="Glimpse.Mvc4">
       <HintPath>..\packages\Glimpse.Mvc4.1.5.2\lib\net40\Glimpse.Mvc4.dll</HintPath>
     </Reference>
+    <Reference Include="Hammock.ClientProfile">
+      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -91,9 +101,6 @@
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -134,6 +141,9 @@
     <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="TweetSharp">
+      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\TweetSharp.dll</HintPath>
     </Reference>
     <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -208,6 +218,8 @@
     <Compile Include="Backend\Interfaces\IUserAccessor.cs" />
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
+    <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
+    <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\ExtendedRazor.cs" />
     <Compile Include="Client\WebClient\App_Start\AuthConfig.cs" />
@@ -219,6 +231,7 @@
     <Compile Include="Client\WebClient\Controllers\HomeController.cs" />
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
+    <Compile Include="Client\WebClient\Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Client\WebClient\GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -291,6 +304,9 @@
     <Content Include="Client\WebClient\Content\favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
+    <Content Include="AppSettings.config" />
+    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
+    <None Include="ConnectionStrings.config" />
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.accordion.js" />
@@ -365,7 +381,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\WebClient\App_Data\" />
-    <Folder Include="Client\WebClient\Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
