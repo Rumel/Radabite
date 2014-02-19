@@ -219,7 +219,6 @@
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
-    <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\Controllers\EventController.cs" />
     <Compile Include="Client\WebClient\Controllers\UserProfileController.cs" />
@@ -307,7 +306,6 @@
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config" />
-    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
     <None Include="ConnectionStrings.config" />
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
@@ -368,8 +366,6 @@
     <Content Include="Client\WebClient\Views\Account\Register.cshtml" />
     <Content Include="Client\WebClient\Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Client\WebClient\Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Client\WebClient\Views\Home\About.cshtml" />
-    <Content Include="Client\WebClient\Views\Home\Contact.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\Error.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_Layout.cshtml" />
