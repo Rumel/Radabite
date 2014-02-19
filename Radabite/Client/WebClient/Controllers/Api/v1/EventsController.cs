@@ -23,14 +23,28 @@ namespace Radabite.Controllers.Api
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public Event Get(int id)
         {
-            return "value";
+            return ServiceManager.Kernel.Get<IEventManager>().GetById(id);
         }
 
         // POST api/<controller>
         public void Post([FromBody]string value)
         {
+            ServiceManager.Kernel.Get<IEventManager>().Save(new Event()
+            {
+                Description = "My cool description",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now + TimeSpan.FromHours(2),
+                IsPrivate = false,
+                Location = new Location()
+                {
+                    Latitude = 0,
+                    LocationName = "My Location",
+                    Longitude = 0
+                },
+                Title = "Cool party"
+            });
         }
 
         // PUT api/<controller>/5

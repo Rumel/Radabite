@@ -16,9 +16,9 @@
                 <li>@Html.ActionLink("Discover", "../Event/DiscoverEvent", new { userId = Model["userId"] })</li>
                 
             </ul>
-            <ul class="right">
-                <li>@Html.ActionLink("Log Off", "..")</li>
-            </ul>
+            <div class="right">
+                @Html.Partial("~/Client/WebClient/Views/Shared/_LoginPartial.cshtml")
+            </div>
         </section>
     </nav>
 </div>

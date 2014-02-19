@@ -12,6 +12,7 @@ namespace Radabite.Client.WebClient.Controllers
 {
     public class EventController : Controller
     {
+
         //
         // GET: /Event/
         public ActionResult Index(long eventId, long userId)
@@ -59,7 +60,9 @@ namespace Radabite.Client.WebClient.Controllers
 			ViewBag.Message = userId + "'s Discover Event page.";
 			ViewBag.userId = userId;
 
-			return View();
+			var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
+			
+			return View(friends);
 		}
 
         [HttpPost]
