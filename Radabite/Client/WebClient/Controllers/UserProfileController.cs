@@ -18,21 +18,7 @@ namespace Radabite.Client.WebClient.Controllers
             ViewBag.Message = userId.ToString() + "'s profile page.";
             ViewBag.userId = userId;
 
-
-			IList<User> friends = new List<User>();
-
-			//needs database to work
-			//friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
-
-			//dummy friends
-			for (int i = 0; i < 5; i++)
-			{
-				friends.Add(new User()
-				{
-					Id = i,
-					DisplayName = "Person " + i
-				});
-			}
+			var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
 			ViewBag.Friends = friends;
 
             //Get list of events that user is involved in
@@ -47,7 +33,6 @@ namespace Radabite.Client.WebClient.Controllers
                 eventList.ElementAt<Event>(i-90).EndTime = DateTime.Now;
                 eventList.ElementAt<Event>(i-90).Description = "We are going to party " + i + "eva";
             }
-
 
             return View(eventList);
         }

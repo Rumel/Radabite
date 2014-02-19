@@ -7,14 +7,14 @@
 		@{
 			if (Model.Count() == 0)
 			{
-				<tr><td>User has no friends :(</td></tr>
+				<tr><td>You have no friends :(</td></tr>
 			}
 			else
 			{
 				foreach (User friend in Model)
 				{
 								<!--These links currently link to the friend's personal profile - should be a different page?-->
-					<tr><td>@Html.ActionLink(friend.DisplayName, "../UserProfile", new { userId = friend.Id })</td></tr>
+					<tr><td>friend.DisplayName</td></tr>
 				}
 			}
 		}
