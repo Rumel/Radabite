@@ -1,6 +1,7 @@
 ﻿using Radabite.Backend.Database;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -18,6 +19,10 @@ namespace Radabite.Backend.Database
 
         public string Description { get; set; }
 
-        public Location Location { get; set; }
+        // TODO Haven't gotten to saving location yet
+        public long LocationId { get; set; }
+
+        //[ForeignKey("LocationId")]
+        //public Location Location { get; set; }
     }
 }

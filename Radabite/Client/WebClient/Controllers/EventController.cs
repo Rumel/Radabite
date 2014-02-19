@@ -23,7 +23,7 @@ namespace Radabite.Client.WebClient.Controllers
 
             var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-            // I assume this is being used to test the UI
+            // Used to test UI
             if (eventRequest == null)
             {
                 eventRequest = new Event()
@@ -34,13 +34,14 @@ namespace Radabite.Client.WebClient.Controllers
                     EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
                     IsPrivate = true,
                     Description = "Happy Birthday Grandma",
-                    Location = new Location()
+                    LocationId = 123
+                    /*Location = new Location()
                     {
                         LocationId = 1,
                         LocationName = "My house",
                         Latitude = 1.01,
                         Longitude = 1.01
-                    }
+                    }*/
                 };
             }
 
@@ -68,20 +69,22 @@ namespace Radabite.Client.WebClient.Controllers
         [HttpPost]
         public RedirectToRouteResult Create(string title, long startTime, long endTime/*, Location location*/)
         {
+            /*
+            TODO No current way to save locations, just using dummy ID for now
             var newLocation = new Location()
             {
                 LocationName = "My house",
                 Latitude = 1.01,
                 Longitude = 1.01
             };
-            
 
-            
+            var locationSave = ServiceManager.Kernel.Get<IEventManager>().Save(newLocation)
+             */
             var newEvent = new Event()
             {
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                Location =  
+                LocationId = 123,
                 IsPrivate = false,
                 Title = title
             };

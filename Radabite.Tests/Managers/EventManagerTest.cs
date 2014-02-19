@@ -24,12 +24,13 @@ namespace Radabite.Tests.Managers
                 EndTime = DateTime.Now + TimeSpan.FromHours(2),
                 StartTime = DateTime.Now,
                 IsPrivate = false,
-                Location = new Location
+                LocationId = 123,
+                /*Location = new Location
                 {
                     Latitude = 0,
                     Longitude = 0,
                     LocationName = "My House"
-                },
+                },*/
                 Title = "PARTY"
             };
         }
