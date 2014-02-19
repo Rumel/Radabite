@@ -18,7 +18,11 @@ namespace Radabite.Client.WebClient.Controllers
             ViewBag.Message = userId.ToString() + "'s profile page.";
             ViewBag.userId = userId;
 
-			var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
+			
+			//TODO: Add friends to UserProfile, so there will actually be friends in the db
+			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
+			//dummy empty list of friends
+			var friends = new List<User>();			
 			ViewBag.Friends = friends;
 
             //Get list of events that user is involved in
