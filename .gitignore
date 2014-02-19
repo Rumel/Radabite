@@ -9,7 +9,6 @@
 *.user
 *.sln.docstates
 AppSettings.config
-ConnectionStrings.config
 
 # Build results
 [Dd]ebug/
