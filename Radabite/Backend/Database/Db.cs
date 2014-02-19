@@ -8,15 +8,15 @@ namespace Radabite.Backend.Database
 {
     public class Db : DbContext
     {
-		 public Db()
-            : base("DefaultConnection")
-        {
-        }
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<User> Users { get; set; }
 
+        public Db()
+            : base("DefaultConnection")
+        {
 
+        }
     }
 }
