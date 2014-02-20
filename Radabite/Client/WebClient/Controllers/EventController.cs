@@ -17,38 +17,33 @@ namespace Radabite.Client.WebClient.Controllers
         // GET: /Event/
         public ActionResult Index(long eventId, long userId)
         {
-            ViewBag.Message = "Event " + eventId;
+			ViewBag.Message = "Event " + eventId.ToString();
 			ViewBag.eventId = eventId;
 			ViewBag.userId = userId;
-            
-            var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-            // I assume this is being used to test the UI
-            if (eventRequest == null)
-            {
-                eventRequest = new Event()
-                {
-                    Id = 1,
-                    Title = "G-Ma's 9th birthday",
-                    StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
-                    EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
-                    IsPrivate = true,
-                    Description = "Happy Birthday Grandma",
-                    Location = new Location()
-                    {
-                        LocationName = "My house",
-                        Latitude = 1.01,
-                        Longitude = 1.01
-                    }
-                };
-            }
+			Event dummy = new Event()
+			{
+				Id = 1,
+				Title = "G-Ma's 9th birthday",
+				StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
+				EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
+				IsPrivate = true,
+				Description = "Happy Birthday Grandma",
+				Location = new Location()
+				{
+					LocationId = 1,
+					LocationName = "My house",
+					Latitude = 1.01,
+					Longitude = 1.01
+				}
+			};
 
-            return View(eventRequest);
+            return View(dummy);
         }
 
 		public ActionResult CreateEvent(long userId)
 		{
-			ViewBag.Message = userId + "'s Create Event page.";
+			ViewBag.Message = userId.ToString() + "'s Create Event page.";
 			ViewBag.userId = userId;
 
 			return View();
@@ -56,7 +51,7 @@ namespace Radabite.Client.WebClient.Controllers
 
 		public ActionResult DiscoverEvent(long userId)
 		{
-			ViewBag.Message = userId + "'s Discover Event page.";
+			ViewBag.Message = userId.ToString() + "'s Discover Event page.";
 			ViewBag.userId = userId;
 
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
@@ -72,33 +67,5 @@ namespace Radabite.Client.WebClient.Controllers
 			return View(friends);
 		}
 
-        [HttpPost]
-        public RedirectToRouteResult Create(string title, long startTime, long endTime/*, Location location*/)
-        {
-            var newEvent = new Event()
-            {
-                StartTime = new DateTime(startTime),
-                EndTime = new DateTime(endTime),
-                Location = new Location()
-                {
-                    LocationName = "My house",
-                    Latitude = 1.01,
-                    Longitude = 1.01
-                },
-                IsPrivate = false,
-                Title = title
-            };
-
-            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
-
-            if (result.Success)
-            {
-                return RedirectToAction("Index", new {userId = 123, eventId = result.Result.Id});
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
     }
 }
