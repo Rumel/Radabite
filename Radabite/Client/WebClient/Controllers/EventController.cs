@@ -15,11 +15,10 @@ namespace Radabite.Client.WebClient.Controllers
 
         //
         // GET: /Event/
-        public ActionResult Index(long eventId, long userId)
+        public ActionResult Index(long eventId)
         {
-            ViewBag.Message = "Event " + eventId;
+            ViewBag.Message = "Event " + eventId.ToString();
 			ViewBag.eventId = eventId;
-			ViewBag.userId = userId;
 
             var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
@@ -34,57 +33,56 @@ namespace Radabite.Client.WebClient.Controllers
                     EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
                     IsPrivate = true,
                     Description = "Happy Birthday Grandma",
-                    LocationId = 123
-                    /*Location = new Location()
+                    Location = new Location()
                     {
                         LocationId = 1,
                         LocationName = "My house",
                         Latitude = 1.01,
                         Longitude = 1.01
-                    }*/
+                    }
                 };
             }
 
             return View(eventRequest);
         }
 
-		public ActionResult CreateEvent(long userId)
+		public ActionResult CreateEvent()
 		{
-			ViewBag.Message = userId + "'s Create Event page.";
-			ViewBag.userId = userId;
+			ViewBag.Message = "Create Event page.";
 
 			return View();
 		}
 
-		public ActionResult DiscoverEvent(long userId)
+		public ActionResult DiscoverEvent()
 		{
-			ViewBag.Message = userId + "'s Discover Event page.";
-			ViewBag.userId = userId;
+            ViewBag.Message = "Discover Event page.";
 
-			var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
-			
-			return View(friends);
+            //TODO: Add friends to UserProfile, so there will actually be friends in the db
+            //var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
+            //dummy list of friends
+            var friends = new List<User>()
+			{
+				new User{DisplayName = "1"},
+				new User{DisplayName = "2"},
+				new User{DisplayName = "3"}
+			};
+
+            return View(friends);
 		}
 
         [HttpPost]
         public RedirectToRouteResult Create(string title, long startTime, long endTime/*, Location location*/)
         {
-            /*
-            TODO No current way to save locations, just using dummy ID for now
-            var newLocation = new Location()
-            {
-                LocationName = "My house",
-                Latitude = 1.01,
-                Longitude = 1.01
-            };
-
-            var locationSave = ServiceManager.Kernel.Get<IEventManager>().Save(newLocation)
-             */
             var newEvent = new Event()
             {
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                LocationId = 123,
+                Location = new Location()
+                {
+                    LocationName = "My house",
+                    Latitude = 1.01,
+                    Longitude = 1.01
+                },
                 IsPrivate = false,
                 Title = title
             };

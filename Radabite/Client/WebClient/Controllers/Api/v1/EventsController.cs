@@ -37,13 +37,12 @@ namespace Radabite.Controllers.Api
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now + TimeSpan.FromHours(2),
                 IsPrivate = false,
-                LocationId = 123,
-                /*Location = new Location()
+                Location = new Location()
                 {
                     Latitude = 0,
                     LocationName = "My Location",
                     Longitude = 0
-                },*/
+                },
                 Title = "Cool party"
             });
         }
