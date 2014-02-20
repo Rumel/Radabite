@@ -4,7 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
-using Radabite.Models;
+using Radabite.Backend.Database;
 
 namespace Radabite.Filters
 {

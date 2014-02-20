@@ -8,7 +8,7 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using Radabite.Models;
+using Radabite.Backend.Database;
 using Radabite.Filters;
 
 namespace Radabite.Client.WebClient.Controllers

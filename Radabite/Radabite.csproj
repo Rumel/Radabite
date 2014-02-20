@@ -241,7 +241,7 @@
     <Compile Include="Backend\Interfaces\IEventAccessor.cs" />
     <Compile Include="Backend\Interfaces\IEventManager.cs" />
     <Compile Include="Backend\Managers\EventManager.cs" />
-    <Compile Include="Client\WebClient\Models\AccountModels.cs" />
+    <Compile Include="Backend\Database\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +388,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\WebClient\App_Data\" />
+    <Folder Include="Client\WebClient\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
