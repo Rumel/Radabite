@@ -219,7 +219,6 @@
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
-    <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\Controllers\EventController.cs" />
     <Compile Include="Client\WebClient\Controllers\UserProfileController.cs" />
@@ -248,6 +247,8 @@
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
+    <Content Include="Client\WebClient\Content\Images\FacebookLogin.jpg" />
+    <Content Include="Client\WebClient\Content\Images\TwitterLogin.jpg" />
     <Content Include="Client\WebClient\Content\Radabite.css" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -304,10 +305,10 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
+    <Content Include="Client\WebClient\Content\themes\base\zocial.css" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config" />
-    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
     <None Include="ConnectionStrings.config" />
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
