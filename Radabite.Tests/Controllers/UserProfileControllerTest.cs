@@ -13,7 +13,7 @@ using Radabite.Tests.Mocks.Accessors;
 namespace Radabite.Tests.Controllers
 {
     [TestClass]
-    public class HomeControllerTest
+    public class UserProfileControllerTest
     {
         [TestInitialize]
         public void Setup()
@@ -25,9 +25,9 @@ namespace Radabite.Tests.Controllers
         }
         
         [TestMethod]
-        public void HomeIndex()
+        public void ProfileIndex()
         {
-            HomeController controller = new HomeController();
+            UserProfileController controller = new UserProfileController();
 
             ViewResult result = controller.Index() as ViewResult;
 
