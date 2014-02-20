@@ -15,11 +15,10 @@ namespace Radabite.Client.WebClient.Controllers
 
         //
         // GET: /Event/
-        public ActionResult Index(long eventId, long userId)
+        public ActionResult Index(long eventId)
         {
 			ViewBag.Message = "Event " + eventId.ToString();
 			ViewBag.eventId = eventId;
-			ViewBag.userId = userId;
 
 			Event dummy = new Event()
 			{
@@ -41,18 +40,16 @@ namespace Radabite.Client.WebClient.Controllers
             return View(dummy);
         }
 
-		public ActionResult CreateEvent(long userId)
+		public ActionResult CreateEvent()
 		{
-			ViewBag.Message = userId.ToString() + "'s Create Event page.";
-			ViewBag.userId = userId;
+			ViewBag.Message = "Create Event page.";
 
 			return View();
 		}
 
-		public ActionResult DiscoverEvent(long userId)
+		public ActionResult DiscoverEvent()
 		{
-			ViewBag.Message = userId.ToString() + "'s Discover Event page.";
-			ViewBag.userId = userId;
+			ViewBag.Message = "Discover Event page.";
 
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
 			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
