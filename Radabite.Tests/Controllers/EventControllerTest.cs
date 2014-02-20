@@ -15,6 +15,15 @@ namespace Radabite.Tests.Controllers
     [TestClass]
     public class EventControllerTest
     {
+        [TestInitialize]
+        public void Setup()
+        {
+            ServiceManager.Kernel.Rebind<IEventManager>().To<EventManager>();
+            ServiceManager.Kernel.Rebind<IEventAccessor>().To<MockEventAccessor>().InSingletonScope();
+            ServiceManager.Kernel.Rebind<IUserManager>().To<UserManager>();
+            ServiceManager.Kernel.Rebind<IUserAccessor>().To<MockUserAccessor>().InSingletonScope();
+        }
+
         [TestMethod]
         public void EventIndex()
         {
@@ -43,15 +52,6 @@ namespace Radabite.Tests.Controllers
             ViewResult result = controller.DiscoverEvent(123) as ViewResult;
 
             Assert.IsNotNull(result);
-        }
-
-        [TestInitialize]
-        public void Setup()
-        {
-            ServiceManager.Kernel.Rebind<IEventManager>().To<EventManager>();
-            ServiceManager.Kernel.Rebind<IEventAccessor>().To<MockEventAccessor>().InSingletonScope();
-            ServiceManager.Kernel.Rebind<IUserManager>().To<UserManager>();
-            ServiceManager.Kernel.Rebind<IUserAccessor>().To<MockUserAccessor>().InSingletonScope();
         }
     }
 }
