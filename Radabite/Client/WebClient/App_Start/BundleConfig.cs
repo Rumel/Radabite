@@ -52,7 +52,8 @@ namespace Radabite
             #endregion
 
                 bundles.Add(new StyleBundle("~/Content/Radabite").Include(
-                    "~/Client/WebClient/Content/Radabite.css"));
+                    "~/Client/WebClient/Content/Radabite.css",
+                    "~/Client/WebClient/Content/themes/base/zocial.css"));
         }
     }
 }
