@@ -32,7 +32,7 @@
             <div class="panel" style="width:600px;height:150px;border:1px solid #000;">
                 <p>@item.Title</p>
                 <p>@item.Description</p>
-				@Html.ActionLink("Event", "../Event", new { eventId = item.Id, userId = ViewBag.userId })
+				@Html.ActionLink("Event", "../Event", new { eventId = item.Id })
             </div>
         }
     </div>

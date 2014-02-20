@@ -13,12 +13,8 @@ namespace Radabite.Client.WebClient.Controllers
 	public class UserProfileController : Controller
 	{
 
-		public ActionResult Index(long userId)
-        {
-            ViewBag.Message = userId.ToString() + "'s profile page.";
-            ViewBag.userId = userId;
-
-			
+		public ActionResult Index()
+        {	
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
 			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
 			//dummy empty list of friends

@@ -29,7 +29,7 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            ViewResult result = controller.Index(123, 234) as ViewResult;
+            ViewResult result = controller.Index(123) as ViewResult;
 
             Assert.IsNotNull(result);
         }
@@ -39,7 +39,7 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            ViewResult result = controller.CreateEvent(123) as ViewResult;
+            ViewResult result = controller.CreateEvent() as ViewResult;
 
             Assert.IsNotNull(result);
         }
@@ -49,7 +49,7 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            ViewResult result = controller.DiscoverEvent(123) as ViewResult;
+            ViewResult result = controller.DiscoverEvent() as ViewResult;
 
             Assert.IsNotNull(result);
         }
