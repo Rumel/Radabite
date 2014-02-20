@@ -13,14 +13,34 @@ using Radabite.Tests.Mocks.Accessors;
 namespace Radabite.Tests.Controllers
 {
     [TestClass]
-    public class HomeControllerTest
+    public class EventControllerTest
     {
         [TestMethod]
-        public void HomeIndex()
+        public void EventIndex()
         {
-            HomeController controller = new HomeController();
+            EventController controller = new EventController();
 
-            ViewResult result = controller.Index() as ViewResult;
+            ViewResult result = controller.Index(123, 234) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void CreateEvent()
+        {
+            EventController controller = new EventController();
+
+            ViewResult result = controller.CreateEvent(123) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DiscoverEvent()
+        {
+            EventController controller = new EventController();
+
+            ViewResult result = controller.DiscoverEvent(123) as ViewResult;
 
             Assert.IsNotNull(result);
         }

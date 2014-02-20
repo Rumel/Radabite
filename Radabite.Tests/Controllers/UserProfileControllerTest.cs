@@ -13,14 +13,14 @@ using Radabite.Tests.Mocks.Accessors;
 namespace Radabite.Tests.Controllers
 {
     [TestClass]
-    public class HomeControllerTest
+    public class UserProfileControllerTest
     {
         [TestMethod]
-        public void HomeIndex()
+        public void ProfileIndex()
         {
-            HomeController controller = new HomeController();
+            UserProfileController controller = new UserProfileController();
 
-            ViewResult result = controller.Index() as ViewResult;
+            ViewResult result = controller.Index(123) as ViewResult;
 
             Assert.IsNotNull(result);
         }
