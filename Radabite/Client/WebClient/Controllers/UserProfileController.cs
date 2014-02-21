@@ -21,7 +21,7 @@ namespace Radabite.Client.WebClient.Controllers
 			var friends = new List<User>();			
 			ViewBag.Friends = friends;
 
-            //Get list of events that user is involved in
+            //Get list of events that user is involved in 
             List<Event> eventList = new List<Event>();
 
             for (int i = 90; i < 94; i++)

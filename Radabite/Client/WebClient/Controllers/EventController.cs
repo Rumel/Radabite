@@ -7,38 +7,47 @@ using System.Web;
 using System.Web.Mvc;
 using Radabite.Backend.Interfaces;
 using RadabiteServiceManager;
+using Radabite.Client.WebClient.ViewModels;
 
 namespace Radabite.Client.WebClient.Controllers
 {
-    public class EventController : Controller
-    {
 
-        //
-        // GET: /Event/
-        public ActionResult Index(long eventId)
-        {
+	public class EventController : Controller
+	{
+
+		//
+		// GET: /Event/
+		public ActionResult Index(long eventId)
+		{
 			ViewBag.Message = "Event " + eventId.ToString();
 			ViewBag.eventId = eventId;
 
-			Event dummy = new Event()
-			{
-				Id = 1,
-				Title = "G-Ma's 9th birthday",
-				StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
-				EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
-				IsPrivate = true,
-				Description = "Happy Birthday Grandma",
-				Location = new Location()
-				{
-					LocationId = 1,
-					LocationName = "My house",
-					Latitude = 1.01,
-					Longitude = 1.01
-				}
-			};
+			//look up the event in DB
+			var mEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-            return View(dummy);
-        }
+			//for UI testing
+			if (mEvent == null)
+			{
+				mEvent = new Event()
+				{
+					Id = 1000,
+					Title = "G-Ma's 9th birthday",
+					StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
+					EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
+					IsPrivate = true,
+					Description = "Happy Birthday Grandma",
+					Location = new Location()
+					{
+						LocationId = 1,
+						LocationName = "My house",
+						Latitude = 1.01,
+						Longitude = 1.01
+					}
+				};
+			}
+
+			return View(mEvent);
+		}
 
 		public ActionResult CreateEvent()
 		{
@@ -61,8 +70,23 @@ namespace Radabite.Client.WebClient.Controllers
 				new User{DisplayName = "3"}
 			};
 
-			return View(friends);
+			//just getting all events right now, will become nearby events, or friends events or something
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			//dummy events to see if it works
+			events = new List<Event>() 
+			{ 
+				new Event{Id = 1, Title = "Nebraska Women in Agriculture Conference"},
+				new Event{Id = 2, Title = "MyUNL Blackboard - Rubrics Essentials"},
+				new Event{Id = 3, Title = "Place Studies: Brownbag on Teaching Place"}
+			};
+
+			return View(new ViewModel
+			{
+				Friends = friends,
+				Events = events.ToList()
+			});
 		}
 
-    }
+	}
 }
