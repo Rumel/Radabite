@@ -242,6 +242,10 @@
     <Compile Include="Backend\Interfaces\IEventManager.cs" />
     <Compile Include="Backend\Managers\EventManager.cs" />
     <Compile Include="Client\WebClient\Models\AccountModels.cs" />
+    <Compile Include="Migrations\201402211933566_AdiosLocations.cs" />
+    <Compile Include="Migrations\201402211933566_AdiosLocations.Designer.cs">
+      <DependentUpon>201402211933566_AdiosLocations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -398,6 +402,11 @@
       <Project>{2d4be2fd-643c-466c-aeab-78240922c029}</Project>
       <Name>RadabiteServiceManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201402211933566_AdiosLocations.resx">
+      <DependentUpon>201402211933566_AdiosLocations.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

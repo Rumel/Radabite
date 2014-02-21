@@ -10,7 +10,6 @@ namespace Radabite.Backend.Database
     {
 
         public DbSet<Event> Events { get; set; }
-        public DbSet<Location> Locations { get; set; }
         public DbSet<User> Users { get; set; }
 
         public Db()
