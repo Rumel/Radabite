@@ -242,6 +242,7 @@
     <Compile Include="Backend\Interfaces\IEventManager.cs" />
     <Compile Include="Backend\Managers\EventManager.cs" />
     <Compile Include="Client\WebClient\Models\AccountModels.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
