@@ -30,10 +30,25 @@
 <div class="row">
     <h3>Step 2: Pick a Place!</h3>
     <div class="large-6 medium-6 columns">
-        <div class="callout panel">
-            <p>
-                <a href="http://maps.google.com">Pick from a map!</a>
-            </p>
+        <div class="callout panel">                
+				<!--I know this doesn't go here-->
+				<script type="text/javascript"
+						src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9mnrBBjZsNVYhGYaDEh8I-XwkKa0yW74&sensor=true">
+				</script>
+				<script type="text/javascript">
+					function initialize() {
+						var mapOptions = {
+							center: new google.maps.LatLng(40.81, -96.68),
+							zoom: 8
+						};
+						var map = new google.maps.Map(document.getElementById("map-canvas"),
+							mapOptions);
+					}
+					google.maps.event.addDomListener(window, 'load', initialize);
+				</script>
+
+
+				<div id="map-canvas" style="width: 420px; height: 300px"></div>
         </div>
     </div>
 </div>
