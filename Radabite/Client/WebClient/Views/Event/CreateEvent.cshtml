@@ -36,20 +36,73 @@
 						src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9mnrBBjZsNVYhGYaDEh8I-XwkKa0yW74&sensor=true">
 				</script>
 				<script type="text/javascript">
+					var map;
+					var geocoder;
+					var marker;
 					function initialize() {
+						geocoder = new google.maps.Geocoder();
 						var mapOptions = {
 							center: new google.maps.LatLng(40.81, -96.68),
-							zoom: 8
+							zoom: 12
 						};
-						var map = new google.maps.Map(document.getElementById("map-canvas"),
+						map = new google.maps.Map(document.getElementById("map-canvas"),
 							mapOptions);
+						google.maps.event.addListener(map, 'click', function (event) {
+							placeMarker(event.latLng);
+						});
+					}
+					function placeMarker(location) {
+						if (marker != null)
+						{
+							marker.setMap(null);
+						}
+
+						marker = new google.maps.Marker({
+							position: location,
+							map: map
+						});
+						
+						//fill the boxes :)
+						document.getElementById('address-box').innerHTML = '';
+						document.getElementById('lat-box').innerHTML = location.lat();
+						document.getElementById('long-box').innerHTML = location.lng();
+					}
+					function codeAddress() {
+						var address = document.getElementById("address").value;
+						geocoder.geocode({ 'address': address }, function (results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+								map.setCenter(results[0].geometry.location);
+								var marker = new google.maps.Marker({
+									map: map,
+									position: results[0].geometry.location
+								});
+
+								//fill the boxes :)
+								//doesn't work yet
+								
+								document.getElementById('address-box').innerHTML = results[0].formatted_address;
+								document.getElementById('lat-box').innerHTML = results[0].geometry.location.lat();
+								document.getElementById('long-box').innerHTML = results[0].geometry.location.lng();
+							} else {
+								alert("Geocode was not successful for the following reason: " + status);
+							}
+						});
 					}
 					google.maps.event.addDomListener(window, 'load', initialize);
 				</script>
 
+			<div id="map-canvas" style="width: 420px; height: 300px" />
 
-				<div id="map-canvas" style="width: 420px; height: 300px"></div>
         </div>
+		<div class="callout panel">
+			<input id="address" type="text" value="Lincoln, NE">
+			<input type="button" value="Encode" onclick="codeAddress()">
+		</div>
+		<div class="callout panel">
+			<p id="address-box">Address</p>
+			<p id="lat-box">Lat</p>
+			<p id="long-box">Long</p>
+		</div>
     </div>
 </div>
 
