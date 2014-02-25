@@ -8,6 +8,7 @@ using System.Web.Security;
 
 namespace Radabite.Models
 {
+    /*
     public class UsersContext : DbContext
     {
         public UsersContext()
@@ -17,6 +18,7 @@ namespace Radabite.Models
 
         public DbSet<UserProfile> UserProfiles { get; set; }
     }
+    */
 
     [Table("UserProfile")]
     public class UserProfile

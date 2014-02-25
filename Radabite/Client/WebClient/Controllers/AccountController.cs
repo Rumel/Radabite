@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using Radabite.Models;
 using Radabite.Filters;
+using Radabite.Backend.Database;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -263,7 +264,7 @@ namespace Radabite.Client.WebClient.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                using (Db db = new Db())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists

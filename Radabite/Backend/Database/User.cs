@@ -24,8 +24,8 @@ namespace Radabite.Backend.Database
 
         public string SelfDescription { get; set; }
 
-		public int Age { get; set; }
+        public int Age { get; set; }
 
-		public virtual IList<User> Friends { get; set; }
+        public virtual IList<User> Friends { get; set; }
     }
 }

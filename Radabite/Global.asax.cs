@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using RadabiteServiceManager;
+using System.Data.Entity;
+using Radabite.Backend.Database;
 
 namespace Radabite
 {
@@ -40,6 +42,8 @@ namespace Radabite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<Db>());
 
             ServiceManager.Kernel.Load(new List<NinjectModule>
             {
