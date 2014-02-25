@@ -41,65 +41,57 @@
 				var marker;
 				function initialize() {
 					geocoder = new google.maps.Geocoder();
+					var startLocation = new google.maps.LatLng(40.81, -96.68);
 					var mapOptions = {
-						center: new google.maps.LatLng(40.81, -96.68),
+						center: startLocation,
 						zoom: 12,
 						draggableCursor: 'default'
 					};
 					map = new google.maps.Map(document.getElementById("map-canvas"),
 						mapOptions);
+
 					google.maps.event.addListener(map, 'click', function (event) {
-						placeMarker(event.latLng);
+						moveMarker(event.latLng);
 					});
-				}
-				function placeMarker(location) {
-					if (marker != null) {
-						marker.setMap(null);
-					}
 
 					marker = new google.maps.Marker({
-						position: location,
 						map: map
 					});
+					moveMarker(startLocation);
+				}
+				function moveMarker(location) {
+					marker.setPosition(location);
 
-					//fill the boxes :)
-					readMarkerLocation();
+					//write to the "form"
+					readMarkerAddress();
 					document.getElementById('lat-box').innerHTML = location.lat();
 					document.getElementById('long-box').innerHTML = location.lng();
 				}
-				function codeAddress() {
+				function searchAddress() {
 					var address = document.getElementById("address").value;
 					geocoder.geocode({ 'address': address }, function (results, status) {
 						if (status == google.maps.GeocoderStatus.OK) {
 							map.setCenter(results[0].geometry.location);
-							if (marker != null) {
-								marker.setMap(null);
-							}
-							marker = new google.maps.Marker({
-								map: map,
-								position: results[0].geometry.location
-							});
-
-							document.getElementById('address-box').value = results[0].formatted_address;
-							document.getElementById('lat-box').innerHTML = results[0].geometry.location.lat();
-							document.getElementById('long-box').innerHTML = results[0].geometry.location.lng();
+							moveMarker(results[0].geometry.location);
 						} else {
 							alert("Geocode was not successful for the following reason: " + status);
 						}
 					});
 				}
-				function readMarkerLocation() {
+				function readMarkerAddress() {
+					var addressBox = document.getElementById('address-box');
 					geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
 						if (status == google.maps.GeocoderStatus.OK) {
 							if (results[1]) {
-								document.getElementById('address-box').value = results[0].formatted_address;
+								addressBox.value = results[0].formatted_address;
 							}
 							else {
-								document.getElementById('address-box').value = 'No address found';
+								addressBox.value = 'No address found';
 							}
 						}
 						else {
 							alert('Error: Geocoder failed: ', status);
+							addressBox.value = 'Error with map';
 						}
 					})
 				}
@@ -108,7 +100,7 @@
 			<h5>Search for a location or click to drop a marker</h5>
 			<div class="row">
 				<div class="small-2 column">
-					<input type="button" value="Search" onclick="codeAddress()">
+					<input type="button" value="Search" onclick="searchAddress()">
 				</div>
 				<div class="small-10 column">
 					<input id="address" type="text" value="Lincoln, NE">
