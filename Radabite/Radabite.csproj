@@ -387,6 +387,7 @@
     <Content Include="Client\WebClient\Views\Shared\_FriendTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Client\WebClient\App_Data\" />
     <Folder Include="Client\WebClient\Models\" />
   </ItemGroup>

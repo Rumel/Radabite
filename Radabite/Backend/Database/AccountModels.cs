@@ -8,23 +8,17 @@ using System.Web.Security;
 
 namespace Radabite.Backend.Database
 {
-    public class UsersContext : DbContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
-    }
-
-    [Table("UserProfile")]
-    public class UserProfile
+    
+    // used for storing external login profiles
+    [Table("ExternalProfile")]
+    public class ExternalProfile
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
+        public int ExternalProfileId { get; set; }
         public string UserName { get; set; }
+        // connects to the Radabite user & all the other data.
+        public User User { get; set; }
     }
 
     public class RegisterExternalLoginModel

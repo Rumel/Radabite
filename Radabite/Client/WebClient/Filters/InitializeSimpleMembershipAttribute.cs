@@ -25,11 +25,11 @@ namespace Radabite.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<Db>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new Db())
                     {
                         if (!context.Database.Exists())
                         {
@@ -38,7 +38,7 @@ namespace Radabite.Filters
                         }
                     }
 
-                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "ExternalProfile", "ExternalProfileId", "UserName", autoCreateTables: true);
                 }
                 catch (Exception ex)
                 {

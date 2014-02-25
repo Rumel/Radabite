@@ -24,12 +24,8 @@ namespace Radabite.Tests.Managers
                 Age = 21,
                 DisplayName = "Bilbo Baggins",
                 Email = "bilbo@hobbiton.com",
-                FacebookName = "Bilbo Baggins",
-                FacebookUserId = 1234567,
                 PhotoLink = "bilbo.jpg",
                 SelfDescription = "I'm the most wonderfulest hobbit of all",
-                TwitterHandle = "OwnerOfTheOneRing",
-                TwitterUserId = 1234567
             };
         }
 
