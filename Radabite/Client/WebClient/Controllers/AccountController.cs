@@ -283,16 +283,13 @@ namespace Radabite.Client.WebClient.Controllers
                     // Check if user already exists
                     if (user == null)
                     {
-                        // Insert name into the profile table
                         var userProfile = new UserProfile { UserName = model.UserName };
-                        db.UserProfiles.Add(userProfile);
-                        db.SaveChanges();
-
-                        User userData = new User();
-                        userData.DisplayName = model.PersonName;
-                        userData.Gender = model.Gender;
-                        userData.FacebookProfileLink = model.Link;
-                        userData.FacebookProfile = userProfile;
+                        User userData = new User {
+                            DisplayName = model.PersonName,
+                            Gender = model.Gender,
+                            FacebookProfileLink = model.Link,
+                            FacebookProfile = userProfile
+                        };
                         SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
