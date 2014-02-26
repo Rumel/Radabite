@@ -2,6 +2,13 @@
 	ViewBag.Title = "Create Event";
 }
 
+@*gets around problem with map controls from foundation.css*@
+<style>
+	#map-canvas img{
+		max-width:inherit;
+	}
+</style>
+
 <div class="row">
 	<hgroup class="title">
 		<h2>@User.Identity.Name's @ViewBag.Message</h2>
@@ -46,8 +53,6 @@
 
 		</div>
 		<div class="callout panel">
-			<input type="button" value="+" onclick="zoomIn()">
-			<input type="button" value="-" onclick="zoomOut()">
 			<input id="address-box" value="Address" style="width: 100%" />
 			<p id="lat-box">Lat</p>
 			<p id="long-box">Long</p>
@@ -333,8 +338,7 @@
 		geocoder = new google.maps.Geocoder();
 		var mapOptions = {
 			zoom: 12,
-			draggableCursor: 'default',
-			zoomControl: false
+			draggableCursor: 'default'
 		};
 		map = new google.maps.Map(document.getElementById("map-canvas"),
 			mapOptions);
@@ -354,14 +358,6 @@
 		} else {
 			positionError(-1);
 		}
-	}
-	function zoomIn() {
-		var level = map.getZoom();
-		map.setZoom(level + 1);
-	}
-	function zoomOut() {
-		var level = map.getZoom();
-		map.setZoom(level - 1);
 	}
 	function positionError(err) {
 		//Defaults to Lincoln, NE
