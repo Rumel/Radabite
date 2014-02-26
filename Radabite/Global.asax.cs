@@ -42,9 +42,7 @@ namespace Radabite
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
-
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<Db>());
-
+           
             ServiceManager.Kernel.Load(new List<NinjectModule>
             {
                 new Bindings()

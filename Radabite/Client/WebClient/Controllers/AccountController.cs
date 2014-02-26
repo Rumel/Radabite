@@ -11,6 +11,9 @@ using WebMatrix.WebData;
 using Radabite.Models;
 using Radabite.Filters;
 using Radabite.Backend.Database;
+using Ninject;
+using RadabiteServiceManager;
+using Radabite.Backend.Interfaces;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -241,7 +244,17 @@ namespace Radabite.Client.WebClient.Controllers
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
+
+                var loginModel = new RegisterExternalLoginModel {
+                    UserName = result.UserName,
+                    PersonName = result.ExtraData["name"],
+                    Link = result.ExtraData["link"],
+                    Gender = result.ExtraData["gender"],
+                    ExternalLoginData = loginData
+                };
+
+                //TODO: these fields aren't getting populated as they should. ??
+                return View("ExternalLoginConfirmation", loginModel);
             }
         }
 
@@ -271,8 +284,16 @@ namespace Radabite.Client.WebClient.Controllers
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                        var userProfile = new UserProfile { UserName = model.UserName };
+                        db.UserProfiles.Add(userProfile);
                         db.SaveChanges();
+
+                        User userData = new User();
+                        userData.DisplayName = model.PersonName;
+                        userData.Gender = model.Gender;
+                        userData.FacebookProfileLink = model.Link;
+                        userData.FacebookProfile = userProfile;
+                        SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
