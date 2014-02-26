@@ -244,16 +244,26 @@ namespace Radabite.Client.WebClient.Controllers
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
-
-                var loginModel = new RegisterExternalLoginModel {
-                    UserName = result.UserName,
-                    PersonName = result.ExtraData["name"],
-                    Link = result.ExtraData["link"],
-                    Gender = result.ExtraData["gender"],
-                    ExternalLoginData = loginData
-                };
-
-                //TODO: these fields aren't getting populated as they should. ??
+                RegisterExternalLoginModel loginModel;
+                if (ViewBag.ProviderDisplayName == "facebook")
+                {
+                    loginModel = new RegisterExternalLoginModel
+                    {
+                        UserName = result.UserName,
+                        PersonName = result.ExtraData["name"],
+                        Link = result.ExtraData["link"],
+                        Gender = result.ExtraData["gender"],
+                        ExternalLoginData = loginData
+                    };
+                }
+                else
+                {
+                    loginModel = new RegisterExternalLoginModel
+                    {
+                        UserName = result.UserName,
+                        ExternalLoginData = loginData
+                    };
+                }
                 return View("ExternalLoginConfirmation", loginModel);
             }
         }
