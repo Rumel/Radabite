@@ -46,7 +46,7 @@ namespace Radabite
             {
                 if(db.Database.Exists())
                 {
-                    db.Database.Initialize(true);
+                    System.Data.Entity.Database.SetInitializer<Radabite.Backend.Database.Db>(new System.Data.Entity.DropCreateDatabaseIfModelChanges<Radabite.Backend.Database.Db>());
                 }
             }
 
