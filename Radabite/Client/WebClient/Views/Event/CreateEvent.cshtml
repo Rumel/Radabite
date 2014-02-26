@@ -46,6 +46,8 @@
 
 		</div>
 		<div class="callout panel">
+			<input type="button" value="+" onclick="zoomIn()">
+			<input type="button" value="-" onclick="zoomOut()">
 			<input id="address-box" value="Address" style="width: 100%" />
 			<p id="lat-box">Lat</p>
 			<p id="long-box">Long</p>
@@ -331,7 +333,8 @@
 		geocoder = new google.maps.Geocoder();
 		var mapOptions = {
 			zoom: 12,
-			draggableCursor: 'default'
+			draggableCursor: 'default',
+			zoomControl: false
 		};
 		map = new google.maps.Map(document.getElementById("map-canvas"),
 			mapOptions);
@@ -351,6 +354,14 @@
 		} else {
 			positionError(-1);
 		}
+	}
+	function zoomIn() {
+		var level = map.getZoom();
+		map.setZoom(level + 1);
+	}
+	function zoomOut() {
+		var level = map.getZoom();
+		map.setZoom(level - 1);
 	}
 	function positionError(err) {
 		//Defaults to Lincoln, NE
