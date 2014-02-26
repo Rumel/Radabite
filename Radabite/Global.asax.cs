@@ -41,6 +41,15 @@ namespace Radabite
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
+
+            using(var db = new Radabite.Backend.Database.Db())
+            {
+                if(db.Database.Exists())
+                {
+                    System.Data.Entity.Database.SetInitializer<Radabite.Backend.Database.Db>(new System.Data.Entity.DropCreateDatabaseIfModelChanges<Radabite.Backend.Database.Db>());
+                }
+            }
+
             ServiceManager.Kernel.Load(new List<NinjectModule>
             {
                 new Bindings()
