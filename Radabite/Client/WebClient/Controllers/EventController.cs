@@ -30,7 +30,6 @@ namespace Radabite.Client.WebClient.Controllers
 				Description = "Happy Birthday Grandma",
 				Location = new Location()
 				{
-					LocationId = 1,
 					LocationName = "My house",
 					Latitude = 1.01,
 					Longitude = 1.01

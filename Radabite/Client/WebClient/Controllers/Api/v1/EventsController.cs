@@ -29,9 +29,9 @@ namespace Radabite.Controllers.Api
         }
 
         // POST api/<controller>
-        public void Post([FromBody]string value)
+        public Event Post([FromBody]string value)
         {
-            ServiceManager.Kernel.Get<IEventManager>().Save(new Event()
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(new Event()
             {
                 Description = "My cool description",
                 StartTime = DateTime.Now,
@@ -45,6 +45,8 @@ namespace Radabite.Controllers.Api
                 },
                 Title = "Cool party"
             });
+
+            return result.Result;
         }
 
         // PUT api/<controller>/5
