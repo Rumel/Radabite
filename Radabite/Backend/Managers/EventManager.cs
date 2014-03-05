@@ -29,6 +29,7 @@ namespace Radabite.Backend.Managers
             return ServiceManager.Kernel.Get<IEventAccessor>().GetById(id);
         }
 
+        // http://facebooksdk.net/docs/datetimeconverter/
         public double  ConvertToFacebookTime(DateTime startTime) 
         {
             DateTime epoch = DateTimeConvertor.Epoch;
@@ -37,7 +38,7 @@ namespace Radabite.Backend.Managers
             double unixTime = DateTimeConvertor.ToUnixTime(dtOffset);
             return unixTime;
         }
-
+        // http://facebooksdk.net/docs/datetimeconverter/
         public DateTime ConvertFromUnixTime(double startTime)
         {
             DateTime result = DateTimeConvertor.FromUnixTime(startTime);
