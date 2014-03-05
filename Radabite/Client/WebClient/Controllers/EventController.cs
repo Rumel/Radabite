@@ -17,26 +17,32 @@ namespace Radabite.Client.WebClient.Controllers
         // GET: /Event/
         public ActionResult Index(long eventId)
         {
-			ViewBag.Message = "Event " + eventId.ToString();
-			ViewBag.eventId = eventId;
+            ViewBag.Message = "Event " + eventId.ToString();
+            ViewBag.eventId = eventId;
 
-			Event dummy = new Event()
-			{
-				Id = 1,
-				Title = "G-Ma's 9th birthday",
-				StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
-				EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
-				IsPrivate = true,
-				Description = "Happy Birthday Grandma",
-				Location = new Location()
-				{
-					LocationName = "My house",
-					Latitude = 1.01,
-					Longitude = 1.01
-				}
-			};
+            var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-            return View(dummy);
+            // Used to test UI
+            if (eventRequest == null)
+            {
+                eventRequest = new Event()
+                {
+                    Id = 1,
+                    Title = "G-Ma's 9th birthday",
+                    StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
+                    EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
+                    IsPrivate = true,
+                    Description = "Happy Birthday Grandma",
+                    Location = new Location()
+                    {
+                        LocationName = "My house",
+                        Latitude = 1.01,
+                        Longitude = 1.01
+                    }
+                };
+            }
+
+            return View(eventRequest);
         }
 
 		public ActionResult CreateEvent()
@@ -63,5 +69,34 @@ namespace Radabite.Client.WebClient.Controllers
 			return View(friends);
 		}
 
+        [HttpPost]
+        public RedirectToRouteResult Create(string title, string description, long startTime, long endTime/*, Location location*/)
+        {
+            var newEvent = new Event()
+            {
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                Location = new Location()
+                {
+                    LocationName = "My house",
+                    Latitude = 1.01,
+                    Longitude = 1.01
+                },
+                IsPrivate = false,
+                Title = title,
+                Description = description
+            };
+
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            if (result.Success)
+            {
+                return RedirectToAction("Index", new { userId = 123, eventId = result.Result.Id });
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
     }
 }

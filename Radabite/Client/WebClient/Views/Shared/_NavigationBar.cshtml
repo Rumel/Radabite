@@ -12,7 +12,7 @@
         <section class="top-bar-section">
             <ul class="left">
                 <li>@Html.ActionLink("Profile", "../UserProfile", new { userId = Model["userId"] })</li>
-                <li>@Html.ActionLink("Create", "../Event/CreateEvent", new { userId = Model["userId"] })</li>
+                <li><a data-reveal-id="CreateEventModal" href="#">Create</a></li>
                 <li>@Html.ActionLink("Discover", "../Event/DiscoverEvent", new { userId = Model["userId"] })</li>
                 
             </ul>
@@ -22,3 +22,5 @@
         </section>
     </nav>
 </div>
+
+@Html.Partial("~/Client/WebClient/Views/Shared/_CreateEventModal.cshtml")
