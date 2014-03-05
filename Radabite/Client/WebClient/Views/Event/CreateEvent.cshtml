@@ -2,20 +2,32 @@
     ViewBag.Title = "Create Event";
 }
 
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#datepicker").datepicker();
+	});
+</script>
+
+
+
 <div class="row">
 <hgroup class="title">
     <h2>@User.Identity.Name's @ViewBag.Message</h2>
+	
+	
 </hgroup>
 
 </div>
+
 
 <div class="row">
     <h3>Step 1: Pick a Time!</h3>
     <div class="large-6 medium-6 columns">
         <div class="callout panel">
-            <p>
-                <a href="http://www.google.com/calendar/render?pli=1">Use Google Calendar</a>
-            </p>
+			<input id="datepicker" />
         </div>
     </div>
     <div class="large-6 medium-6 columns">
@@ -58,3 +70,5 @@
         </div>
     </div>
 </div>
+
+
