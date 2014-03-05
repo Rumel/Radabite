@@ -219,7 +219,6 @@
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
-    <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
     <Compile Include="Bindings.cs" />
     <Compile Include="Client\WebClient\Controllers\EventController.cs" />
     <Compile Include="Client\WebClient\Controllers\UserProfileController.cs" />

@@ -25,7 +25,7 @@ namespace Radabite.Client.WebClient.Controllers
 				Id = 1,
 				Title = "G-Ma's 9th birthday",
 				StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
-				EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
+				EndTime = new DateTime(2014, 10, 1, 1, 1, 2),
 				IsPrivate = true,
 				Description = "Happy Birthday Grandma",
 				Location = new Location()
