@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using RadabiteServiceManager;
+using System.Data.Entity;
+using Radabite.Backend.Database;
 
 namespace Radabite
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Radabite.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,13 +11,9 @@ namespace Radabite.Backend.Database
     {
         public string DisplayName { get; set; }
 
-        public string TwitterHandle { get; set; }
+        public UserProfile TwitterProfile { get; set; }
 
-        public string FacebookName { get; set; }
-
-        public long TwitterUserId { get; set; }
-
-        public long FacebookUserId { get; set; }
+        public UserProfile FacebookProfile { get; set; }
 
         public string Email { get; set; }
 
@@ -24,8 +21,12 @@ namespace Radabite.Backend.Database
 
         public string SelfDescription { get; set; }
 
-		public int Age { get; set; }
+        public int Age { get; set; }
 
-		public virtual IList<User> Friends { get; set; }
+        public string Gender { get; set; }
+
+        public string FacebookProfileLink { get; set; }
+
+        public virtual IList<User> Friends { get; set; }
     }
 }
