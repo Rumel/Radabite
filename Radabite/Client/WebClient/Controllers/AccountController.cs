@@ -57,7 +57,10 @@ namespace Radabite.Client.WebClient.Controllers
         public ActionResult LogOff()
         {
             WebSecurity.Logout();
-
+            if (Session["facebooktoken"] != null)
+            {
+                Session.RemoveAll();
+            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -225,6 +228,11 @@ namespace Radabite.Client.WebClient.Controllers
             if (!result.IsSuccessful)
             {
                 return RedirectToAction("ExternalLoginFailure");
+            }
+
+            if (result.ExtraData.Keys.Contains("accesstoken"))
+            {
+                Session["facebooktoken"] = result.ExtraData["accesstoken"];
             }
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
