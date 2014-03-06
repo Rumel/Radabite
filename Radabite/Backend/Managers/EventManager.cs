@@ -33,7 +33,7 @@ namespace Radabite.Backend.Managers
         public double  ConvertToFacebookTime(DateTime startTime) 
         {
             DateTime epoch = DateTimeConvertor.Epoch;
-            int pdtOffset = -25200; // pacific daylight time offeset in seconds
+            int pdtOffset = -25200; // pacific daylight time offset in seconds
             DateTimeOffset dtOffset = new DateTimeOffset(startTime, TimeSpan.FromSeconds(pdtOffset));
             double unixTime = DateTimeConvertor.ToUnixTime(dtOffset);
             return unixTime;
