@@ -384,7 +384,6 @@
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
     <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
     <Content Include="Client\WebClient\Views\UserProfile\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Event\CreateEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
     <Content Include="Client\WebClient\Views\Event\Index.cshtml" />

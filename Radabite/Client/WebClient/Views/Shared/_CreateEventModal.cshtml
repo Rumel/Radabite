@@ -1,21 +1,25 @@
-﻿<div id="CreateEventModal" class="reveal-modal small" data-reveal>
+﻿@model Radabite.Models.EventModel
+
+<div id="CreateEventModal" class="reveal-modal small" data-reveal>
     <h2>Create an Event!</h2>
-    <form action="/Event/Create" method="post">
+    @using (Html.BeginForm("Create", "Event", FormMethod.Post))
+    {
         <div class="row">
             <div class="large-8 columns">
-                Event name: <input type="text" name="title">
+                @Html.TextBoxFor(m => m.Title, new { placeholder = "Event Title" })
+                @Html.ValidationMessageFor(m => m.Title)
             </div>
         </div>
         <div class="row">
             <div class="large-8 columns">
-                Details: <input type="text" name="description">
+                @Html.TextBoxFor(m => m.Description, new { placeholder = "Event Description" })
+                @Html.ValidationMessageFor(m => m.Description)
             </div>
         </div>
         <div class="row">
             <div class="large-8 columns">
-                Where: <input type="text" name="eventlocationname">
-                <input type="hidden" name="eventlocationxcoord" />
-                <input type="hidden" name="eventlocationycoord" />
+                @Html.TextBoxFor(m => m.LocationName, new { placeholder = "Event Location" })
+                @Html.ValidationMessageFor(m => m.LocationName)
             </div>
             <div class="large-4 columns">
                 <a class="radius button" data-reveal-id="CreateEvent-MapModal" href="#">Map</a>
@@ -23,10 +27,12 @@
         </div>
         <div class="row">
             <div class="large-4 columns">
-                Start: <input type="text" name="startTime">
+                @Html.TextBoxFor(m => m.StartTime)
+                @Html.ValidationMessageFor(m => m.StartTime)
             </div>
             <div class="large-4 columns">
-                Finish: <input type="text" name="endTime">
+                @Html.TextBoxFor(m => m.EndTime)
+                @Html.ValidationMessageFor(m => m.EndTime)
             </div>
             <div class="medium-2 columns">
                 <a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
@@ -37,19 +43,20 @@
         </div>
         <div class="row">
             <div class="large-8 columns">
-                Privacy: <select name="privacy">
-                    <option value="private" selected>Private</option>
-                    <option value="public">Public</option>
-                 </select>
+                Private Event: @Html.RadioButtonFor(m => m.IsPrivate, "Private")
             </div>
         </div>
-        <input type="submit" name="Submit" value="Create">
+        <input type="submit" value="Create">
         <a class="close-reveal-modal">&#215;</a>
-    </form>
+    }
 </div>
 
 <div id="CreateEvent-MapModal" class="reveal-modal small" data-reveal>
     <a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
+    @*@Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model);*@
+
+    @Html.HiddenFor(m => m.XCoordinate, new { id = "mapxcoord" })
+    @Html.HiddenFor(m => m.YCoordinate, new { id = "mapycoord" })
 </div>
 
 <div id="CreateEvent-PollModal" class="reveal-modal small" data-reveal>

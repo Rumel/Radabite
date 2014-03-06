@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Radabite.Backend.Interfaces;
 using RadabiteServiceManager;
+using Radabite.Models;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -70,21 +71,21 @@ namespace Radabite.Client.WebClient.Controllers
 		}
 
         [HttpPost]
-        public RedirectToRouteResult Create(string title, string description, long startTime, long endTime/*, Location location*/)
+        public RedirectToRouteResult Create(EventModel model)
         {
             var newEvent = new Event()
             {
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now,
+                StartTime = new DateTime(model.StartTime.Ticks),
+                EndTime = new DateTime(model.EndTime.Ticks),
                 Location = new Location()
                 {
                     LocationName = "My house",
                     Latitude = 1.01,
                     Longitude = 1.01
                 },
-                IsPrivate = false,
-                Title = title,
-                Description = description
+                IsPrivate = model.IsPrivate,
+                Title = model.Title,
+                Description = model.Description
             };
 
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
