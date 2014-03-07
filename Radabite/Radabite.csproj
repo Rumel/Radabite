@@ -218,7 +218,6 @@
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
     <Compile Include="Client\WebClient\Filters\InitializeSimpleMembershipAttribute.cs" />
-    <Compile Include="Client\WebClient\GlimpseSecurityPolicy.cs" />
     <Compile Include="Client\WebClient\Models\EventModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
