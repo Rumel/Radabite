@@ -57,5 +57,11 @@ namespace Radabite.Tests.Managers
         {
             Assert.AreEqual(1, ServiceManager.Kernel.Get<IUserManager>().GetById(1).Id);
         }
+
+        [TestMethod]
+        public void GetByProfileTest()
+        {
+            Assert.IsTrue(false);
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using Ninject;
 using RadabiteServiceManager;
+using Radabite.Models;
 
 namespace Radabite.Backend.Managers
 {
@@ -26,6 +27,27 @@ namespace Radabite.Backend.Managers
         public IEnumerable<User> GetAll()
         {
             return ServiceManager.Kernel.Get<IUserAccessor>().GetAll();
+        }
+
+        User IUserManager.GetByUserName(string userName)
+        {
+            UserProfile profile = ServiceManager.Kernel.Get<IUserAccessor>().GetUserProfile(userName);
+            return ServiceManager.Kernel.Get<IUserAccessor>().GetByUserProfile(profile.UserId);
+        }
+
+        SaveResult<User> IGenericManager<User>.Save(User t)
+        {
+            throw new NotImplementedException();
+        }
+
+        User IGenericManager<User>.GetById(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<User> IGenericManager<User>.GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

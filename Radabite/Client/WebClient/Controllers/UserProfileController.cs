@@ -7,19 +7,19 @@ using System.Web.Mvc;
 using Ninject;
 using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
+using Radabite.Client.WebClient.Models;
 
 namespace Radabite.Client.WebClient.Controllers
 {
 	public class UserProfileController : Controller
 	{
 
-		public ActionResult Index()
+		public ActionResult Index(UserModel userModel)
         {	
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
 			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
 			//dummy empty list of friends
 			var friends = new List<User>();			
-			ViewBag.Friends = friends;
 
             //Get list of events that user is involved in
             List<Event> eventList = new List<Event>();
@@ -33,8 +33,9 @@ namespace Radabite.Client.WebClient.Controllers
                 eventList.ElementAt<Event>(i-90).EndTime = DateTime.Now;
                 eventList.ElementAt<Event>(i-90).Description = "We are going to party " + i + "eva";
             }
-
-            return View(eventList);
+            userModel.Events = eventList;
+            userModel.Friends = friends;
+            return View(userModel);
         }
 
 	}

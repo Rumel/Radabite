@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Radabite.Backend.Database;
 using Radabite.Backend.Interfaces;
+using Radabite.Models;
 
 namespace Radabite.Tests.Mocks.Accessors
 {
@@ -34,6 +35,16 @@ namespace Radabite.Tests.Mocks.Accessors
                 new User(),
                 new User()
             };
+        }
+
+        User GetByUserProfile(int userProfileId)
+        {
+            throw new NotImplementedException();
+        }
+
+        UserProfile GetUserProfile(string userName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

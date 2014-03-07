@@ -128,6 +128,7 @@
     <Compile Include="Controllers\UserProfileControllerTest.cs" />
     <Compile Include="Controllers\EventControllerTest.cs" />
     <Compile Include="Managers\EventManagerTest.cs" />
+    <Compile Include="Managers\FacebookManagerTest.cs" />
     <Compile Include="Managers\UserManagerTest.cs" />
     <Compile Include="Mocks\Accessors\MockEventAccessor.cs" />
     <Compile Include="Mocks\Accessors\MockUserAccessor.cs" />

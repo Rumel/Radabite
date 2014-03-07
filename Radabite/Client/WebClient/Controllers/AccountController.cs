@@ -14,6 +14,7 @@ using Radabite.Backend.Database;
 using Ninject;
 using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
+using Radabite.Client.WebClient.Models;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -228,7 +229,9 @@ namespace Radabite.Client.WebClient.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
-                return RedirectToLocal(returnUrl);
+                var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(result.UserName);
+                var userModel = new UserModel { User = user };
+                return RedirectToAction("Index", "UserProfile", userModel);
             }
 
             if (User.Identity.IsAuthenticated)

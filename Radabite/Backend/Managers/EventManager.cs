@@ -29,20 +29,5 @@ namespace Radabite.Backend.Managers
             return ServiceManager.Kernel.Get<IEventAccessor>().GetById(id);
         }
 
-        // http://facebooksdk.net/docs/datetimeconverter/
-        public double  ConvertToFacebookTime(DateTime startTime) 
-        {
-            DateTime epoch = DateTimeConvertor.Epoch;
-            int pdtOffset = -25200; // pacific daylight time offset in seconds
-            DateTimeOffset dtOffset = new DateTimeOffset(startTime, TimeSpan.FromSeconds(pdtOffset));
-            double unixTime = DateTimeConvertor.ToUnixTime(dtOffset);
-            return unixTime;
-        }
-        // http://facebooksdk.net/docs/datetimeconverter/
-        public DateTime ConvertFromUnixTime(double startTime)
-        {
-            DateTime result = DateTimeConvertor.FromUnixTime(startTime);
-            return result;
-        }
     }
 }
