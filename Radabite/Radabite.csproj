@@ -218,6 +218,7 @@
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
     <Compile Include="Client\WebClient\Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Client\WebClient\Models\EventModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -294,6 +295,10 @@
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config" />
     <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <None Include="ConnectionStrings.config" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -365,7 +370,6 @@
     <Content Include="Client\WebClient\Views\Shared\_Foundation.cshtml" />
     <Content Include="Client\WebClient\Views\Home\Index.cshtml" />
     <Content Include="Client\WebClient\Views\UserProfile\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Event\CreateEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
     <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
