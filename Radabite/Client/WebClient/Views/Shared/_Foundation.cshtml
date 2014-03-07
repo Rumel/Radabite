@@ -16,11 +16,10 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @Html.Partial("~/Client/WebClient/Views/Shared/_NavigationBar.cshtml", Request.Params)
-    @RenderBody()
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/foundation")
+    @Html.Partial("~/Client/WebClient/Views/Shared/_NavigationBar.cshtml", Request.Params)
+    @RenderBody()
     <script>
         $(document).foundation();
     </script>
