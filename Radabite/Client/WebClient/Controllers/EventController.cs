@@ -7,47 +7,44 @@ using System.Web;
 using System.Web.Mvc;
 using Radabite.Backend.Interfaces;
 using RadabiteServiceManager;
-using Radabite.Client.WebClient.ViewModels;
+using Radabite.Models;
 
 namespace Radabite.Client.WebClient.Controllers
 {
+    public class EventController : Controller
+    {
 
-	public class EventController : Controller
-	{
+        //
+        // GET: /Event/
+        public ActionResult Index(long eventId)
+        {
+            ViewBag.Message = "Event " + eventId.ToString();
+            ViewBag.eventId = eventId;
 
-		//
-		// GET: /Event/
-		public ActionResult Index(long eventId)
-		{
-			ViewBag.Message = "Event " + eventId.ToString();
-			ViewBag.eventId = eventId;
+            var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-			//look up the event in DB
-			var mEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+            // Used to test UI
+            if (eventRequest == null)
+            {
+                eventRequest = new Event()
+                {
+                    Id = 1,
+                    Title = "G-Ma's 9th birthday",
+                    StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
+                    EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
+                    IsPrivate = true,
+                    Description = "Happy Birthday Grandma",
+                    Location = new Location()
+                    {
+                        LocationName = "My house",
+                        Latitude = 1.01,
+                        Longitude = 1.01
+                    }
+                };
+            }
 
-			//for UI testing
-			if (mEvent == null)
-			{
-				mEvent = new Event()
-				{
-					Id = 1000,
-					Title = "G-Ma's 9th birthday",
-					StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
-					EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
-					IsPrivate = true,
-					Description = "Happy Birthday Grandma",
-					Location = new Location()
-					{
-						LocationId = 1,
-						LocationName = "My house",
-						Latitude = 1.01,
-						Longitude = 1.01
-					}
-				};
-			}
-
-			return View(mEvent);
-		}
+            return View(eventRequest);
+        }
 
 		public ActionResult CreateEvent()
 		{
@@ -70,23 +67,37 @@ namespace Radabite.Client.WebClient.Controllers
 				new User{DisplayName = "3"}
 			};
 
-			//just getting all events right now, will become nearby events, or friends events or something
-			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
-
-			//dummy events to see if it works
-			events = new List<Event>() 
-			{ 
-				new Event{Id = 1, Title = "Nebraska Women in Agriculture Conference"},
-				new Event{Id = 2, Title = "MyUNL Blackboard - Rubrics Essentials"},
-				new Event{Id = 3, Title = "Place Studies: Brownbag on Teaching Place"}
-			};
-
-			return View(new ViewModel
-			{
-				Friends = friends,
-				Events = events.ToList()
-			});
+			return View(friends);
 		}
 
-	}
+        [HttpPost]
+        public RedirectToRouteResult Create(EventModel model)
+        {
+            var newEvent = new Event()
+            {
+                StartTime = new DateTime(model.StartTime.Ticks),
+                EndTime = new DateTime(model.EndTime.Ticks),
+                Location = new Location()
+                {
+                    LocationName = "My house",
+                    Latitude = 1.01,
+                    Longitude = 1.01
+                },
+                IsPrivate = model.IsPrivate,
+                Title = model.Title,
+                Description = model.Description
+            };
+
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            if (result.Success)
+            {
+                return RedirectToAction("Index", new { userId = 123, eventId = result.Result.Id });
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+    }
 }
