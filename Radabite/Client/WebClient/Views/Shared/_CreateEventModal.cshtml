@@ -18,7 +18,7 @@
         </div>
         <div class="row">
             <div class="large-8 columns">
-                @Html.TextBoxFor(m => m.LocationName, new { placeholder = "Event Location" })
+                @Html.TextBoxFor(m => m.LocationName, new { placeholder = "Event Location", id="locationInput" })
                 @Html.ValidationMessageFor(m => m.LocationName)
             </div>
             <div class="large-4 columns">
@@ -53,7 +53,7 @@
 
 <div id="CreateEvent-MapModal" class="reveal-modal small" data-reveal>
     <a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
-    @*@Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model);*@
+    @Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model)
 
     @Html.HiddenFor(m => m.XCoordinate, new { id = "mapxcoord" })
     @Html.HiddenFor(m => m.YCoordinate, new { id = "mapycoord" })
