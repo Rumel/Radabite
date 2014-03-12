@@ -73,8 +73,8 @@ namespace Radabite.Client.WebClient.Controllers
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
-                    Latitude = model.YCoordinate,
-                    Longitude = model.XCoordinate
+                    Latitude = model.Latitude,
+                    Longitude = model.Longitude
                 },
                 IsPrivate = model.IsPrivate,
                 Title = model.Title,

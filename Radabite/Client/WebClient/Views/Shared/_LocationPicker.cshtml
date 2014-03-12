@@ -4,12 +4,16 @@
 		max-width: inherit;
 	}
 </style>
-
+<div class="row">
+	<a class="radius button" data-reveal-id="CreateEventModal" href="#" onclick="clearLocation()">Back</a>
+	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Save</a>
+</div>
 <div class="row">
 	<div class="small-12 columns">
 		<h5>Search for a place or click to mark a location</h5>
 	</div>
 </div>
+<div class="row"><div id="google-map" style="width: 100%; height: 300px"></div></div>
 <div class="row">
 	<div class="small-7 large-10 columns">
 		<input id="address" type="text" value="Lincoln, NE" onkeypress="if (event.keyCode == 13) { searchAddress() }">
@@ -18,11 +22,7 @@
 		<input type="button" value="Search" onclick="searchAddress()" class="button radius" style="padding: 9px">
 	</div>
 </div>
-<div class="row"><div id="google-map" style="width: 100%; height: 300px"></div></div>
-<div class="row">
-	<p id="lat-box">Lat</p>
-	<p id="long-box">Long</p>
-</div>
+
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9mnrBBjZsNVYhGYaDEh8I-XwkKa0yW74&sensor=true"></script>
 
@@ -41,6 +41,11 @@
 		}
 
 	});
+	function clearLocation() {
+		document.getElementById('locationInput').value = '';
+		document.getElementById('mapLongitude').value = null;
+		document.getElementById('mapLatitude').value = null;
+	}
 	function initialize() {
 		geocoder = new google.maps.Geocoder();
 		var mapOptions = {
@@ -86,10 +91,8 @@
 
 		//write to the form
 		readMarkerAddress();
-		document.getElementById('mapxcoord').value = location.lng();
-		document.getElementById('mapycoord').value = location.lat();
-		document.getElementById('lat-box').innerHTML = location.lat();
-		document.getElementById('long-box').innerHTML = location.lng();
+		document.getElementById('mapLongitude').value = location.lng();
+		document.getElementById('mapLatitude').value = location.lat();
 	}
 	function searchAddress() {
 		var address = document.getElementById("address").value;
