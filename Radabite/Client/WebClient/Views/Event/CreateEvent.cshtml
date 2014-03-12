@@ -101,15 +101,16 @@
 			}
 
 			var $tpDiv = $('<div class="time-picker' + (settings.show24Hours ? '' : ' time-picker-12hours') + '"></div>');
-			var $tpList = $('<ul></ul>');
+			var $tpList = $('<select id=\"time-select\"></select>');
 
 			// Build the list.
 			for (var i = 0; i < times.length; i++) {
-				$tpList.append("<li>" + times[i] + "</li>");
+				$tpList.append("<option value=\"" + i + "\">" + times[i] + "</option>");
 			}
 			$tpDiv.append($tpList);
 			// Append the timPicker to the body and position it.
-			$tpDiv.appendTo('body').hide();
+			$tpList.appendTo('#timepicker');
+			//$tpDiv.appendTo('body').hide();
 
 			// Store the mouse state, used by the blur event. Use mouseover instead of
 			// mousedown since Opera fires blur before mousedown.
@@ -334,28 +335,40 @@
 </script>
 <script>
 	
-	jQuery(function() {
-		// Default.
-		
-		// 02.00 AM - 03.30 PM, 15 minutes steps.
-		$("#time2").timePicker({
-			startTime: "02.00",  // Using string. Can take string or Date object.
-			endTime: new Date(0, 0, 0, 15, 30, 0),  // Using Date object.
+	jQuery(function() {		
+		$("#timepicker").timePicker({
+			startTime: "0:00",  // Using string. Can take string or Date object.
+			endTime: "23:59", //new Date(0, 0, 0, 23, 45, 0),  // Using Date object.
 			show24Hours: false,
-			separator:'.',
-			step: 15});
-    
-		// An example how the two helper functions can be used to achieve 
-		// advanced functionality.
-		// - Linking: When changing the first input the second input is updated and the
-		//   duration is kept.
-		// - Validation: If the second input has a time earlier than the firs input,
-		//   an error class is added.
-    
+			separator:':',
+			step: 30});
 	});
   
 </script>
 
+
+<script>
+	function addTime() {
+		var times = document.getElementById('times');
+
+		var time = document.createElement('div');
+		time.className = 'row';
+
+		var words = document.createElement('h6');
+		words.innerHTML = 'Words';
+
+		var datePicker = document.getElementById('datepicker');
+		var timePicker = document.getElementById('time-select');
+		if (datePicker.value != '') {
+			words.innerHTML = datePicker.value + ' ' + timePicker.options[timePicker.selectedIndex].text;
+			time.appendChild(words);
+			times.appendChild(time);
+		} else {
+			//lame warning
+			datePicker.value = 'Pick a time';
+		}
+	}
+</script>
 
 <div class="row">
 <hgroup class="title">
@@ -366,10 +379,20 @@
 
 </div>
 
-<div id="timeModal" class="reveal-modal" data-reveal>
-	<div class="callout panel">
-		<input id="datepicker" />
-		<input type="text" id="time2" size="10" value="12.00 PM" autocomplete="OFF">
+<div id="timeModal" class="reveal-modal small" data-reveal>
+	<h5>Check available times:</h5>
+	<div id="times"></div>
+	<div class="row">
+		<div class="small-4 columns">
+			<input id="datepicker" />
+		</div>
+		<div class="small-4 columns">
+			<div id="timepicker"></div>
+		</div>
+		<div class="small-4 columns">
+			<a href="#" class="button radius" onclick="addTime()">Add</a>
+		</div>
+		@*<input type="text" id="time2" size="10" value="12.00 PM" autocomplete="OFF">*@
 	</div>
 	<a class="close-reveal-modal">&#215;</a>
 </div>
