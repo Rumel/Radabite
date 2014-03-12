@@ -59,9 +59,11 @@ namespace Radabite.Tests.Managers
         }
 
         [TestMethod]
-        public void GetByProfileTest()
-        {
-            Assert.IsTrue(false);
+        public void GetByUserNameTest()
+        {   
+            var name = "Dalton";
+            var actual = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(name);
+            Assert.AreNotEqual(null, actual.FacebookProfile);
         }
     }
 }

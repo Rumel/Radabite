@@ -37,14 +37,14 @@ namespace Radabite.Tests.Mocks.Accessors
             };
         }
 
-        User GetByUserProfile(int userProfileId)
+        public User GetByUserProfile(int userProfileId)
         {
-            throw new NotImplementedException();
+            return new User { FacebookProfile = new UserProfile{UserId = userProfileId} };
         }
 
-        UserProfile GetUserProfile(string userName)
+        public UserProfile GetUserProfile(string userName)
         {
-            throw new NotImplementedException();
+            return new UserProfile { UserName = userName };
         }
     }
 }

@@ -229,9 +229,8 @@ namespace Radabite.Client.WebClient.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
-                var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(result.UserName);
-                var userModel = new UserModel { User = user };
-                return RedirectToAction("Index", "UserProfile", userModel);
+                // the u becomes a route parameter
+                return RedirectToAction("Index", "UserProfile", new { u = result.UserName });
             }
 
             if (User.Identity.IsAuthenticated)
