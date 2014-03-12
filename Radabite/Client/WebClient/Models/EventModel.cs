@@ -22,9 +22,9 @@ namespace Radabite.Models
 
         public string LocationName { get; set; }
 
-        public int XCoordinate { get; set; }
+        public double XCoordinate { get; set; }
 
-        public int YCoordinate { get; set; }
+        public double YCoordinate { get; set; }
     }  
 
 }
