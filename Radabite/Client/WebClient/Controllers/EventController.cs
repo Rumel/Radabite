@@ -43,7 +43,19 @@ namespace Radabite.Client.WebClient.Controllers
                 };
             }
 
-            return View(eventRequest);
+            var eventViewModel = new EventModel()
+            {
+                Title = eventRequest.Title,
+                StartTime = eventRequest.StartTime,
+                EndTime = eventRequest.EndTime,
+                IsPrivate = eventRequest.IsPrivate,
+                Description = eventRequest.Description,
+                LocationName = "My house",
+                XCoordinate = 1.01,
+                YCoordinate = 1.01,
+           };
+
+            return View(eventViewModel);
         }
 
 		public ActionResult CreateEvent()

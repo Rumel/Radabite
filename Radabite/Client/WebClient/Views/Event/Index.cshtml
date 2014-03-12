@@ -1,11 +1,11 @@
-﻿@using Radabite.Backend.Database
+﻿@using Radabite.Models
 
 
 @{
 	ViewBag.Title = "Event";
 }
 
-@model Event
+@model EventModel
 
 <div class="row">
 	<hgroup class="title">
@@ -14,7 +14,12 @@
 </div>
 
 <div class="row">
-	<h3>Title: @Model.Title</h3>
+    <div class="large-8 medium-8 columns">
+    	<h3>Title: @Model.Title</h3>
+    </div>
+    <div class="large-4 medium-4 columns">
+        <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit Event</a>
+    </div>
 </div>
 
 <div class="row">
@@ -33,6 +38,7 @@
 		</li>
 		<li>
 			<h5>Location:</h5>
+            @Model.LocationName
 		</li>
 		<li>
 			<h5>Privacy:</h5>
@@ -40,14 +46,16 @@
 				if(Model.IsPrivate)
 				{
 					<span style="color: blue" class="inline">Private</span>	
-					<span style="color: gray" class="inline">Public</span>
+					@*<span style="color: gray" class="inline">Public</span>*@
 				}
 				else
 				{
-					<span style="color: gray" class="inline">Private</span>	
+					@*<span style="color: gray" class="inline">Private</span>*@
 					<span style="color: blue" class="inline">Public</span>
 				}
 			}
 		</li>
 	</ul>
 </div>
+
+@Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
