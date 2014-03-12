@@ -298,10 +298,6 @@
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <None Include="ConnectionStrings.config" />
-    <None Include="ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.accordion.js" />
