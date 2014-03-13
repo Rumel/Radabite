@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Radabite.Backend.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,15 +9,6 @@ using System.Web.Security;
 
 namespace Radabite.Models
 {
-    public class UsersContext : DbContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
-    }
 
     [Table("UserProfile")]
     public class UserProfile
@@ -32,7 +24,9 @@ namespace Radabite.Models
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
-
+        public string PersonName { get; set; }
+        public string Gender { get; set; }
+        public string Link { get; set; }
         public string ExternalLoginData { get; set; }
     }
 

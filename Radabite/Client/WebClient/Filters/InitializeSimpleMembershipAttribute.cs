@@ -4,7 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
-using Radabite.Models;
+using Radabite.Backend.Database;
 
 namespace Radabite.Filters
 {
@@ -25,11 +25,11 @@ namespace Radabite.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<Db>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new Db())
                     {
                         if (!context.Database.Exists())
                         {
