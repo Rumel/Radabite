@@ -229,6 +229,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\WebClient\App_Data\Radabite.mdf" />
+    <Content Include="Client\WebClient\App_Data\Radabite_log.ldf">
+      <DependentUpon>Radabite.mdf</DependentUpon>
+    </Content>
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
@@ -373,7 +377,7 @@
     <Content Include="ConnectionStrings.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\WebClient\App_Data\" />
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

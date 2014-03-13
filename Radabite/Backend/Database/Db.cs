@@ -19,5 +19,12 @@ namespace Radabite.Backend.Database
         {
 
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Event>().HasRequired<Location>(e => e.Location);
+        }
     }
 }
