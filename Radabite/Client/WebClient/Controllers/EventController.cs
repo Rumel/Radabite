@@ -39,7 +39,8 @@ namespace Radabite.Client.WebClient.Controllers
                         LocationName = "My house",
                         Latitude = 1.01,
                         Longitude = 1.01
-                    }
+                    },
+                    IsActive = true
                 };
             }
 
@@ -97,7 +98,8 @@ namespace Radabite.Client.WebClient.Controllers
                 },
                 IsPrivate = model.IsPrivate,
                 Title = model.Title,
-                Description = model.Description
+                Description = model.Description,
+                IsActive = model.IsActive
             };
 
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);

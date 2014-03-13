@@ -25,6 +25,13 @@ namespace Radabite.Models
         public double XCoordinate { get; set; }
 
         public double YCoordinate { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public EventModel()
+        {
+            IsActive = true;
+        }
     }  
 
 }

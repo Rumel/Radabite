@@ -34,7 +34,7 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Events.FirstOrDefault(x => x.Id == id);
+                return db.Events.FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
         }
     }
