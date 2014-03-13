@@ -4,13 +4,13 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-		$("#start-datepicker").datepicker();
+		$("#startDatepicker").datepicker();
 	});
 	$(document).ready(function () {
-		$("#end-datepicker").datepicker();
+		$("#endDatepicker").datepicker();
 	});
 
-	/*
+/*
  * A time picker for jQuery
  *
  * Dual licensed under the MIT and GPL licenses.
@@ -64,20 +64,16 @@
 				times[times.length] = formatTime(time, settings);
 				time = new Date(time.setMinutes(time.getMinutes() + settings.step));
 			}
-
 			var $tpDiv = $('<div class="time-picker' + (settings.show24Hours ? '' : ' time-picker-12hours') + '"></div>');
-			var $tpList = $('<select id=\"time-select\"></select>');
+			var $tpList = $('<select id=\"' + elm.id + 'Select\"></select>');
 
 			// Build the list.
 			for (var i = 0; i < times.length; i++) {
 				$tpList.append("<option value=\"" + i + "\">" + times[i] + "</option>");
 			}
 			$tpDiv.append($tpList);
-			// Append the timPicker to the body and position it.
+			// Append the time picker list
 			$tpList.appendTo(elm);
-			//$tpList.appendTo('#startTimepicker');
-			//$tpList.appendTo('#endTimepicker');
-			//$tpDiv.appendTo('body').hide();
 
 			// Store the mouse state, used by the blur event. Use mouseover instead of
 			// mousedown since Opera fires blur before mousedown.
@@ -319,16 +315,41 @@
 		});
 	});
 </script>
+<script>
+	saveTimes = function () {
+		var startInput = document.getElementById('startTimeInput');
+		var endInput = document.getElementById('endTimeInput');
+
+		var startDate = document.getElementById('startDatepicker');
+		var startTime = document.getElementById('startTimepickerSelect');
+		var endDate = document.getElementById('endDatepicker');
+		var endTime = document.getElementById('endTimepickerSelect');
+
+
+		if (startDate.value == '') {
+			//lame warning
+			startDate.value = 'Pick a date';
+			console.log('1');
+		} else if(endDate.value == '') {
+			endDate.value = 'Pick a date';
+			console.log('2');
+		} else {
+			startInput.value = startDate.value + ' ' + startTime.options[startTime.selectedIndex].text;
+			endInput.value = endDate.value + ' ' + endTime.options[endTime.selectedIndex].text;
+			console.log('3');
+		}
+	}
+</script>
 
 <div id="CreateEvent-CalendarModal" class="reveal-modal small" data-reveal>
 	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Save</a>
+	<a class="radius button" data-reveal-id="CreateEventModal" href="#" onclick="saveTimes()">Save</a>
 	<div class="row">
 		<div class="small-4 columns">
 			<h5>Start time:</h5>
 		</div>
 		<div class="small-4 columns">
-			<input id="start-datepicker" style="padding: 8px ; margin:0px ; width: 100%" />
+			<input id="startDatepicker" style="padding: 8px ; margin:0px ; width: 100%" />
 		</div>
 		<div class="small-4 columns">
 			<div id="startTimepicker"></div>
@@ -339,14 +360,10 @@
 			<h5>End time:</h5>
 		</div>
 		<div class="small-4 columns">
-			<input id="end-datepicker" style="padding: 8px ; margin:0px ; width: 100%" />
+			<input id="endDatepicker" style="padding: 8px ; margin:0px ; width: 100%" />
 		</div>
 		<div class="small-4 columns">
 			<div id="endTimepicker"></div>
 		</div>
 	</div>
-	<div class="small-4 columns">
-		<a href="#" class="button radius">Add</a>
-	</div>
-	<a class="close-reveal-modal">&#215;</a>
 </div>
