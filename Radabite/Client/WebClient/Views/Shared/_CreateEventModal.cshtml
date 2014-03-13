@@ -1,5 +1,20 @@
 ﻿@model Radabite.Models.EventModel
 
+<script>
+	$(document).on('close', '[data-reveal]', function () {
+		var modal = $(this);
+
+		if (modal.attr('id') == 'CreateEventModal') {
+			console.log('clear\'em');
+			document.getElementById('Title').value = '';
+			document.getElementById('Description').value = '';
+			document.getElementById('locationInput').value = '';
+			document.getElementById('startTimeInput').value = '';
+			document.getElementById('endTimeInput').value = '';
+		}
+	});
+</script>
+
 <div id="CreateEventModal" class="reveal-modal small" data-reveal>
 	<h2>Create an Event!</h2>
 	@using (Html.BeginForm("Create", "Event", FormMethod.Post))

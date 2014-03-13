@@ -71,6 +71,7 @@
 			for (var i = 0; i < times.length; i++) {
 				$tpList.append("<option value=\"" + i + "\">" + times[i] + "</option>");
 			}
+			$tpList[0].selectedIndex = 38;
 			$tpDiv.append($tpList);
 			// Append the time picker list
 			$tpList.appendTo(elm);
@@ -279,22 +280,13 @@
 
 		/* Normalise time object to a common date. */
 		function normaliseTime(time) {
-			time.setFullYear(2001);
+			time.setFullYear(2014);
 			time.setMonth(0);
 			time.setDate(0);
 			return time;
 		}
 
 	})(jQuery);
-
-
-	$("#time2").timePicker({
-		startTime: "02.00", // Using string. Can take string or Date object.
-		endTime: new Date(0, 0, 0, 15, 30, 0), // Using Date object here.
-		show24Hours: false,
-		separator: '.',
-		step: 15
-	});
 </script>
 <script>
 
@@ -329,21 +321,19 @@
 		if (startDate.value == '') {
 			//lame warning
 			startDate.value = 'Pick a date';
-			console.log('1');
 		} else if(endDate.value == '') {
 			endDate.value = 'Pick a date';
-			console.log('2');
 		} else {
 			startInput.value = startDate.value + ' ' + startTime.options[startTime.selectedIndex].text;
 			endInput.value = endDate.value + ' ' + endTime.options[endTime.selectedIndex].text;
-			console.log('3');
+			$('#CreateEventModal').foundation('reveal', 'open');
 		}
 	}
 </script>
 
 <div id="CreateEvent-CalendarModal" class="reveal-modal small" data-reveal>
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#" onclick="saveTimes()">Save</a>
+	<a class="radius button" data-reveal-id="CreateEventModal">Back</a>
+	<a class="radius button" onclick="saveTimes()">Save</a>
 	<div class="row">
 		<div class="small-4 columns">
 			<h5>Start time:</h5>

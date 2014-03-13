@@ -7,8 +7,8 @@
 		}
 	</style>
 	<div class="row">
-		<a class="radius button" data-reveal-id="CreateEventModal" href="#" onclick="clearLocation()">Back</a>
-		<a class="radius button" data-reveal-id="CreateEventModal" href="#">Save</a>
+		<a class="radius button" data-reveal-id="CreateEventModal" onclick="clearLocation()">Back</a>
+		<a class="radius button" data-reveal-id="CreateEventModal">Save</a>
 	</div>
 	<div class="row">
 		<div class="small-12 columns">
@@ -41,7 +41,6 @@
 			if (modal.attr('id') == 'CreateEvent-MapModal' && map == null) {
 				initialize();
 			}
-
 		});
 		function clearLocation() {
 			document.getElementById('locationInput').value = '';
