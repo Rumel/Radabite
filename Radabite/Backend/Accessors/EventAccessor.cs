@@ -25,7 +25,7 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Events.ToList();
+                return db.Events.Include("Location").ToList();
             }
         }
 
@@ -34,7 +34,7 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Events.FirstOrDefault(x => x.Id == id);
+                return db.Events.Include("Location").FirstOrDefault(x => x.Id == id);
             }
         }
     }
