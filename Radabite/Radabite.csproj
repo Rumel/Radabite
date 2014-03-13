@@ -301,7 +301,9 @@
     <Content Include="Client\WebClient\Views\Shared\_UpdateEventModal.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <None Include="ConnectionStrings.config" />
+    <None Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>

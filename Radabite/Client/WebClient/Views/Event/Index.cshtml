@@ -62,3 +62,16 @@
 </div>
 
 @Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
+
+<div id="DeleteEventModal" class="reveal-modal small" data-reveal>
+    <h1>Are you sure you want to delete this event?</h1>
+    <a class="radius button" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
+    <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+
+<script type="text/javascript">
+    $(document).on('click', '#cancel-delete', function () {
+        $('#DeleteEventModal').foundation('reveal', 'close');
+    });
+</script>
