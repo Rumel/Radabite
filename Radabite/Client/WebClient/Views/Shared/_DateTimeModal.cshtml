@@ -4,7 +4,10 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-		$("#datepicker").datepicker();
+		$("#start-datepicker").datepicker();
+	});
+	$(document).ready(function () {
+		$("#end-datepicker").datepicker();
 	});
 
 	/*
@@ -71,7 +74,9 @@
 			}
 			$tpDiv.append($tpList);
 			// Append the timPicker to the body and position it.
-			$tpList.appendTo('#timepicker');
+			$tpList.appendTo(elm);
+			//$tpList.appendTo('#startTimepicker');
+			//$tpList.appendTo('#endTimepicker');
 			//$tpDiv.appendTo('body').hide();
 
 			// Store the mouse state, used by the blur event. Use mouseover instead of
@@ -298,7 +303,14 @@
 <script>
 
 	jQuery(function () {
-		$("#timepicker").timePicker({
+		$("#startTimepicker").timePicker({
+			startTime: "0:00",  // Using string. Can take string or Date object.
+			endTime: "23:59", //new Date(0, 0, 0, 23, 45, 0),  // Using Date object.
+			show24Hours: false,
+			separator: ':',
+			step: 30
+		});
+		$("#endTimepicker").timePicker({
 			startTime: "0:00",  // Using string. Can take string or Date object.
 			endTime: "23:59", //new Date(0, 0, 0, 23, 45, 0),  // Using Date object.
 			show24Hours: false,
@@ -306,47 +318,33 @@
 			step: 30
 		});
 	});
-
-</script>
-
-
-<script>
-	function addTime() {
-		var times = document.getElementById('times');
-
-		var time = document.createElement('div');
-		time.className = 'row';
-
-		var words = document.createElement('h6');
-		words.innerHTML = 'Words';
-
-		var datePicker = document.getElementById('datepicker');
-		var timePicker = document.getElementById('time-select');
-		if (datePicker.value != '') {
-			words.innerHTML = datePicker.value + ' ' + timePicker.options[timePicker.selectedIndex].text;
-			time.appendChild(words);
-			times.appendChild(time);
-		} else {
-			//lame warning
-			datePicker.value = 'Pick a time';
-		}
-	}
 </script>
 
 <div id="timeModal" class="reveal-modal small" data-reveal>
-	<h5>Check available times:</h5>
-	<div id="times"></div>
 	<div class="row">
 		<div class="small-4 columns">
-			<input id="datepicker" style="padding: 8px ; margin:0px ; width: 100%" />
+			<h5>Start time:</h5>
 		</div>
 		<div class="small-4 columns">
-			<div id="timepicker"></div>
+			<input id="start-datepicker" style="padding: 8px ; margin:0px ; width: 100%" />
 		</div>
 		<div class="small-4 columns">
-			<a href="#" class="button radius" onclick="addTime()">Add</a>
+			<div id="startTimepicker"></div>
 		</div>
-		@*<input type="text" id="time2" size="10" value="12.00 PM" autocomplete="OFF">*@
 	</div>
+	<div class="row">
+		<div class="small-4 columns">
+			<h5>End time:</h5>
+		</div>
+		<div class="small-4 columns">
+			<input id="end-datepicker" style="padding: 8px ; margin:0px ; width: 100%" />
+		</div>
+		<div class="small-4 columns">
+			<div id="endTimepicker"></div>
+		</div>
+	</div>
+		<div class="small-4 columns">
+			<a href="#" class="button radius">Add</a>
+		</div>
 	<a class="close-reveal-modal">&#215;</a>
 </div>
