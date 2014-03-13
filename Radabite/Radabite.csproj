@@ -218,6 +218,7 @@
     <Compile Include="Backend\Database\Db.cs" />
     <Compile Include="Backend\Database\Event.cs" />
     <Compile Include="Client\WebClient\Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Client\WebClient\ViewModels\ViewModel.cs" />
     <Compile Include="Client\WebClient\Models\EventModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -295,6 +296,7 @@
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config" />
     <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
       <SubType>Code</SubType>
     </Content>
