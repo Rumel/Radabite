@@ -46,13 +46,6 @@ namespace Radabite.Client.WebClient.Controllers
             return View(eventRequest);
         }
 
-		public ActionResult CreateEvent()
-		{
-			ViewBag.Message = "Create Event page.";
-
-			return View();
-		}
-
 		public ActionResult DiscoverEvent()
 		{
 			ViewBag.Message = "Discover Event page.";
@@ -79,9 +72,9 @@ namespace Radabite.Client.WebClient.Controllers
                 EndTime = new DateTime(model.EndTime.Ticks),
                 Location = new Location()
                 {
-                    LocationName = "My house",
-                    Latitude = 1.01,
-                    Longitude = 1.01
+                    LocationName = model.LocationName,
+                    Latitude = model.Latitude,
+                    Longitude = model.Longitude
                 },
                 IsPrivate = model.IsPrivate,
                 Title = model.Title,
