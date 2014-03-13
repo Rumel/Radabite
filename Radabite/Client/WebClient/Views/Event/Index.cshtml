@@ -40,7 +40,7 @@
 		</li>
 		<li>
 			<h5>Location:</h5>
-            @Model.Location.LocationName
+            @Model.LocationName
 		</li>
 		<li>
 			<h5>Privacy:</h5>
@@ -63,9 +63,19 @@
 @Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
 
 <div id="DeleteEventModal" class="reveal-modal small" data-reveal>
-    <h1>Are you sure you want to delete this event?</h1>
-    <a class="radius button" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
-    <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>
+    <h4>Are you sure you want to delete this event?</h4>
+    <br />
+    <div class="row">
+        <div class="medium-12 medium-centered columns">
+            @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post)) {
+                <input type="submit" value="Yes, Delete" />
+            }
+            @*<a class="radius button" id="confirm-delete" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
+            <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>*@
+        </div>
+    </div>
+    
+    
     <a class="close-reveal-modal">&#215;</a>
 </div>
 
@@ -73,4 +83,10 @@
     $(document).on('click', '#cancel-delete', function () {
         $('#DeleteEventModal').foundation('reveal', 'close');
     });
+    /*$(document).on('click', '#confirm-delete', function () {
+        $('#DeleteEventModal').foundation('reveal', 'close');
+        $.post("Url.Action("Delete")", function (data) {
+            // do stuff;
+        });
+    });*/
 </script>
