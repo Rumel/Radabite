@@ -1,128 +1,131 @@
-﻿@*gets around problem with map controls from foundation.css*@
-<style>
-	#map-canvas img {
-		max-width: inherit;
-	}
-</style>
-<div class="row">
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#" onclick="clearLocation()">Back</a>
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Save</a>
-</div>
-<div class="row">
-	<div class="small-12 columns">
-		<h5>Search for a place or click to mark a location</h5>
-	</div>
-</div>
-<div class="row"><div id="google-map" style="width: 100%; height: 300px"></div></div>
-<div class="row">
-	<div class="small-7 large-10 columns">
-		<input id="address" type="text" value="Lincoln, NE" onkeypress="if (event.keyCode == 13) { searchAddress() }">
-	</div>
-	<div class="small-5 large-2 columns">
-		<input type="button" value="Search" onclick="searchAddress()" class="button radius" style="padding: 9px">
-	</div>
-</div>
+﻿<div id="CreateEvent-MapModal" class="reveal-modal small" data-reveal>
 
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9mnrBBjZsNVYhGYaDEh8I-XwkKa0yW74&sensor=true"></script>
-
-<!--geometa.js from a Google example for finding current location (Gears)-->
-<script type="text/javascript" src="http://google-ajax-examples.googlecode.com/svn/trunk/whereareyou/scripts/geometa.js"></script>
-		
-<script type="text/javascript">
-	var map;
-	var geocoder;
-	var marker;
-	$(document).on('opened', '[data-reveal]', function () {
-		//initialize the map the first time the modal is opened
-		var modal = $(this);
-		if (modal.attr('id') == 'CreateEvent-MapModal' && map == null) {
-			initialize();
+	@*gets around problem with map controls from foundation.css*@
+	<style>
+		#map-canvas img {
+			max-width: inherit;
 		}
+	</style>
+	<div class="row">
+		<a class="radius button" data-reveal-id="CreateEventModal" href="#" onclick="clearLocation()">Back</a>
+		<a class="radius button" data-reveal-id="CreateEventModal" href="#">Save</a>
+	</div>
+	<div class="row">
+		<div class="small-12 columns">
+			<h5>Search for a place or click to mark a location</h5>
+		</div>
+	</div>
+	<div class="row"><div id="google-map" style="width: 100%; height: 300px"></div></div>
+	<div class="row">
+		<div class="small-7 large-10 columns">
+			<input id="address" type="text" value="Lincoln, NE" onkeypress="if (event.keyCode == 13) { searchAddress() }">
+		</div>
+		<div class="small-5 large-2 columns">
+			<input type="button" value="Search" onclick="searchAddress()" class="button radius" style="padding: 9px">
+		</div>
+	</div>
 
-	});
-	function clearLocation() {
-		document.getElementById('locationInput').value = '';
-		document.getElementById('mapLongitude').value = null;
-		document.getElementById('mapLatitude').value = null;
-	}
-	function initialize() {
-		geocoder = new google.maps.Geocoder();
-		var mapOptions = {
-			zoom: 12,
-			draggableCursor: 'default'
-		};
-		map = new google.maps.Map(document.getElementById("google-map"),
-			mapOptions);
 
-		google.maps.event.addListener(map, 'click', function (event) {
-			moveMarker(event.latLng);
-		});
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9mnrBBjZsNVYhGYaDEh8I-XwkKa0yW74&sensor=true"></script>
 
-		marker = new google.maps.Marker({
-			map: map
-		});
+	<!--geometa.js from a Google example for finding current location (Gears)-->
+	<script type="text/javascript" src="http://google-ajax-examples.googlecode.com/svn/trunk/whereareyou/scripts/geometa.js"></script>
 
-		google.maps.event.trigger(map, 'resize');
-
-		//Sets location to current location if possible, else starts at a default location
-		//prepareGeolocation();
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(positionSuccess, positionFail);
-		} else {
-			positionFail(-1);
-		}
-	}
-	function positionFail(err) {
-		//Defaults to Lincoln, NE
-		var startLocation = new google.maps.LatLng(40.81, -96.68);
-		moveMarker(startLocation);
-		map.setCenter(startLocation);
-	}
-	function positionSuccess(position) {
-		// Centre the map on the new location
-		var coords = position.coords || position.coordinate || position;
-		var latLng = new google.maps.LatLng(coords.latitude, coords.longitude);
-		map.setCenter(latLng);
-		moveMarker(latLng);
-	}
-	function moveMarker(location) {
-		marker.setPosition(location);
-
-		//write to the form
-		readMarkerAddress();
-		document.getElementById('mapLongitude').value = location.lng();
-		document.getElementById('mapLatitude').value = location.lat();
-	}
-	function searchAddress() {
-		var address = document.getElementById("address").value;
-		geocoder.geocode({ 'address': address }, function (results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				map.setCenter(results[0].geometry.location);
-				moveMarker(results[0].geometry.location);
-			} else {
-				alert("Geocode was not successful for the following reason: " + status);
+	<script type="text/javascript">
+		var map;
+		var geocoder;
+		var marker;
+		$(document).on('opened', '[data-reveal]', function () {
+			//initialize the map the first time the modal is opened
+			var modal = $(this);
+			if (modal.attr('id') == 'CreateEvent-MapModal' && map == null) {
+				initialize();
 			}
+
 		});
-	}
-	function readMarkerAddress() {
-		var addressBox = document.getElementById('address');
-		var eventLocation = document.getElementById('locationInput');
-		geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				if (results[1]) {
-					addressBox.value = results[0].formatted_address;
-					eventLocation.value = results[0].formatted_address;
+		function clearLocation() {
+			document.getElementById('locationInput').value = '';
+			document.getElementById('mapLongitude').value = null;
+			document.getElementById('mapLatitude').value = null;
+		}
+		function initialize() {
+			geocoder = new google.maps.Geocoder();
+			var mapOptions = {
+				zoom: 12,
+				draggableCursor: 'default'
+			};
+			map = new google.maps.Map(document.getElementById("google-map"),
+				mapOptions);
+
+			google.maps.event.addListener(map, 'click', function (event) {
+				moveMarker(event.latLng);
+			});
+
+			marker = new google.maps.Marker({
+				map: map
+			});
+
+			google.maps.event.trigger(map, 'resize');
+
+			//Sets location to current location if possible, else starts at a default location
+			//prepareGeolocation();
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(positionSuccess, positionFail);
+			} else {
+				positionFail(-1);
+			}
+		}
+		function positionFail(err) {
+			//Defaults to Lincoln, NE
+			var startLocation = new google.maps.LatLng(40.81, -96.68);
+			moveMarker(startLocation);
+			map.setCenter(startLocation);
+		}
+		function positionSuccess(position) {
+			// Centre the map on the new location
+			var coords = position.coords || position.coordinate || position;
+			var latLng = new google.maps.LatLng(coords.latitude, coords.longitude);
+			map.setCenter(latLng);
+			moveMarker(latLng);
+		}
+		function moveMarker(location) {
+			marker.setPosition(location);
+
+			//write to the form
+			readMarkerAddress();
+			document.getElementById('mapLongitude').value = location.lng();
+			document.getElementById('mapLatitude').value = location.lat();
+		}
+		function searchAddress() {
+			var address = document.getElementById("address").value;
+			geocoder.geocode({ 'address': address }, function (results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					map.setCenter(results[0].geometry.location);
+					moveMarker(results[0].geometry.location);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			});
+		}
+		function readMarkerAddress() {
+			var addressBox = document.getElementById('address');
+			var eventLocation = document.getElementById('locationInput');
+			geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					if (results[1]) {
+						addressBox.value = results[0].formatted_address;
+						eventLocation.value = results[0].formatted_address;
+					}
+					else {
+						addressBox.value = 'No address found';
+					}
 				}
 				else {
-					addressBox.value = 'No address found';
+					alert('Error: Geocoder failed: ', status);
+					addressBox.value = 'Error with map';
 				}
-			}
-			else {
-				alert('Error: Geocoder failed: ', status);
-				addressBox.value = 'Error with map';
-			}
-		})
-	}
-</script>
+			})
+		}
+	</script>
 
+</div>

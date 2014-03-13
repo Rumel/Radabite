@@ -55,14 +55,11 @@
 	}
 </div>
 
-<div id="CreateEvent-MapModal" class="reveal-modal small" data-reveal>
-	@Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model)
-</div>
 
 <div id="CreateEvent-PollModal" class="reveal-modal small" data-reveal>
 	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
 </div>
 
-<div id="CreateEvent-CalendarModal" class="reveal-modal small" data-reveal>
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
-</div>
+
+@Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model)
+@Html.Partial("~/Client/WebClient/Views/Shared/_DateTimeModal.cshtml", Model)
