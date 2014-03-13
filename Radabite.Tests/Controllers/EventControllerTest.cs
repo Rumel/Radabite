@@ -35,16 +35,6 @@ namespace Radabite.Tests.Controllers
         }
 
         [TestMethod]
-        public void CreateEvent()
-        {
-            EventController controller = new EventController();
-
-            ViewResult result = controller.CreateEvent() as ViewResult;
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void DiscoverEvent()
         {
             EventController controller = new EventController();

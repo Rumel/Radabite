@@ -1,10 +1,11 @@
 ﻿@using Radabite.Backend.Database
+@using Radabite.Client.WebClient.ViewModels
 
 @{
 	ViewBag.Title = "Discover Event";
 }
 
-@model List<User>
+@model ViewModel
 
 <div class="row">
 	<hgroup class="title">
@@ -15,12 +16,26 @@
 
 <div class="row">
 	<div class="large-4 medium-4 columns">
-		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", Model);}
+		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", Model.Friends);}
 	</div>
 	<div class="large-8 medium-8 columns">
-		<h3>Find Events</h3>
-		<div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 1 })</div>
-		<div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 2 })</div>
-		<div style="width:600px;height:100px;border:1px solid #000;">@Html.ActionLink("Event", "../Event", new { eventId = 3 })</div>
+		<table style="width: 100%">
+			<thead><tr><th>Events</th></tr></thead>
+			<tbody>
+				@{
+					if (Model.Events.Count == 0)
+					{
+						<tr><td>You have no events.</td></tr>
+					}
+					else
+					{
+						foreach (Event e in Model.Events)
+						{
+							<tr><td>@Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })</td></tr>
+						}
+					}
+				}
+			</tbody>
+		</table>
 	</div>
 </div>
