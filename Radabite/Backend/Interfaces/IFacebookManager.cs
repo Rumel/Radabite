@@ -1,4 +1,6 @@
 ﻿using Facebook;
+using Newtonsoft.Json.Linq;
+using Radabite.Client.WebClient.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace Radabite.Backend.Interfaces
 {
     interface IFacebookManager
     {
-        void GetPosts(string userId, string accessToken, DateTime startTime, DateTime endTime);
+        Task<IList<FacebookPostModel>> GetPostsAsync(string userId, string accessToken, DateTime startTime, DateTime endTime);
         string GetAccessToken(FacebookClient fb);
 
 
