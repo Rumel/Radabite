@@ -4,10 +4,19 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-		$("#startDatepicker").datepicker();
+		$("#startDatepicker").datepicker({
+			minDate: new Date(),		//default is today
+			onClose: function (selectedDate) {
+				$("#endDatepicker").datepicker("option", "minDate", selectedDate);
+			}
+		});
 	});
 	$(document).ready(function () {
-		$("#endDatepicker").datepicker();
+		$("#endDatepicker").datepicker({
+			onClose: function (selectedDate) {
+				$("#startDatepicker").datepicker("option", "maxDate", selectedDate);
+			}
+		});
 	});
 
 /*
