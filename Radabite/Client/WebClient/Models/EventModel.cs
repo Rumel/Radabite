@@ -9,6 +9,8 @@ namespace Radabite.Models
 {
     public class EventModel
     {
+        public long Id { get; set; }
+
         [Required]
         public string Title { get; set; }
 
