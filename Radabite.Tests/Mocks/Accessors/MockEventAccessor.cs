@@ -10,7 +10,7 @@ namespace Radabite.Tests.Mocks.Accessors
 {
     public class MockEventAccessor : IEventAccessor
     {
-        public SaveResult<Event> Save(Event t)
+        public SaveResult<Event> SaveOrUpdate(Event t)
         {
             t.Id = 1;
             return new SaveResult<Event>(true, t);
