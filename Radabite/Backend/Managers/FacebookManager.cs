@@ -11,13 +11,19 @@ using System.Web;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Radabite.Client.WebClient.Models;
+using System.Text;
+using System.Net;
+using System.IO;
+using Microsoft.Web.WebPages.OAuth;
+using DotNetOpenAuth.AspNet;
+
 
 namespace Radabite.Backend.Managers
 {
     public class FacebookManager : IFacebookManager
     {
         // http://facebooksdk.net/docs/making-asynchronous-requests/
-        public async Task<IList<FacebookPostModel>> GetPostsAsync(string userId, string accessToken, DateTime startTime, DateTime endTime)
+        public string GetPosts(string userAccessToken, string userId, string accessToken, DateTime startTime, DateTime endTime) 
         {
    //         var fb = new FacebookClient(accessToken);
    //         fb.Get("cassey.lottman");
@@ -26,7 +32,7 @@ namespace Radabite.Backend.Managers
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://graph.facebook.com");
+                client.BaseAddress = new Uri("https://graph.facebook.com");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -50,62 +56,23 @@ namespace Radabite.Backend.Managers
 
                 /* Trying really hard but I can't get this to work.
                 //http://stackoverflow.com/questions/9799771/whats-wrong-with-this-async-task-method
-                var finalResponse = await client.GetAsync("me").ContinueWith(request =>
-                    {
-                        // the continueWith function wraps the response in a Task, so need to get its result
-                        var response = request.Result;
-                        return response.Content.ReadAsStringAsync().ContinueWith(t =>
-                            {
-                                var result = new HttpResponseMessage();
-                                response.CreateContent(t.Result);
-                                return response;
-                            });
-                    }).Unwrap();
                 */
-                var finalResponse = await client.GetAsync("me").ContinueWith(request =>
-                    {
-                        var read = request.Result.Content.ReadAsStringAsync();
-                        return read.Result;
-                    });
-                //var result = await task.Content.ReadAsStringAsync();
-                var facebookPostList = JsonConvert.DeserializeObject<IList<FacebookPostModel>>(finalResponse);
-               // var facebookPostList = new List<FacebookPostModel>();
-                return facebookPostList;
-/*
- * public async Task<CustomerMVC> GetCustomer()
-{
-    //return control to caller until GetAsync has completed
-    var task = await client.GetAsync("api/values");
-    //return control to caller until ReadAsStringAsync has completed
-    var result = await task.Content.ReadAsStringAsync()
-    return JsonConvert.DeserializeObject<CustomerMVC>(result);
-}
- */
 
-            }
-
-           // var query = string.Format(""); // query
-         //   using (var client = new HttpClient()) { 
-        //    var result = await GetPostsAsync();
-        //    }
-        }
-
-        // http://www.asp.net/web-api/overview/web-api-clients/calling-a-web-api-from-a-net-client
-        /*
-        public async Task<JObject> GetPostsAsync()
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://graph.facebook.com");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //HTTP GET
-                HttpResponseMessage response = await client.GetAsync("me");
-                return JObject.Parse(response.Content.ToString());
+               // string facebookAccessToken = GetAccessToken(new FacebookClient());
+                string facebookAccessToken = userAccessToken;
+                StringBuilder sb = new StringBuilder("/me?");
+                sb.Append("access_token=");
+               //sb.Append(HttpUtility.UrlEncode(facebookAccessToken));               
+                sb.Append(facebookAccessToken);
+             
+                var finalResponse = client.GetAsync(sb.ToString()).Result;
+                return finalResponse.Content.ReadAsStringAsync().Result;
             }
         }
-        */
+
+
+                //var facebookPostList = JsonConvert.DeserializeObject<IList<FacebookPostModel>>(finalResponse);
+        //    return facebookPostList;
 
         public void PracticeGet()
         {

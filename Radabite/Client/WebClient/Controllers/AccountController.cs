@@ -58,6 +58,7 @@ namespace Radabite.Client.WebClient.Controllers
         public ActionResult LogOff()
         {
             WebSecurity.Logout();
+            Session.Clear();
             return RedirectToAction("Index", "Home");
         }
 
@@ -230,6 +231,8 @@ namespace Radabite.Client.WebClient.Controllers
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
                 // the u becomes a route parameter
+                Session.Add("facebookUserToken", result.ExtraData["accesstoken"]);
+
                 return RedirectToAction("Index", "UserProfile", new { u = result.UserName });
             }
 
@@ -256,6 +259,7 @@ namespace Radabite.Client.WebClient.Controllers
                         Gender = result.ExtraData["gender"],
                         ExternalLoginData = loginData
                     };
+                    Session["facebookToken"] = result.ExtraData["accesstoken"];
                 }
                 else
                 {
