@@ -2,7 +2,7 @@
 
 <div id="UpdateEventModal" class="reveal-modal small" data-reveal>
     <h2>Update your Event!</h2>
-    @using (Html.BeginForm("Create", "Event", FormMethod.Post))
+    @using (Html.BeginForm("Update", "Event", FormMethod.Post))
     {
         <div class="row">
             <div class="large-8 columns">
@@ -45,8 +45,9 @@
             <div class="large-8 columns">
                 Private Event: @Html.RadioButtonFor(m => m.IsPrivate, "Private")
             </div>
+            @Html.HiddenFor(m => m.Id);
         </div>
-        <input type="submit" value="Create">
+        <input type="submit" value="Update">
         <a class="close-reveal-modal">&#215;</a>
         @Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude" })
 		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude" })

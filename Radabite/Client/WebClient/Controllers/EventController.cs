@@ -31,6 +31,7 @@ namespace Radabite.Client.WebClient.Controllers
 
             var eventViewModel = new EventModel()
             {
+                Id = eventRequest.Id,
                 Title = eventRequest.Title,
                 StartTime = eventRequest.StartTime,
                 EndTime = eventRequest.EndTime,
@@ -67,6 +68,7 @@ namespace Radabite.Client.WebClient.Controllers
         {
             var newEvent = new Event()
             {
+                Id = model.Id,
                 StartTime = new DateTime(model.StartTime.Ticks),
                 EndTime = new DateTime(model.EndTime.Ticks),
                 Location = new Location()
@@ -99,6 +101,38 @@ namespace Radabite.Client.WebClient.Controllers
         {
             var newEvent = new Event()
             {
+                StartTime = new DateTime(model.StartTime.Ticks),
+                EndTime = new DateTime(model.EndTime.Ticks),
+                Location = new Location()
+                {
+                    LocationName = model.LocationName,
+                    Latitude = model.Latitude,
+                    Longitude = model.Longitude
+                },
+                IsPrivate = model.IsPrivate,
+                Title = model.Title,
+                Description = model.Description,
+                IsActive = model.IsActive
+            };
+
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            if (result.Success)
+            {
+                return RedirectToAction("Index", new { userId = 123, eventId = result.Result.Id });
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult Update(EventModel model)
+        {
+            var newEvent = new Event()
+            {
+                Id = model.Id,
                 StartTime = new DateTime(model.StartTime.Ticks),
                 EndTime = new DateTime(model.EndTime.Ticks),
                 Location = new Location()
