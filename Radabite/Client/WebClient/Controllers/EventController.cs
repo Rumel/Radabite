@@ -8,6 +8,9 @@ using System.Web.Mvc;
 using Radabite.Backend.Interfaces;
 using RadabiteServiceManager;
 using Radabite.Models;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -21,7 +24,8 @@ namespace Radabite.Client.WebClient.Controllers
             ViewBag.Message = "Event " + eventId.ToString();
             ViewBag.eventId = eventId;
 
-            var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+            //var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+			Event eventRequest = null;
 
             // Used to test UI
             if (eventRequest == null)
@@ -43,8 +47,27 @@ namespace Radabite.Client.WebClient.Controllers
                 };
             }
 
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
+				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/jpeg"));
+				//fooCDN.DefaultRequestHeaders.Authorization
+
+				System.Diagnostics.Debug.WriteLine("Getting?");
+				HttpResponseMessage response = fooCDN.GetAsync("/api/content/c1485afb-d055-4f2f-a73e-c4e1bc22d2e9").Result;
+				System.Diagnostics.Debug.WriteLine("Worked?");
+
+				if (response.IsSuccessStatusCode)
+				{
+					//response.Content.ReadAsAsync<SOMETHING>();
+				}
+			}
+
+
             return View(eventRequest);
         }
+
 
 		public ActionResult DiscoverEvent()
 		{
