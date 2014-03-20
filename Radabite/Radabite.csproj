@@ -192,15 +192,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
+    <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
     <Compile Include="Backend\Database\User.cs" />
     <Compile Include="Backend\Database\DataObject.cs" />
+    <Compile Include="Backend\Interfaces\IFooCDNAccessor.cs" />
+    <Compile Include="Backend\Interfaces\IFooCDNManager.cs" />
     <Compile Include="Backend\Interfaces\IGenericAccessor.cs" />
     <Compile Include="Backend\Interfaces\IGenericManager.cs" />
     <Compile Include="Backend\Interfaces\IUserAccessor.cs" />
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
+    <Compile Include="Backend\Managers\FooCDNManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
     <Compile Include="Client\WebClient\Controllers\EventsController.cs" />
