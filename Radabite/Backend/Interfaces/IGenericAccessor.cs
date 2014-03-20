@@ -9,7 +9,7 @@ namespace Radabite.Backend.Interfaces
 {
     public interface IGenericAccessor<T> where T : DataObject
     {
-        SaveResult<T> Save(T t);
+        SaveResult<T> SaveOrUpdate(T t);
 
         T GetById(long id);
 

@@ -26,24 +26,24 @@ namespace Radabite.Client.WebClient.Controllers
             // Used to test UI
             if (eventRequest == null)
             {
-                eventRequest = new Event()
-                {
-                    Id = 1,
-                    Title = "G-Ma's 9th birthday",
-                    StartTime = new DateTime(2014, 1, 1, 1, 1, 1),
-                    EndTime = new DateTime(2014, 1, 1, 1, 1, 2),
-                    IsPrivate = true,
-                    Description = "Happy Birthday Grandma",
-                    Location = new Location()
-                    {
-                        LocationName = "My house",
-                        Latitude = 1.01,
-                        Longitude = 1.01
-                    }
-                };
+                return Redirect("Event/EventNotFound");                    
             }
 
-            return View(eventRequest);
+            var eventViewModel = new EventModel()
+            {
+                Id = eventRequest.Id,
+                Title = eventRequest.Title,
+                StartTime = eventRequest.StartTime,
+                EndTime = eventRequest.EndTime,
+                IsPrivate = eventRequest.IsPrivate,
+                Description = eventRequest.Description,
+                // TODO retrieve locations
+                LocationName = "My house",
+                Latitude = 1.01,
+                Longitude = 1.01,
+           };
+
+            return View(eventViewModel);
         }
 
 		public ActionResult DiscoverEvent()
@@ -64,6 +64,39 @@ namespace Radabite.Client.WebClient.Controllers
 		}
 
         [HttpPost]
+        public RedirectToRouteResult Delete(EventModel model)
+        {
+            var newEvent = new Event()
+            {
+                Id = model.Id,
+                StartTime = new DateTime(model.StartTime.Ticks),
+                EndTime = new DateTime(model.EndTime.Ticks),
+                Location = new Location()
+                {
+                    LocationName = model.LocationName,
+                    Latitude = model.Latitude,
+                    Longitude = model.Longitude
+                },
+                IsPrivate = model.IsPrivate,
+                Title = model.Title,
+                Description = model.Description,
+                // Soft delete entry
+                IsActive = false
+            };
+
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            if (result.Success)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+
+        [HttpPost]
         public RedirectToRouteResult Create(EventModel model)
         {
             var newEvent = new Event()
@@ -78,7 +111,8 @@ namespace Radabite.Client.WebClient.Controllers
                 },
                 IsPrivate = model.IsPrivate,
                 Title = model.Title,
-                Description = model.Description
+                Description = model.Description,
+                IsActive = model.IsActive
             };
 
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
@@ -91,6 +125,43 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 throw new Exception();
             }
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult Update(EventModel model)
+        {
+            var newEvent = new Event()
+            {
+                Id = model.Id,
+                StartTime = new DateTime(model.StartTime.Ticks),
+                EndTime = new DateTime(model.EndTime.Ticks),
+                Location = new Location()
+                {
+                    LocationName = model.LocationName,
+                    Latitude = model.Latitude,
+                    Longitude = model.Longitude
+                },
+                IsPrivate = model.IsPrivate,
+                Title = model.Title,
+                Description = model.Description,
+                IsActive = model.IsActive
+            };
+
+            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            if (result.Success)
+            {
+                return RedirectToAction("Index", new { userId = 123, eventId = result.Result.Id });
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+
+        public ActionResult EventNotFound()
+        {
+            return View();
         }
     }
 }

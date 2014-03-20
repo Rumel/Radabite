@@ -19,5 +19,7 @@ namespace Radabite.Backend.Database
         public string Description { get; set; }
 
         public Location Location { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Radabite.Tests.Mocks.Accessors
 {
     public class MockUserAccessor : IUserAccessor
     {
-        public SaveResult<User> Save(User t)
+        public SaveResult<User> SaveOrUpdate(User t)
         {
             t.Id = 1;
             return new SaveResult<User>(true, t);
