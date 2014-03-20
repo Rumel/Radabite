@@ -27,17 +27,20 @@
         </div>
         <div class="row">
             <div class="large-4 columns">
-                @Html.TextBoxFor(m => m.StartTime, new { placeholder = Model.StartTime })
+                @Html.TextBoxFor(m => m.StartTime, new { id = "startTimeUpdate" })
                 @Html.ValidationMessageFor(m => m.StartTime)
             </div>
             <div class="large-4 columns">
-                @Html.TextBoxFor(m => m.EndTime, new { placeholder = Model.EndTime })
+                @Html.TextBoxFor(m => m.EndTime, new { id = "endTimeUpdate" })
                 @Html.ValidationMessageFor(m => m.EndTime)
             </div>
-            <div class="medium-2 columns">
+
+            @*Not used yet 
+			<div class="medium-2 columns">
                 <a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
-            </div>
-            <div class="medium-2 columns">
+            </div>*@
+            
+			<div class="medium-4 columns">
                 <a class="radius button" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
             </div>
         </div>
@@ -52,10 +55,6 @@
         @Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude" })
 		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude" })
 	}
-</div>
-
-<div id="CreateEvent-MapModal" class="reveal-modal small" data-reveal>
-	@Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model)
 </div>
 
 <div id="CreateEvent-PollModal" class="reveal-modal small" data-reveal>
