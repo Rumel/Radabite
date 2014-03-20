@@ -23,11 +23,38 @@ namespace Radabite.Client.WebClient.Controllers
 
             var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-            // Used to test UI
             if (eventRequest == null)
             {
                 return Redirect("Event/EventNotFound");                    
             }
+
+            //var posts = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+            var posts = new List<Post>();
+
+            var owner = new User
+            {
+                DisplayName = "Tom Jones",
+                PhotoLink = "http://bit.ly/1nHr6dG"
+            };
+
+            var post1 = new Post()
+            {
+                From = owner,
+                Message = "Guys please come to this event",
+                SendTime = new DateTime(2013, 12, 12, 8, 59, 0),
+                Likes = 0
+            };
+
+            var post2 = new Post()
+            {
+                From = owner,
+                Message = "I have Doritos!",
+                SendTime = new DateTime(2013, 12, 12, 9, 0, 0),
+                Likes = 1
+            };
+
+            posts.Add(post1);
+            posts.Add(post2);
 
             var eventViewModel = new EventModel()
             {
@@ -37,11 +64,11 @@ namespace Radabite.Client.WebClient.Controllers
                 EndTime = eventRequest.EndTime,
                 IsPrivate = eventRequest.IsPrivate,
                 Description = eventRequest.Description,
-                // TODO retrieve locations
-                LocationName = "My house",
-                Latitude = 1.01,
-                Longitude = 1.01,
-           };
+                LocationName = eventRequest.Location.LocationName,
+                Latitude = eventRequest.Location.Latitude,
+                Longitude = eventRequest.Location.Longitude,
+                Posts = posts
+            };
 
             return View(eventViewModel);
         }

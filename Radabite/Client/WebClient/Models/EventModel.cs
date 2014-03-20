@@ -29,6 +29,8 @@ namespace Radabite.Models
         public double Longitude { get; set; }
 
         public bool IsActive { get; set; }
+        
+        public List<Post> Posts { get; set; }
 
         public EventModel()
         {
