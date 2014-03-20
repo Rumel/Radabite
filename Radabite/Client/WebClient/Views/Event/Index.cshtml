@@ -25,39 +25,56 @@
 </div>
 
 <div class="row">
-	<span>@Model.Description</span>
+	<h4>Description: @Model.Description</h4>
 </div>
 
 <div class="row">
-	<ul>
-		<li>
-			<h5>Time:</h5>
-			<ul class="inline-list">
-				<li>@Model.StartTime</li>
-				<li>-</li>
-				<li>@Model.EndTime</li>
-			</ul>
-		</li>
-		<li>
-			<h5>Location:</h5>
-            @Model.LocationName
-		</li>
-		<li>
-			<h5>Privacy:</h5>
-			@{
-				if(Model.IsPrivate)
-				{
-					<span style="color: blue" class="inline">Private</span>	
-					@*<span style="color: gray" class="inline">Public</span>*@
-				}
-				else
-				{
-					@*<span style="color: gray" class="inline">Private</span>*@
-					<span style="color: blue" class="inline">Public</span>
-				}
-			}
-		</li>
-	</ul>
+	<h5>Time: @Model.StartTime - @Model.EndTime</h5>
+	<h5>Location: @Model.LocationName</h5>
+    @{if (Model.IsPrivate) { <h5>Privacy: Private</h5> }
+      else
+      { <h5>Privacy: Public</h5> } }
+</div>
+
+<br />
+<div class="row">
+    <div class="panel">
+        <div class="row">
+            <div class="large-12 medium-12 columns">
+                <form method="post" action="/Event/AddPost">
+                    <input type="text" name="message" placeholder="Enter a Message to post!" />
+                    <input type="submit" value="Post" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var post in Model.Posts)
+    {
+        <div class="panel">
+            <div class ="row">
+                <div class="large-3 medium-3 columns">
+                   <img src="@post.From.PhotoLink" alt="" />
+                </div>
+                <div class="large-9 medium 9 columns">
+                    <p>
+                        <a href="/Home/UserProfile?userid=@post.From.Id">@post.From.DisplayName</a>
+                    </p>
+                    <p>@post.Message</p>
+                    <div class="row">
+                        <div class="large-3 medium-3 columns">
+                            Likes: @post.Likes
+                        </div>
+                        <div class="large-6 medium-6 columns" style="direction:rtl">
+                            Sent at: @post.SendTime
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+    }
 </div>
 
 @Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
@@ -67,7 +84,8 @@
     <br />
     <div class="row">
         <div class="medium-12 medium-centered columns">
-            @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post)) {
+            @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post))
+            {
                 <input type="submit" value="Yes, Delete" />
             }
             @*<a class="radius button" id="confirm-delete" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
