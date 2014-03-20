@@ -15,7 +15,7 @@
 
 	//functions for dealing with different between CreateEventModal and UpdateEventModal
 	var calledFrom;
-	$(document).on('open', '[data-reveal]', function () {
+	$(document).on('opened', '[data-reveal]', function () {
 		var modal = $(this);
 
 		if (modal.attr('id') == 'CreateEventModal' || modal.attr('id') == 'UpdateEventModal') {
@@ -39,6 +39,13 @@
 
 			startTime.selectedIndex = startDT.getHours() * 2 + (startDT.getMinutes() / 30);
 			endTime.selectedIndex = endDT.getHours() * 2 + (endDT.getMinutes() / 30);
+		}
+
+		if (modal.attr('id') == 'CreateEvent-MapModal' && calledFrom == 'UpdateEventModal') {
+
+			document.getElementById('address').value = document.getElementById('locationInputUpdate').value;
+			google.maps.event.trigger(map, 'resize');
+			searchAddress();
 		}
 	});
 	backToCaller = function () {

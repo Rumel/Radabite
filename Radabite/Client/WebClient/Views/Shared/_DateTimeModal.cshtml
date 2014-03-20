@@ -339,15 +339,15 @@
 			if (calledFrom == 'CreateEventModal') {
 				startInput = document.getElementById('startTimeInput');
 				endInput = document.getElementById('endTimeInput');
-				$('#CreateEventModal').foundation('reveal', 'open');
 			} else {
 				startInput = document.getElementById('startTimeUpdate');
 				endInput = document.getElementById('endTimeUpdate');
-				$('#UpdateEventModal').foundation('reveal', 'open');
 			}
 
 			startInput.value = startDate.value + ' ' + startTime.options[startTime.selectedIndex].text;
 			endInput.value = endDate.value + ' ' + endTime.options[endTime.selectedIndex].text;
+
+			backToCaller();
 		}
 	}
 </script>
