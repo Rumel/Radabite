@@ -25,8 +25,9 @@ namespace Radabite.Backend.Managers
         // http://facebooksdk.net/docs/making-asynchronous-requests/
         public string GetPosts(string userAccessToken, string userId, string accessToken, DateTime startTime, DateTime endTime) 
         {
-   //         var fb = new FacebookClient(accessToken);
-   //         fb.Get("cassey.lottman");
+        //  var fb = new FacebookClient(accessToken);
+        //  fb.Get("cassey.lottman");
+    
             double unixStartTime = ConvertToFacebookTime(startTime);
             double unixEndTime = ConvertToFacebookTime(endTime);
 
@@ -38,40 +39,17 @@ namespace Radabite.Backend.Managers
 
                 //HTTP GET
                 
-                /*
-                client.GetAsync("me").ContinueWith(response =>
-                {                    
-                    response.Result.Content.ReadAsAsync().ContinueWith(json =>
-                    {
-                        dynamic result = json.Result;
-                        string firstName = result.first_name;
-                        string lastName = result.last_name;
-                    });
-                });
-                     */
-
-                // what I was doing originally
-                //HttpResponseMessage response = await client.GetAsync("me");
-                //return JObject.Parse(response.Content.ToString());
-
-                /* Trying really hard but I can't get this to work.
-                //http://stackoverflow.com/questions/9799771/whats-wrong-with-this-async-task-method
-                */
-
-               // string facebookAccessToken = GetAccessToken(new FacebookClient());
                 string facebookAccessToken = userAccessToken;
-                StringBuilder sb = new StringBuilder("/me?fields=statuses&");
+                StringBuilder sb = new StringBuilder("/me?fields=posts.fields(message)&");
                 sb.Append("access_token=");
-               //sb.Append(HttpUtility.UrlEncode(facebookAccessToken));               
                 sb.Append(facebookAccessToken);
              
                 var finalResponse = client.GetAsync(sb.ToString()).Result;
                 
-                //return finalResponse.ToString();
                 var resString = finalResponse.Content.ReadAsStringAsync().Result;
                 dynamic fstatuses = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
 
-                FacebookPageResults response = (FacebookPageResults) JsonConvert.DeserializeObject(resString);
+            //    FacebookPageResults response = (FacebookPageResults) JsonConvert.DeserializeObject(resString);
 
                 return finalResponse.Content.ReadAsStringAsync().Result;
             }
