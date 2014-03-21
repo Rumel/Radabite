@@ -25,6 +25,8 @@ namespace Radabite.Backend.Managers
         // http://facebooksdk.net/docs/making-asynchronous-requests/
         public string GetPosts(string userAccessToken, string userId, string accessToken, DateTime startTime, DateTime endTime) 
         {
+
+            // if we were using the facebook sdk we would do this.
         //  var fb = new FacebookClient(accessToken);
         //  fb.Get("cassey.lottman");
     
@@ -40,29 +42,24 @@ namespace Radabite.Backend.Managers
                 //HTTP GET
                 
                 string facebookAccessToken = userAccessToken;
-                StringBuilder sb = new StringBuilder("/me?fields=posts.fields(message)&");
+                StringBuilder sb = new StringBuilder("/me?fields=posts&");
                 sb.Append("access_token=");
                 sb.Append(facebookAccessToken);
              
                 var finalResponse = client.GetAsync(sb.ToString()).Result;
                 
                 var resString = finalResponse.Content.ReadAsStringAsync().Result;
+
+                // Creates a dynamic object with properties of the response
+                // this is what we'll use to read the responses into FacebookPostModel objects.
                 dynamic fstatuses = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
 
+                // this is another way of doing it but the json responses are so nested that this will be very messy. 
+                // dynamic's the way to go.
             //    FacebookPageResults response = (FacebookPageResults) JsonConvert.DeserializeObject(resString);
 
                 return finalResponse.Content.ReadAsStringAsync().Result;
             }
-        }
-
-
-                //var facebookPostList = JsonConvert.DeserializeObject<IList<FacebookPostModel>>(finalResponse);
-        //    return facebookPostList;
-
-        public void PracticeGet()
-        {
-            //var fb = new FacebookClient();
-            // var result = fb.Get("cassey.lottman");
         }
 
         // http://facebooksdk.net/docs/datetimeconverter/

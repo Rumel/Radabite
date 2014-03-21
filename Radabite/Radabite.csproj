@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
+    <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
     <Compile Include="Client\WebClient\Models\Post.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
@@ -200,11 +201,14 @@
     <Compile Include="Backend\Database\DataObject.cs" />
     <Compile Include="Backend\Helpers\JsonUtils.cs" />
     <Compile Include="Backend\Interfaces\IFacebookManager.cs" />
+    <Compile Include="Backend\Interfaces\IFooCDNAccessor.cs" />
+    <Compile Include="Backend\Interfaces\IFooCDNManager.cs" />
     <Compile Include="Backend\Interfaces\IGenericAccessor.cs" />
     <Compile Include="Backend\Interfaces\IGenericManager.cs" />
     <Compile Include="Backend\Interfaces\IUserAccessor.cs" />
     <Compile Include="Backend\Interfaces\IUserManager.cs" />
     <Compile Include="Backend\Managers\FacebookManager.cs" />
+    <Compile Include="Backend\Managers\FooCDNManager.cs" />
     <Compile Include="Backend\Managers\UserManager.cs" />
     <Compile Include="Client\WebClient\Controllers\AccountController.cs" />
     <Compile Include="Bindings.cs" />
@@ -348,7 +352,9 @@
     <Content Include="Client\WebClient\Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Client\WebClient\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Client\WebClient\Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
