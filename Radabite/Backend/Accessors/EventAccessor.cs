@@ -11,11 +11,24 @@ namespace Radabite.Backend.Accessors
 {
     public class EventAccessor : IEventAccessor
     {
-        public SaveResult<Event> Save(Event e)
+        public SaveResult<Event> SaveOrUpdate(Event e)
         {
             using (var db = new Db())
             {
-                db.Events.Add(e);
+                if(e.Id != 0){
+                    var obj = GetById(e.Id);
+                    obj.Id = e.Id;
+                    obj.Title = e.Title;
+                    obj.Description = e.Description;
+                    obj.Location = e.Location;
+                    obj.StartTime = e.StartTime;
+                    obj.EndTime = e.EndTime;
+                    obj.IsPrivate = e.IsPrivate;
+                    obj.IsActive = e.IsActive;
+                    db.Entry(obj).State = System.Data.EntityState.Modified;
+                } else {
+                    db.Events.Add(e);
+                }
                 db.SaveChanges();
             }
             return new SaveResult<Event>(true, e);
@@ -25,7 +38,7 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Events.ToList();
+                return db.Events.Include("Location").ToList();
             }
         }
 
@@ -34,7 +47,7 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Events.FirstOrDefault(x => x.Id == id);
+                return db.Events.Include("Location").FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
         }
     }

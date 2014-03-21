@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
+    <Compile Include="Client\WebClient\Models\Post.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Client\WebClient\Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Client\WebClient\Models\FacebookPostModel.cs" />
     <Compile Include="Client\WebClient\Models\UserModel.cs" />
+    <Compile Include="Client\WebClient\ViewModels\ViewModel.cs" />
     <Compile Include="Client\WebClient\Models\EventModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -234,6 +236,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\WebClient\App_Data\Radabite.mdf" />
+    <Content Include="Client\WebClient\App_Data\Radabite_log.ldf">
+      <DependentUpon>Radabite.mdf</DependentUpon>
+    </Content>
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
@@ -298,12 +304,19 @@
     <Content Include="Client\WebClient\Content\themes\base\zocial.css" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
-    <Content Include="AppSettings.config" />
+    <Content Include="AppSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_DateTimeModal.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <None Include="ConnectionStrings.config" />
+    <Content Include="Client\WebClient\Views\Shared\_UpdateEventModal.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="ConfigurationStrings.config" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -379,9 +392,10 @@
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
     <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_FriendTable.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\EventNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Client\WebClient\App_Data\" />
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

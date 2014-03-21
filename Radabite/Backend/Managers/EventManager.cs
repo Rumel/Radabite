@@ -15,7 +15,7 @@ namespace Radabite.Backend.Managers
 
         public SaveResult<Event> Save(Event e)
         {
-            return ServiceManager.Kernel.Get<IEventAccessor>().Save(e);
+            return ServiceManager.Kernel.Get<IEventAccessor>().SaveOrUpdate(e);
         }
 
         public IEnumerable<Event> GetAll()

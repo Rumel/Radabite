@@ -9,6 +9,8 @@ namespace Radabite.Models
 {
     public class EventModel
     {
+        public long Id { get; set; }
+
         [Required]
         public string Title { get; set; }
 
@@ -22,9 +24,18 @@ namespace Radabite.Models
 
         public string LocationName { get; set; }
 
-        public int XCoordinate { get; set; }
+        public double Latitude { get; set; }
 
-        public int YCoordinate { get; set; }
+        public double Longitude { get; set; }
+
+        public bool IsActive { get; set; }
+        
+        public List<Post> Posts { get; set; }
+
+        public EventModel()
+        {
+            IsActive = true;
+        }
     }  
 
 }

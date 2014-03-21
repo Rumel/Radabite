@@ -11,9 +11,9 @@
 
         <section class="top-bar-section">
             <ul class="left">
-                <li>@Html.ActionLink("Profile", "../UserProfile", new { userId = Model["userId"] })</li>
+                <li>@Html.ActionLink("Profile", "../UserProfile", new { u = User.Identity.Name })</li>
                 <li><a data-reveal-id="CreateEventModal" href="#">Create</a></li>
-                <li>@Html.ActionLink("Discover", "../Event/DiscoverEvent", new { userId = Model["userId"] })</li>
+                <li>@Html.ActionLink("Discover", "../Event/DiscoverEvent", new { u = User.Identity.Name })</li>
                 
             </ul>
             <div class="right">
