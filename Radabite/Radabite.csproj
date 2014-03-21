@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
+    <Compile Include="Client\WebClient\Models\Post.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
