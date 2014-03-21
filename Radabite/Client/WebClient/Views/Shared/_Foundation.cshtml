@@ -1,5 +1,9 @@
 ﻿<!DOCTYPE html>
 <html class="no-js" lang="en">
+@Scripts.Render("~/bundles/jquery")
+
+@Scripts.Render("~/bundles/jqueryui")
+
 <head>
     <meta charset="utf-8" />
 
@@ -16,12 +20,11 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/foundation")
     @Html.Partial("~/Client/WebClient/Views/Shared/_NavigationBar.cshtml", Request.Params)
     @RenderBody()
+	@Scripts.Render("~/bundles/foundation")
     <script>
-        $(document).foundation();
+		$(document).foundation();
     </script>
     @*Use the Scripts section to define page specific scripts*@
     @RenderSection("scripts", required: false)
