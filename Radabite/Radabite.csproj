@@ -197,6 +197,7 @@
     <Compile Include="Backend\Database\Location.cs" />
     <Compile Include="Backend\Database\User.cs" />
     <Compile Include="Backend\Database\DataObject.cs" />
+    <Compile Include="Backend\Helpers\JsonUtils.cs" />
     <Compile Include="Backend\Interfaces\IFacebookManager.cs" />
     <Compile Include="Backend\Interfaces\IGenericAccessor.cs" />
     <Compile Include="Backend\Interfaces\IGenericManager.cs" />

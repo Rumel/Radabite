@@ -60,12 +60,19 @@ namespace Radabite.Backend.Managers
 
                // string facebookAccessToken = GetAccessToken(new FacebookClient());
                 string facebookAccessToken = userAccessToken;
-                StringBuilder sb = new StringBuilder("/me?");
+                StringBuilder sb = new StringBuilder("/me?fields=statuses&");
                 sb.Append("access_token=");
                //sb.Append(HttpUtility.UrlEncode(facebookAccessToken));               
                 sb.Append(facebookAccessToken);
              
                 var finalResponse = client.GetAsync(sb.ToString()).Result;
+                
+                //return finalResponse.ToString();
+                var resString = finalResponse.Content.ReadAsStringAsync().Result;
+                dynamic fstatuses = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
+
+                FacebookPageResults response = (FacebookPageResults) JsonConvert.DeserializeObject(resString);
+
                 return finalResponse.Content.ReadAsStringAsync().Result;
             }
         }
