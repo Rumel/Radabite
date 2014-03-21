@@ -19,6 +19,7 @@
 		});
 	});
 
+
 /*
  * A time picker for jQuery
  *
@@ -318,8 +319,9 @@
 </script>
 <script>
 	saveTimes = function () {
-		var startInput = document.getElementById('startTimeInput');
-		var endInput = document.getElementById('endTimeInput');
+
+		var startInput;
+		var endInput;
 
 		var startDate = document.getElementById('startDatepicker');
 		var startTime = document.getElementById('startTimepickerSelect');
@@ -333,15 +335,25 @@
 		} else if(endDate.value == '') {
 			endDate.value = 'Pick a date';
 		} else {
+
+			if (calledFrom == 'CreateEventModal') {
+				startInput = document.getElementById('startTimeInput');
+				endInput = document.getElementById('endTimeInput');
+			} else {
+				startInput = document.getElementById('startTimeUpdate');
+				endInput = document.getElementById('endTimeUpdate');
+			}
+
 			startInput.value = startDate.value + ' ' + startTime.options[startTime.selectedIndex].text;
 			endInput.value = endDate.value + ' ' + endTime.options[endTime.selectedIndex].text;
-			$('#CreateEventModal').foundation('reveal', 'open');
+
+			backToCaller();
 		}
 	}
 </script>
 
 <div id="CreateEvent-CalendarModal" class="reveal-modal small" data-reveal>
-	<a class="radius button" data-reveal-id="CreateEventModal">Back</a>
+	<a class="radius button" onclick="backToCaller()">Back</a>
 	<a class="radius button" onclick="saveTimes()">Save</a>
 	<div class="row">
 		<div class="small-4 columns">

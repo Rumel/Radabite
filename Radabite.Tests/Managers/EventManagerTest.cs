@@ -30,7 +30,8 @@ namespace Radabite.Tests.Managers
                     Longitude = 0,
                     LocationName = "My House"
                 },
-                Title = "PARTY"
+                Title = "PARTY",
+                IsActive = true
             };
         }
 

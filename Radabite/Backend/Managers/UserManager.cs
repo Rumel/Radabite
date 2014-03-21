@@ -20,7 +20,7 @@ namespace Radabite.Backend.Managers
 
         public SaveResult<User> Save(User t)
         {
-            return ServiceManager.Kernel.Get<IUserAccessor>().Save(t);
+            return ServiceManager.Kernel.Get<IUserAccessor>().SaveOrUpdate(t);
         }
 
         public IEnumerable<User> GetAll()

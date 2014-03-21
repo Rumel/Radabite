@@ -12,6 +12,49 @@
 			document.getElementById('endTimeInput').value = '';
 		}
 	});
+
+	//functions for dealing with different between CreateEventModal and UpdateEventModal
+	var calledFrom;
+	$(document).on('opened', '[data-reveal]', function () {
+		var modal = $(this);
+
+		if (modal.attr('id') == 'CreateEventModal' || modal.attr('id') == 'UpdateEventModal') {
+			calledFrom = modal.attr('id');
+		}
+
+		if(modal.attr('id') == 'CreateEvent-CalendarModal' && calledFrom == 'UpdateEventModal') {
+			//fill the values in the time modal with the values from the event being edited
+			var startDate = document.getElementById('startDatepicker');
+			var startTime = document.getElementById('startTimepickerSelect');
+			var endDate = document.getElementById('endDatepicker');
+			var endTime = document.getElementById('endTimepickerSelect');
+
+			var startInput = document.getElementById('startTimeUpdate');
+			var endInput = document.getElementById('endTimeUpdate');
+			var startDT = new Date(startInput.value);
+			var endDT = new Date(endInput.value);
+
+			startDate.value = startDT.toLocaleDateString();
+			endDate.value = endDT.toLocaleDateString();
+
+			startTime.selectedIndex = startDT.getHours() * 2 + (startDT.getMinutes() / 30);
+			endTime.selectedIndex = endDT.getHours() * 2 + (endDT.getMinutes() / 30);
+		}
+
+		if (modal.attr('id') == 'CreateEvent-MapModal' && calledFrom == 'UpdateEventModal') {
+
+			document.getElementById('address').value = document.getElementById('locationInputUpdate').value;
+			google.maps.event.trigger(map, 'resize');
+			searchAddress();
+		}
+	});
+	backToCaller = function () {
+		if (calledFrom == 'CreateEventModal') {
+			$('#CreateEventModal').foundation('reveal', 'open');
+		} else {
+			$('#UpdateEventModal').foundation('reveal', 'open');
+		}
+	}
 </script>
 
 <div id="CreateEventModal" class="reveal-modal small" data-reveal>
@@ -48,10 +91,13 @@
 				@Html.TextBoxFor(m => m.EndTime, new { id = "endTimeInput" })
 				@Html.ValidationMessageFor(m => m.EndTime)
 			</div>
+			
+			@*Not used yet
 			<div class="medium-2 columns">
 				<a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
-			</div>
-			<div class="medium-2 columns">
+			</div>*@
+			
+			<div class="medium-4 columns">
 				<a class="radius button" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
 			</div>
 		</div>
@@ -67,11 +113,6 @@
 		@Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude" })
 		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude" })
 	}
-</div>
-
-
-<div id="CreateEvent-PollModal" class="reveal-modal small" data-reveal>
-	<a class="radius button" data-reveal-id="CreateEventModal" href="#">Back</a>
 </div>
 
 

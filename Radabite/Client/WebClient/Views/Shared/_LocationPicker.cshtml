@@ -7,8 +7,8 @@
 		}
 	</style>
 	<div class="row">
-		<a class="radius button" data-reveal-id="CreateEventModal" onclick="clearLocation()">Back</a>
-		<a class="radius button" data-reveal-id="CreateEventModal">Save</a>
+		<a class="radius button" onclick="backToCaller()">Back</a>
+		<a class="radius button" onclick="saveLocation()">Save</a>
 	</div>
 	<div class="row">
 		<div class="small-12 columns">
@@ -38,15 +38,10 @@
 		$(document).on('opened', '[data-reveal]', function () {
 			//initialize the map the first time the modal is opened
 			var modal = $(this);
-			if (modal.attr('id') == 'CreateEvent-MapModal' && map == null) {
+			if ((modal.attr('id') == 'CreateEvent-MapModal' || modal.attr('id') == 'UpdateEventModal') && map == null) {
 				initialize();
 			}
 		});
-		function clearLocation() {
-			document.getElementById('locationInput').value = '';
-			document.getElementById('mapLongitude').value = null;
-			document.getElementById('mapLatitude').value = null;
-		}
 		function initialize() {
 			geocoder = new google.maps.Geocoder();
 			var mapOptions = {
@@ -67,7 +62,6 @@
 			google.maps.event.trigger(map, 'resize');
 
 			//Sets location to current location if possible, else starts at a default location
-			//prepareGeolocation();
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(positionSuccess, positionFail);
 			} else {
@@ -90,10 +84,7 @@
 		function moveMarker(location) {
 			marker.setPosition(location);
 
-			//write to the form
 			readMarkerAddress();
-			document.getElementById('mapLongitude').value = location.lng();
-			document.getElementById('mapLatitude').value = location.lat();
 		}
 		function searchAddress() {
 			var address = document.getElementById("address").value;
@@ -108,12 +99,11 @@
 		}
 		function readMarkerAddress() {
 			var addressBox = document.getElementById('address');
-			var eventLocation = document.getElementById('locationInput');
+
 			geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					if (results[1]) {
 						addressBox.value = results[0].formatted_address;
-						eventLocation.value = results[0].formatted_address;
 					}
 					else {
 						addressBox.value = 'No address found';
@@ -124,6 +114,20 @@
 					addressBox.value = 'Error with map';
 				}
 			})
+		}
+		saveLocation = function () {
+
+			var location = marker.getPosition();
+			if (calledFrom == 'CreateEventModal') {
+				document.getElementById('locationInput').value = document.getElementById('address').value;
+				document.getElementById('mapLongitude').value = location.lng();
+				document.getElementById('mapLatitude').value = location.lat();
+			} else {
+				document.getElementById('locationInputUpdate').value = document.getElementById('address').value;
+				document.getElementById('mapLongitudeUpdate').value = location.lng();
+				document.getElementById('mapLatitudeUpdate').value = location.lat();
+			}
+			backToCaller();
 		}
 	</script>
 
