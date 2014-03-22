@@ -24,15 +24,13 @@ namespace Radabite.Backend.Accessors
 
 		JavaScriptSerializer _serializer = new JavaScriptSerializer();
 		
-		//how to go from response.Content (binary?) to image... probably return that?
-		public byte[] Get(string blobID)
+		public byte[] Get(string blobID, string mediaType)
 		{
 			using (var fooCDN = new HttpClient())
 			{
 				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
 				fooCDN.DefaultRequestHeaders.Accept.Clear();
-				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/jpeg"));
-				//fooCDN.DefaultRequestHeaders.Authorization
+				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
 
 				HttpResponseMessage response = fooCDN.GetAsync("/api/content/" + blobID).Result;
 
@@ -62,11 +60,8 @@ namespace Radabite.Backend.Accessors
 
 				if (response.IsSuccessStatusCode)
 				{
-					//eventually, have this read into a class that matches the JSON
 					var result = response.Content.ReadAsAsync<Object>().Result;
 					
-					System.Diagnostics.Debug.WriteLine("GET info content: " + result.ToString());
-
 					return _serializer.Deserialize<Dictionary<string, dynamic>>(result.ToString());					
 				}
 				else
@@ -112,9 +107,12 @@ namespace Radabite.Backend.Accessors
 				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
 				fooCDN.DefaultRequestHeaders.Accept.Clear();
 
-				HttpResponseMessage response = fooCDN.PutAsync("/api/content/" + blobID + "?type=" + type.ToString(), null).Result;
+				HttpContent empty = new StringContent("");
+				empty.Headers.Add("Content-Length", "0");
 
-				//returns 204 "No Content", but it works?
+
+				HttpResponseMessage response = fooCDN.PutAsync("/api/content/" + blobID + "?type=" + type.ToString(), empty).Result;
+
 				if (response.IsSuccessStatusCode)
 				{
 					return response;

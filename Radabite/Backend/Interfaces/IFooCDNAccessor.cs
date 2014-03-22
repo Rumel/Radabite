@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Radabite.Backend.Accessors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -8,12 +9,12 @@ namespace Radabite.Backend.Interfaces
 {
 	public interface IFooCDNAccessor
 	{
-		byte[] Get(string blobID);
+		byte[] Get(string blobID, string mediaType);
 
 		IDictionary<string, dynamic> GetInfo(string blobID);
 
 		HttpResponseMessage Post(string blobID, HttpContent content);
 
-		HttpResponseMessage Put(string blobID, Radabite.Backend.Accessors.FooCDNAccessor.StorageType type);
+		HttpResponseMessage Put(string blobID, FooCDNAccessor.StorageType type);
 	}
 }

@@ -14,9 +14,9 @@ namespace Radabite.Backend.Managers
 {
 	public class FooCDNManager : IFooCDNManager
 	{
-		public byte[] Get(string blobID)
+		public byte[] Get(string blobID, string mediaType)
 		{
-			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(blobID);
+			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(blobID, mediaType);
 		}
 
 		public IDictionary<string, dynamic> GetInfo(string blobID)
@@ -29,7 +29,7 @@ namespace Radabite.Backend.Managers
 			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(blobID, content);
 		}
 
-		public HttpResponseMessage Put(string blobID, Radabite.Backend.Accessors.FooCDNAccessor.StorageType type)
+		public HttpResponseMessage Put(string blobID, FooCDNAccessor.StorageType type)
 		{
 			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Put(blobID, type);
 		}
