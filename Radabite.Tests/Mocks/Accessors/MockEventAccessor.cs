@@ -20,7 +20,19 @@ namespace Radabite.Tests.Mocks.Accessors
         {
             return new Event()
             {
-                Id = id
+				Id = id,
+                Title = "Test Title",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                IsPrivate = false,
+                Description = "Test Description",
+				Location = new Location()
+				{
+					LocationName = "Test Location",
+					Latitude = 0,
+					Longitude = 0,
+				},
+				IsActive = true
             };
         }
 
