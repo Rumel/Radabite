@@ -82,6 +82,7 @@ namespace Radabite.Tests.Accessors
 			Assert.IsNotNull(result);
 		}
 
+		// NOTE: This test uses DELETE to avoid creating garbage blobs on runs
 		[TestMethod]
 		public void FooCreateTest()
 		{
@@ -89,6 +90,8 @@ namespace Radabite.Tests.Accessors
 
 			//the returned result is the new blob's ID
 			Assert.IsNotNull(result);
+
+			var deleteResult = ServiceManager.Kernel.Get<IFooCDNAccessor>().Delete(result);
 		}
 
 		// NOTE: This test for delete depends on functioning POST (create blob) and POST (upload to blob)
