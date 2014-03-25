@@ -29,7 +29,12 @@ namespace Radabite.Tests.Accessors
 	[TestClass]
 	public class FooCDNTest
 	{
-		[TestInitialize]
+    const string jpegBlob = "c1485afb-d055-4f2f-a73e-c4e1bc22d2e9";
+    const string plainTextBlob = "49971910-8aa5-4b8c-99fd-c37f6b98be92";
+    const string postTextBlob = "8a5de7e6-3760-4908-b19d-6c619e19c522";
+
+        
+        [TestInitialize]
 		public void Setup()
 		{
 			ServiceManager.Kernel.Rebind<IFooCDNAccessor>().To<FooCDNAccessor>().InSingletonScope();
@@ -39,7 +44,7 @@ namespace Radabite.Tests.Accessors
 		public void FooGetImageTest()
 		{
 			//GET from the test blob
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9", "image/jpeg");
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(jpegBlob, "image/jpeg");
 
 			Assert.IsNotNull(result);
 		}
@@ -48,7 +53,7 @@ namespace Radabite.Tests.Accessors
 		public void FooGetTextPlainTest()
 		{
 			//GET from the test blob
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get("49971910-8aa5-4b8c-99fd-c37f6b98be92", "text/plain");
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(plainTextBlob, "text/plain");
 			var mString = System.Text.Encoding.ASCII.GetString(result);
 			Assert.AreEqual(mString, "test");
 		}
@@ -56,16 +61,16 @@ namespace Radabite.Tests.Accessors
 		[TestMethod]
 		public void FooGetInfoTest()
 		{
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9");
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo(jpegBlob);
 
-			Assert.AreEqual(result["BlobID"], "c1485afb-d055-4f2f-a73e-c4e1bc22d2e9");
+			Assert.AreEqual(result["BlobID"], jpegBlob);
 			Assert.AreEqual(result["MimeType"], "image/jpeg");
 		}
 
 		[TestMethod]
 		public void FooPutTest()
 		{
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Put("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9", FooCDNAccessor.StorageType.Tape);
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Put(jpegBlob, FooCDNAccessor.StorageType.Tape);
 
 			Assert.IsTrue(result.IsSuccessStatusCode);
 		}
@@ -76,7 +81,7 @@ namespace Radabite.Tests.Accessors
 			string testFilename = "testFile.txt";
 
 			File.WriteAllText(testFilename, "Testing post");
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Post("8a5de7e6-3760-4908-b19d-6c619e19c522", testFilename);
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(postTextBlob, testFilename);
 			File.Delete(testFilename);
 
 			Assert.IsNotNull(result);
