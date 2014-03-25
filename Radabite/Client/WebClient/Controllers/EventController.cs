@@ -72,7 +72,7 @@ namespace Radabite.Client.WebClient.Controllers
                 Posts = posts
             };
 
-            return View(eventRequest);
+            return View(eventViewModel);
         }
 
 

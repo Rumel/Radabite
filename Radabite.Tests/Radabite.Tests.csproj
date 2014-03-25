@@ -125,6 +125,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accessors\FooCDNTest.cs" />
     <Compile Include="Controllers\UserProfileControllerTest.cs" />
     <Compile Include="Controllers\EventControllerTest.cs" />
     <Compile Include="Managers\EventManagerTest.cs" />
