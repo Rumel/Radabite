@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Web.WebPages.OAuth;
 using Radabite.Backend.Database;
 using System.Configuration;
+using DotNetOpenAuth.FacebookOAuth2;
 
 namespace Radabite
 {
@@ -23,10 +24,20 @@ namespace Radabite
                 consumerKey: ConfigurationManager.AppSettings["twitterConsumerKey"],
                 consumerSecret: ConfigurationManager.AppSettings["twitterSecretKey"]);
 
+            //https://github.com/mj1856/DotNetOpenAuth.FacebookOAuth2
+            var facebookAppId = ConfigurationManager.AppSettings["facebookAppId"];
+            var facebookAppSecret = ConfigurationManager.AppSettings["facebookAppSecret"];
+            var client = new FacebookOAuth2Client(facebookAppId, facebookAppSecret, "read_stream");
+            var extraData = new Dictionary<string, object>();
+            //extraData.Add("read_stream", "read_stream");
+            //string[] scope = new string[] {"read_stream"};
+            OAuthWebSecurity.RegisterClient(client, "Facebook", extraData);
+
+            /*
             OAuthWebSecurity.RegisterFacebookClient(
                 appId: ConfigurationManager.AppSettings["facebookAppId"],
                 appSecret: ConfigurationManager.AppSettings["facebookAppSecret"]);
-
+            */
             //OAuthWebSecurity.RegisterGoogleClient();
         }
     }

@@ -42,7 +42,7 @@ namespace Radabite.Backend.Managers
                 //HTTP GET
                 
                 string facebookAccessToken = userAccessToken;
-                StringBuilder sb = new StringBuilder("/me?fields=posts&");
+                StringBuilder sb = new StringBuilder("/me?fields=statuses&");
                 sb.Append("access_token=");
                 sb.Append(facebookAccessToken);
              
