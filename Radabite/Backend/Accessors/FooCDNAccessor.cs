@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
+using System.Net.Http.Formatting;
+using System.IO;
 
 namespace Radabite.Backend.Accessors
 {
@@ -23,12 +25,13 @@ namespace Radabite.Backend.Accessors
 		}
 
 		JavaScriptSerializer _serializer = new JavaScriptSerializer();
+		Uri _baseUri = new Uri("http://foocdn.azurewebsites.net");
 		
 		public byte[] Get(string blobID, string mediaType)
 		{
 			using (var fooCDN = new HttpClient())
 			{
-				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
+				fooCDN.BaseAddress = _baseUri;
 				fooCDN.DefaultRequestHeaders.Accept.Clear();
 				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
 
@@ -52,7 +55,7 @@ namespace Radabite.Backend.Accessors
 		{
 			using (var fooCDN = new HttpClient())
 			{
-				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
+				fooCDN.BaseAddress = _baseUri;
 				fooCDN.DefaultRequestHeaders.Accept.Clear();
 				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -62,6 +65,7 @@ namespace Radabite.Backend.Accessors
 				{
 					var result = response.Content.ReadAsAsync<Object>().Result;
 					
+					//Into a dictionary for now
 					return _serializer.Deserialize<Dictionary<string, dynamic>>(result.ToString());					
 				}
 				else
@@ -71,58 +75,74 @@ namespace Radabite.Backend.Accessors
 			}
 		}
 
-		public HttpResponseMessage Post(string blobID, HttpContent content)
+		public byte[] Post(string blobID, string filename)
 		{
-			using (var fooCDN = new HttpClient())
-			{
-				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
-				fooCDN.DefaultRequestHeaders.Accept.Clear();
+			WebClient fooCDN = new WebClient();
 
-				//What if this doesn't match the mime type that the blob has?
-				//not always going to be JSON, silly!
-					//set this based on some attribute of content?
-				//fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
-				
+			byte[] response = fooCDN.UploadFile("http://foocdn.azurewebsites.net/api/content/" + blobID, filename);
 
-				HttpResponseMessage response = fooCDN.PostAsync("/api/content/" + blobID, content).Result;
-				
-
-				if (response.IsSuccessStatusCode)
-				{
-					var j = response.Content.ReadAsAsync<Object>().Result;
-					
-					return response;
-				}
-				else
-				{
-					throw new Exception("FooCDN POST not successful");
-				}
-			}
+			return response;
 		}
 
 		public HttpResponseMessage Put(string blobID, StorageType type)
 		{
 			using(var fooCDN = new HttpClient())
 			{
-				fooCDN.BaseAddress = new Uri("http://foocdn.azurewebsites.net");
+				fooCDN.BaseAddress = _baseUri;
 				fooCDN.DefaultRequestHeaders.Accept.Clear();
 
 				HttpContent empty = new StringContent("");
 				empty.Headers.Add("Content-Length", "0");
 
-
 				HttpResponseMessage response = fooCDN.PutAsync("/api/content/" + blobID + "?type=" + type.ToString(), empty).Result;
 
-				if (response.IsSuccessStatusCode)
-				{
-					return response;
-				}
-				else
-				{
-					throw new Exception("FooCDN PUT not successful");
-				}
+				return response;
 			}
 		}
 
+		public string CreateBlob(string mimeType)
+		{
+			var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://foocdn.azurewebsites.net/api/content/add/");
+			httpWebRequest.ContentType = "application/json";
+			httpWebRequest.Method = "POST";
+
+			using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+			{
+				string json = "{ \"AccountKey\": \"E22EB65F52875\", \"MimeType\":\"" + mimeType + "\"}";
+
+				streamWriter.Write(json);
+			}
+			var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+			if (httpResponse.StatusCode == HttpStatusCode.OK)
+			{
+				using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+				{
+					var createdBlob = streamReader.ReadToEnd();
+
+					//get rid of the quotes surrounding it
+					createdBlob = createdBlob.Substring(1, createdBlob.Length - 2);
+
+					return createdBlob;
+				}
+			}
+			else
+			{
+				throw new Exception("POST: create new blob not successful");
+			}
+		}
+
+		public HttpResponseMessage Delete(string blobID)
+		{
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
+
+				HttpResponseMessage response = fooCDN.DeleteAsync("/api/content/" + blobID).Result;
+
+				return response;
+			}
+		}
 	}
 }

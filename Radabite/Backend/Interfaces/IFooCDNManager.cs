@@ -13,8 +13,13 @@ namespace Radabite.Backend.Interfaces
 
 		IDictionary<string, dynamic> GetInfo(string blobID);
 
-		HttpResponseMessage Post(string blobID, HttpContent content);
+		byte[] Post(string blobID, string filename);
 
 		HttpResponseMessage Put(string blobID, FooCDNAccessor.StorageType type);
+
+		string CreateBlob(string mimeType);
+
+		HttpResponseMessage Delete(string blobID);
+
 	}
 }

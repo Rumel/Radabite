@@ -24,14 +24,25 @@ namespace Radabite.Backend.Managers
 			return ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo(blobID);
 		}
 
-		public HttpResponseMessage Post(string blobID, HttpContent content)
+		public byte[] Post(string blobID, string filename)
 		{
-			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(blobID, content);
+			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(blobID, filename);
 		}
 
 		public HttpResponseMessage Put(string blobID, FooCDNAccessor.StorageType type)
 		{
 			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Put(blobID, type);
 		}
+
+		public string CreateBlob(string mimeType)
+		{
+			return ServiceManager.Kernel.Get<IFooCDNAccessor>().CreateBlob(mimeType);
+		}
+
+		public HttpResponseMessage Delete(string blobID)
+		{
+			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Delete(blobID);
+		}
+
 	}
 }
