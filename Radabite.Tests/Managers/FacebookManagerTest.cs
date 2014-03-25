@@ -10,9 +10,8 @@ namespace Radabite.Tests.Managers
         [TestMethod]
         public void GetPosts()
         {
-            //TODO - this isn't even a test.
             var manager = new FacebookManager();
-            var expected = manager.GetPosts("", "", "", new DateTime(2014, 3, 3), new DateTime(2014, 3, 22));
+            var expected = manager.GetPosts("", new DateTime(2014, 3, 3), new DateTime(2014, 3, 22));
             Assert.IsNotNull(expected);
         }
     }
