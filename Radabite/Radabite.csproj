@@ -322,6 +322,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="ConfigurationStrings.config" />
+    <Content Include="Client\WebClient\Views\Feed\Posts.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
