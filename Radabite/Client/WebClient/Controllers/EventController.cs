@@ -34,7 +34,7 @@ namespace Radabite.Client.WebClient.Controllers
             var posts = new List<Post>();
 
             var owner = new User
-                {
+            {
                 DisplayName = "Tom Jones",
                 PhotoLink = "http://bit.ly/1nHr6dG"
             };
@@ -59,7 +59,7 @@ namespace Radabite.Client.WebClient.Controllers
             posts.Add(post2);
 
             var eventViewModel = new EventModel()
-                    {
+            {
                 Id = eventRequest.Id,
                 Title = eventRequest.Title,
                 StartTime = eventRequest.StartTime,
@@ -70,22 +70,9 @@ namespace Radabite.Client.WebClient.Controllers
                 Latitude = eventRequest.Location.Latitude,
                 Longitude = eventRequest.Location.Longitude,
                 Posts = posts
-                };
+            };
 
-
-
-//TESTING FOR GET and GET info
-			var thing = ServiceManager.Kernel.Get<IFooCDNManager>().Get("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9");
-			var otherThing = ServiceManager.Kernel.Get<IFooCDNManager>().GetInfo("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9");
-			
-			//POST
-			//HttpContent content = new StreamContent("I am plain text");
-			//var thirdThing = ServiceManager.Kernel.Get<IFooCDNManager>().Post("49971910-8aa5-4b8c-99fd-c37f6b98be92", content);
-
-			var putThing = ServiceManager.Kernel.Get<IFooCDNManager>().Put("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9", Radabite.Backend.Accessors.FooCDNAccessor.StorageType.Tape);
-
-
-            return View(eventRequest);
+            return View(eventViewModel);
         }
 
 
