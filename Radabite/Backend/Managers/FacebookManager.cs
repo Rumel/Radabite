@@ -23,7 +23,7 @@ namespace Radabite.Backend.Managers
     public class FacebookManager : IFacebookManager
     {
         // http://facebooksdk.net/docs/making-asynchronous-requests/
-        public string GetPosts(string userAccessToken, string userId, string accessToken, DateTime startTime, DateTime endTime) 
+        public string GetPosts(string userAccessToken, string userId, DateTime startTime, DateTime endTime) 
         {
 
             // if we were using the facebook sdk we would do this.
@@ -42,10 +42,14 @@ namespace Radabite.Backend.Managers
                 //HTTP GET
                 
                 string facebookAccessToken = userAccessToken;
-                StringBuilder sb = new StringBuilder("/me?fields=statuses&");
+                StringBuilder sb = new StringBuilder("/me?fields=statuses.fields(message,from,id)&");
                 sb.Append("access_token=");
                 sb.Append(facebookAccessToken);
-             
+                sb.Append("&since=");
+                sb.Append(unixStartTime);
+                sb.Append("&until=");
+                sb.Append(unixEndTime);
+
                 var finalResponse = client.GetAsync(sb.ToString()).Result;
                 
                 var resString = finalResponse.Content.ReadAsStringAsync().Result;

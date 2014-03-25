@@ -18,12 +18,12 @@ namespace Radabite.Client.WebClient.Controllers
         [Authorize]
         public ActionResult GetPosts() 
         {
-            DateTime startDate = new DateTime(2014, 2, 20);
-            DateTime endDate = new DateTime(2014, 3, 13);
+            DateTime startDate = new DateTime(2012, 1, 01);
+            DateTime endDate = new DateTime(2014, 1, 30);
             if (Session["facebookUserToken"] != null)
             {
                 var accessToken = Session["facebookUserToken"].ToString();
-                var result = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(accessToken, "cassey", "11", startDate, endDate);
+                var result = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(accessToken, "cassey", startDate, endDate);
                 return new ContentResult { Content = result, ContentType = "application/json" };
             }
             else

@@ -12,6 +12,7 @@ namespace DotNetOpenAuth.FacebookOAuth2
 {
     /// <summary>
     /// A DotNetOpenAuth client for logging in to Facebook using OAuth2.
+    /// Code from: https://github.com/mj1856/DotNetOpenAuth.FacebookOAuth2
     /// Reference: http://developers.facebook.com/docs/howtos/login/server-side-login/
     /// </summary>
     public class FacebookOAuth2Client : OAuth2Client
