@@ -72,19 +72,6 @@ namespace Radabite.Client.WebClient.Controllers
                 Posts = posts
             };
 
-
-
-//TESTING FOR GET and GET info
-			//var thing = ServiceManager.Kernel.Get<IFooCDNManager>().Get("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9");
-			//var otherThing = ServiceManager.Kernel.Get<IFooCDNManager>().GetInfo("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9");
-			
-			//POST
-			//HttpContent content = new StreamContent("I am plain text");
-			//var thirdThing = ServiceManager.Kernel.Get<IFooCDNManager>().Post("49971910-8aa5-4b8c-99fd-c37f6b98be92", content);
-
-			//var putThing = ServiceManager.Kernel.Get<IFooCDNManager>().Put("c1485afb-d055-4f2f-a73e-c4e1bc22d2e9", Radabite.Backend.Accessors.FooCDNAccessor.StorageType.Tape);
-
-
             return View(eventViewModel);
         }
 
