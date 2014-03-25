@@ -23,7 +23,7 @@ namespace Radabite.Backend.Managers
     public class FacebookManager : IFacebookManager
     {
         // http://facebooksdk.net/docs/making-asynchronous-requests/
-        public string GetPosts(string userAccessToken, DateTime startTime, DateTime endTime) 
+        public IList<FacebookPostModel> GetPosts(string userAccessToken, DateTime startTime, DateTime endTime) 
         {
 
             // if we were using the facebook sdk we would do this.
@@ -57,13 +57,25 @@ namespace Radabite.Backend.Managers
 
                 // Creates a dynamic object with properties of the response
                 // this is what we'll use to read the responses into FacebookPostModel objects.
-                dynamic fstatuses = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
+                dynamic fdata = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
+                dynamic fstatuses = fdata.statuses.data;
+                List<FacebookPostModel> posts = new List<FacebookPostModel>();
+                foreach (dynamic status in fstatuses)
+                {
+                   // double unixTime = Convert.ToDouble(status.updated_time);
+                   // DateTime aspTime = ConvertFromUnixTimestamp(unixTime);
+                    FacebookPostModel post = new FacebookPostModel{
+                        message = status.message,
+                        created_time = status.updated_time
+                    };
+                    posts.Add(post);
+                }
 
                 // this is another way of doing it but the json responses are so nested that this will be very messy. 
                 // dynamic's the way to go.
             //    FacebookPageResults response = (FacebookPageResults) JsonConvert.DeserializeObject(resString);
 
-                return finalResponse.Content.ReadAsStringAsync().Result;
+                return posts;
             }
         }
 

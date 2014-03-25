@@ -24,7 +24,8 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 var accessToken = Session["facebookUserToken"].ToString();
                 var result = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(accessToken, startDate, endDate);
-                return new ContentResult { Content = result, ContentType = "application/json" };
+               // return new ContentResult { Content = result, ContentType = "application/json" };
+                return new ContentResult { Content = "", ContentType = "application/json" };
             }
             else
             {
