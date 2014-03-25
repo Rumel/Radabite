@@ -23,15 +23,15 @@ namespace Radabite.Backend.Managers
     public class FacebookManager : IFacebookManager
     {
         // http://facebooksdk.net/docs/making-asynchronous-requests/
-        public string GetPosts(string userAccessToken, string userId, DateTime startTime, DateTime endTime) 
+        public string GetPosts(string userAccessToken, DateTime startTime, DateTime endTime) 
         {
 
             // if we were using the facebook sdk we would do this.
         //  var fb = new FacebookClient(accessToken);
         //  fb.Get("cassey.lottman");
     
-            double unixStartTime = ConvertToFacebookTime(startTime);
-            double unixEndTime = ConvertToFacebookTime(endTime);
+            double unixStartTime = ConvertToUnixTimestamp(startTime);
+            double unixEndTime = ConvertToUnixTimestamp(endTime);
 
             using (var client = new HttpClient())
             {
@@ -49,6 +49,7 @@ namespace Radabite.Backend.Managers
                 sb.Append(unixStartTime);
                 sb.Append("&until=");
                 sb.Append(unixEndTime);
+                sb.Append("&limit=50");
 
                 var finalResponse = client.GetAsync(sb.ToString()).Result;
                 
@@ -66,22 +67,20 @@ namespace Radabite.Backend.Managers
             }
         }
 
-        // http://facebooksdk.net/docs/datetimeconverter/
-        public double ConvertToFacebookTime(DateTime startTime)
+        public DateTime ConvertFromUnixTimestamp(double timestamp)
         {
-            DateTime epoch = DateTimeConvertor.Epoch;
-            int pdtOffset = -25200; // pacific daylight time offset in seconds
-            DateTimeOffset dtOffset = new DateTimeOffset(startTime, TimeSpan.FromSeconds(pdtOffset));
-            double unixTime = DateTimeConvertor.ToUnixTime(dtOffset);
-            return unixTime;
-        }
-        // http://facebooksdk.net/docs/datetimeconverter/
-        public DateTime ConvertFromUnixTime(double startTime)
-        {
-            DateTime result = DateTimeConvertor.FromUnixTime(startTime);
-            return result;
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return origin.AddSeconds(timestamp);
         }
 
+
+        public double ConvertToUnixTimestamp(DateTime date)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan diff = date - origin;
+            return Math.Floor(diff.TotalSeconds);
+        }
+     
         public string GetAccessToken(FacebookClient fb)
         {
             dynamic result = fb.Get("oauth/access_token", new
@@ -92,7 +91,6 @@ namespace Radabite.Backend.Managers
                 });
             return result.access_token;
         }
-
 
     }
 }
