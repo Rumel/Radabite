@@ -14,6 +14,8 @@ using Radabite.Backend.Database;
 using Ninject;
 using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
+using Radabite.Client.WebClient.Models;
+using DotNetOpenAuth.FacebookOAuth2;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -57,7 +59,7 @@ namespace Radabite.Client.WebClient.Controllers
         public ActionResult LogOff()
         {
             WebSecurity.Logout();
-
+            Session.Clear();
             return RedirectToAction("Index", "Home");
         }
 
@@ -221,6 +223,7 @@ namespace Radabite.Client.WebClient.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
+            FacebookOAuth2Client.RewriteRequest(); // needs to go before every call to verify authentication
             AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
             if (!result.IsSuccessful)
             {
@@ -229,7 +232,10 @@ namespace Radabite.Client.WebClient.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
-                return RedirectToLocal(returnUrl);
+                // the u becomes a route parameter
+                Session.Add("facebookUserToken", result.ExtraData["accesstoken"]);
+
+                return RedirectToAction("Index", "UserProfile", new { u = result.UserName });
             }
 
             if (User.Identity.IsAuthenticated)
@@ -255,6 +261,7 @@ namespace Radabite.Client.WebClient.Controllers
                         Gender = result.ExtraData["gender"],
                         ExternalLoginData = loginData
                     };
+                    Session["facebookToken"] = result.ExtraData["accesstoken"];
                 }
                 else
                 {

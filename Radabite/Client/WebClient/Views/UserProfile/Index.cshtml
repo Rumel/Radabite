@@ -1,10 +1,10 @@
-﻿@using Radabite.Backend.Database;
-@using Radabite.Client.WebClient.ViewModels;
+﻿@using Radabite.Client.WebClient.Models;
+@using Radabite.Backend.Database;
 
 @{
     ViewBag.Title = "Profile";
 }
-@model ViewModel
+@model UserModel
 
 <div class="row">
 <hgroup class="title">
@@ -26,7 +26,7 @@
                 <span>Location: Test Location</span>
             </p>
         </div>
-		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", Model.Friends);}
+		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", @Model.Friends);}
     </div>
     <div class="large-8 medium-8 columns">
         <h3>Your Events</h3>

@@ -8,4 +8,5 @@
   <add key="twitterSecretKey" value="YOUR-KEY-HERE"/>
   <add key="facebookAppId" value="YOUR-KEY-HERE"/>
   <add key="facebookAppSecret" value="YOUR-KEY-HERE"/>
+  <add key="fooCdnKey" value="YOUR-KEY-HERE"/>
 </appSettings>

@@ -19,6 +19,22 @@ namespace Radabite.Backend.Accessors
             } 
         }
 
+        public User GetByUserProfile(int p)
+        {
+            using (var db = new Db())
+            {
+                return db.Users.FirstOrDefault(x => x.TwitterProfile.UserId == p || x.FacebookProfile.UserId == p);
+            }
+        }
+
+        public UserProfile GetUserProfile(string userName)
+        {
+            using (var db = new Db())
+            { 
+                return db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == userName.ToLower());
+            }
+        }
+
         public SaveResult<User> SaveOrUpdate(User t)
         {
             using (var db = new Db())
@@ -41,7 +57,7 @@ namespace Radabite.Backend.Accessors
                 }
                 else
                 {
-                    db.Users.Add(t);
+                db.Users.Add(t);
                 }
                 db.SaveChanges();
                 return new SaveResult<User>(true, t);

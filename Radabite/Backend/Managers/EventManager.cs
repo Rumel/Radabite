@@ -6,6 +6,7 @@ using Radabite.Backend.Database;
 using Radabite.Backend.Interfaces;
 using Ninject;
 using RadabiteServiceManager;
+using Facebook;
 
 namespace Radabite.Backend.Managers
 {
@@ -27,5 +28,6 @@ namespace Radabite.Backend.Managers
         {
             return ServiceManager.Kernel.Get<IEventAccessor>().GetById(id);
         }
+
     }
 }

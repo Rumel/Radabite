@@ -25,5 +25,10 @@ namespace Radabite.Tests.Mocks.Managers
         {
             throw new NotImplementedException();
         }
+
+        public User GetByUserName(string userName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -20,6 +20,8 @@ namespace Radabite.Backend.Database
 
         public Location Location { get; set; }
 
+        public bool FinishedGettingPosts { get; set; }
+
         public bool IsActive { get; set; }
 
     }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using Ninject;
 using RadabiteServiceManager;
+using Radabite.Models;
 
 namespace Radabite.Backend.Managers
 {
@@ -27,5 +28,12 @@ namespace Radabite.Backend.Managers
         {
             return ServiceManager.Kernel.Get<IUserAccessor>().GetAll();
         }
+
+        User IUserManager.GetByUserName(string userName)
+        {
+            UserProfile profile = ServiceManager.Kernel.Get<IUserAccessor>().GetUserProfile(userName);
+            return ServiceManager.Kernel.Get<IUserAccessor>().GetByUserProfile(profile.UserId);
+        }
+
     }
 }
