@@ -11,7 +11,6 @@ namespace Radabite.Backend.Interfaces
 {
     interface IFacebookManager
     {
-        //IList<FacebookPostModel> GetPosts(string userId, string accessToken, DateTime startTime, DateTime endTime);
         IList<FacebookPostModel> GetPosts(string userAccessToken, DateTime startTime, DateTime endTime);
         string GetAccessToken(FacebookClient fb);
 
