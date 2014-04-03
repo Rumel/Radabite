@@ -25,9 +25,9 @@
 	    <h4>Time: @Model.StartTime - @Model.EndTime</h4>
 	    <h4>Location: @Model.LocationName</h4>
         @{if (Model.IsPrivate) 
-            { <h5>Privacy: Private</h5> }
+            { <h4>Privacy: Private</h4> }
         else
-            { <h5>Privacy: Public</h5> } }
+            { <h4>Privacy: Public</h4> } }
     </div>
 </div>
 
@@ -92,7 +92,7 @@
     <a class="close-reveal-modal">&#215;</a>
 </div>
 
-<div id="InviteModal" class="reveal-modal small" data-reveal>
+<div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
     @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name })
     <a class="close-reveal-modal">&#215;</a>
 </div>

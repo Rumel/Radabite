@@ -1,25 +1,30 @@
 ﻿@using Radabite.Client.WebClient.Models
 
 @model UserModel
-
-<form>
-    
-    @{foreach (var f in Model.Friends)
-        {
-            <div class="panel">
-                <div class="row">
-                    <div class="large-2 medium-2 columns">
-                        <img src="@f.PhotoLink"  />
-                    </div>
-                    <div class="large-6 medium-6 columns">
-                        <h3>@f.DisplayName</h3>
-                    </div>
-                    <div class="large-4 medium-4 columns" style="direction:rtl; padding-right:0">
-                        <a class="radius button" style="margin-bottom:0px">Invite</a>
+<div class="row" style="overflow: auto; height:80%">
+    <form>
+        @{foreach (var f in Model.Friends)
+            {
+                <div class="panel">
+                    <div class="row">
+                        <div class="large-2 medium-2 columns">
+                            <img src="@f.PhotoLink"  />
+                        </div>
+                        <div class="large-6 medium-6 columns">
+                            <h3>@f.DisplayName</h3>
+                        </div>
+                        <div class="large-4 medium-4 columns" style="direction:rtl; padding-right:0">
+                            <a class="radius button" style="margin-bottom:0px">Invite</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         }
-    }
-</form>
+    </form>
+</div>
+<br />
+<div class="row">
+    <a class="radius button" href="#">Submit Invitations</a>
+</div>
+
 

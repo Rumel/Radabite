@@ -206,6 +206,26 @@ namespace Radabite.Client.WebClient.Controllers
                     new User(){
                         DisplayName = "Clint Eastwood",
                         PhotoLink = "http://bit.ly/1hCIdbE"
+                    },
+                    new User(){
+                        DisplayName = "Clift Eastwood",
+                        PhotoLink = "http://bit.ly/1hCIdbE"
+                    },
+                    new User(){
+                        DisplayName = "Clirt Eastwood",
+                        PhotoLink = "http://bit.ly/1hCIdbE"
+                    },
+                    new User(){
+                        DisplayName = "Clipt Eastwood",
+                        PhotoLink = "http://bit.ly/1hCIdbE"
+                    },
+                    new User(){
+                        DisplayName = "Clizt Eastwood",
+                        PhotoLink = "http://bit.ly/1hCIdbE"
+                    },
+                    new User(){
+                        DisplayName = "Clixt Eastwood",
+                        PhotoLink = "http://bit.ly/1hCIdbE"
                     }
                 }
             };
