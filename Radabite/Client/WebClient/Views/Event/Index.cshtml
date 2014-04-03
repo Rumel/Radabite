@@ -6,12 +6,7 @@
 
 @model EventModel
 
-<div class="row">
-	<hgroup class="title">
-		<h2>@ViewBag.Message</h2>
-	</hgroup>
-</div>
-
+<br />  
 <div class="row">
     <div class="large-8 medium-8 columns">
     	<h3>Title: @Model.Title</h3>
@@ -25,34 +20,34 @@
 </div>
 
 <div class="row">
-	<h4>Description: @Model.Description</h4>
-</div>
-
-<div class="row">
-	<h5>Time: @Model.StartTime - @Model.EndTime</h5>
-	<h5>Location: @Model.LocationName</h5>
-    @{if (Model.IsPrivate) { <h5>Privacy: Private</h5> }
-      else
-      { <h5>Privacy: Public</h5> } }
+    <div class="large-12 medium-12 columns">
+        <h4>Description: @Model.Description</h4>
+	    <h4>Time: @Model.StartTime - @Model.EndTime</h4>
+	    <h4>Location: @Model.LocationName</h4>
+        @{if (Model.IsPrivate) 
+            { <h5>Privacy: Private</h5> }
+        else
+            { <h5>Privacy: Public</h5> } }
+    </div>
 </div>
 
 <br />
 <div class="row">
-    <div class="panel">
-        <div class="row">
-            <div class="large-12 medium-12 columns">
-                <form method="post" action="/Event/AddPost">
-                    <input type="text" name="message" placeholder="Enter a Message to post!" />
-                    <input type="submit" value="Post" />
-                </form>
-            </div>
+    <div class="large-4 medium-4 columns">
+        <div class="panel">
+            <h4>Friends</h4>
+            <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
         </div>
     </div>
-</div>
-
-<div class="row">
-    @foreach (var post in Model.Posts)
-    {
+    <div class="large-8 medium-8 columns">
+        <div class="panel">
+            <form method="post" action="/Event/AddPost">
+                <input type="text" name="message" placeholder="Enter a Message to post!" />
+                <input type="submit" value="Post" />
+            </form>
+        </div>
+        @foreach (var post in Model.Posts)
+        {
         <div class="panel">
             <div class ="row">
                 <div class="large-3 medium-3 columns">
@@ -67,14 +62,15 @@
                         <div class="large-3 medium-3 columns">
                             Likes: @post.Likes
                         </div>
-                        <div class="large-6 medium-6 columns" style="direction:rtl">
+                        <div class="large-9 medium-9 columns" style="direction:rtl">
                             Sent at: @post.SendTime
                         </div>
                     </div>
                 </div>
             </div>
        </div>
-    }
+        }
+    </div>
 </div>
 
 @Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
@@ -93,7 +89,11 @@
         </div>
     </div>
     
-    
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+
+<div id="InviteModal" class="reveal-modal small" data-reveal>
+    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name })
     <a class="close-reveal-modal">&#215;</a>
 </div>
 
