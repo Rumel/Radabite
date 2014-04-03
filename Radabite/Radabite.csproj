@@ -307,6 +307,7 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
     <Content Include="Client\WebClient\Content\themes\base\zocial.css" />
+    <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config">

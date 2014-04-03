@@ -17,10 +17,10 @@
     	<h3>Title: @Model.Title</h3>
     </div>
     <div class="large-2 medium-2 columns" style="direction:rtl">
-        <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
+        <a class="radius button" data-reveal-id="UpdateEventModal" href="#" id="EditEventButton">Edit</a>
     </div>
     <div class="large-2 medium-2 columns">
-        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
+        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)" id="DeleteEventButton">Delete</a>
     </div>
 </div>
 
@@ -107,4 +107,21 @@
             // do stuff;
         });
     });*/
+
+	//send an event when CreateEvent modal is opened
+	$('#EditEventButton').on('click', function () {
+		console.log('Editing event:)');
+		ga('send', 'pageview', {
+			'page': 'EditEvent',
+			'title': 'Edit Event modal'
+		});
+	});
+
+	$('#DeleteEventButton').on('click', function () {
+		console.log('Deleting event:)');
+		ga('send', 'pageview', {
+			'page': 'DeleteEvent',
+			'title': 'Delete Event modal'
+		});
+	});
 </script>
