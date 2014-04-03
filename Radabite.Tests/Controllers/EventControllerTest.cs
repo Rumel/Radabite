@@ -56,7 +56,7 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            ViewResult result = controller.DiscoverEvent() as ViewResult;
+            ViewResult result = controller.DiscoverEvent("abcd") as ViewResult;
 
             Assert.IsNotNull(result);
         }
