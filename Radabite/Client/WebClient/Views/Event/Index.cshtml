@@ -34,10 +34,7 @@
 <br />
 <div class="row">
     <div class="large-4 medium-4 columns">
-        <div class="panel">
-            <h4>Friends</h4>
-            <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
-        </div>
+        @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model);
     </div>
     <div class="large-8 medium-8 columns">
         <div class="panel">
