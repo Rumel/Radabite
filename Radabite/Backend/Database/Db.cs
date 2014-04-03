@@ -9,11 +9,16 @@ namespace Radabite.Backend.Database
 {
     public class Db : DbContext
     {
-
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<Invitation> Invitations { get; set; }
+        
         public DbSet<Location> Locations { get; set; }
+        
         public DbSet<User> Users { get; set; }
+        
         public DbSet<UserProfile> UserProfiles { get; set; }
+        
         public Db()
             : base("DefaultConnection")
         {
@@ -24,7 +29,8 @@ namespace Radabite.Backend.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Event>().HasRequired<Location>(e => e.Location);
+            //modelBuilder.Entity<Event>().HasRequired<Location>(e => e.Location);
+            //modelBuilder.Entity<Event>().HasRequired<User>(e => e.Owner).WithMany(u => u.Events);
         }
     }
 }
