@@ -10,6 +10,7 @@ using RadabiteServiceManager;
 using Radabite.Models;
 using System.Net.Http;
 using System.Text;
+using Radabite.Client.WebClient.Models;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -83,14 +84,21 @@ namespace Radabite.Client.WebClient.Controllers
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
 			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
 			//dummy list of friends
-			var friends = new List<User>()
-			{
-				new User{DisplayName = "1"},
-				new User{DisplayName = "2"},
-				new User{DisplayName = "3"}
-			};
+            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
 
-			return View(friends);
+            var userModel = new UserModel
+            {
+                User = user
+            };
+
+            userModel.Friends = new List<User>
+            {
+
+            };
+
+            userModel.Events = new List<Event> { };
+            
+			return View(userModel);
 		}
 
         [HttpPost]
