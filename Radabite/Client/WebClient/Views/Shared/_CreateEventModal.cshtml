@@ -103,7 +103,8 @@
 		</div>
 		<div class="row">
 			<div class="large-8 columns">
-				Private Event: @Html.RadioButtonFor(m => m.IsPrivate, "Private")
+                Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, new { @checked = "checked" })
+                Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
 			</div>
 		</div>
 		<input type="submit" value="Create">
