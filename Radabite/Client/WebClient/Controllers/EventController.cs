@@ -77,14 +77,11 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
 
-		public ActionResult DiscoverEvent()
+		public ActionResult DiscoverEvent(string u)
 		{
 			ViewBag.Message = "Discover Event page.";
 
-			//TODO: Add friends to UserProfile, so there will actually be friends in the db
-			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
-			//dummy list of friends
-            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
 
             var userModel = new UserModel
             {
