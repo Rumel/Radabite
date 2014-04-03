@@ -43,7 +43,7 @@
             <div class="large-12 medium-12 columns">
                 <form method="post" action="/Event/AddPost">
                     <input type="text" name="message" placeholder="Enter a Message to post!" />
-                    <input type="submit" value="Post" />
+                    <input type="submit" value="Post" id="PostSubmitButton"/>
                 </form>
             </div>
         </div>
@@ -86,7 +86,7 @@
         <div class="medium-12 medium-centered columns">
             @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post))
             {
-                <input type="submit" value="Yes, Delete" />
+                <input type="submit" value="Yes, Delete" id="DeleteSubmitButton" />
             }
             @*<a class="radius button" id="confirm-delete" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
             <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>*@
@@ -108,9 +108,10 @@
         });
     });*/
 
-	//send an event when CreateEvent modal is opened
+
+//Google Analytics:
+	//send an pageview when EditEvent modal is opened
 	$('#EditEventButton').on('click', function () {
-		console.log('Editing event:)');
 		ga('send', 'pageview', {
 			'page': 'EditEvent',
 			'title': 'Edit Event modal'
@@ -118,10 +119,42 @@
 	});
 
 	$('#DeleteEventButton').on('click', function () {
-		console.log('Deleting event:)');
 		ga('send', 'pageview', {
 			'page': 'DeleteEvent',
-			'title': 'Delete Event modal'
+			'title': 'Delete Event modal opened'
+		});
+	});
+
+	$('#UpdateSubmitButton').on('click', function () {
+		ga('send', {
+			'hitType': 'event',
+			'eventCategory': 'Event updated',
+			'eventAction': 'click',
+		});
+	});
+
+	$('#DeleteSubmitButton').on('click', function () {
+		ga('send', {
+			'hitType': 'event',
+			'eventCategory': 'Event deleted',
+			'eventAction': 'click',
+		});
+	});
+
+	$('#PostSubmitButton').on('click', function () {
+		
+		ga('send', {
+			'hitType': 'event',
+			'eventCategory': 'Posted to Event @Model.Id',
+			'eventAction': 'click',
+		});
+	});
+
+	$(function () {
+		ga('send', {
+			'hitType': 'event',
+			'eventCategory': 'Viewed event page @Model.Id',
+			'eventAction': 'view',
 		});
 	});
 </script>
