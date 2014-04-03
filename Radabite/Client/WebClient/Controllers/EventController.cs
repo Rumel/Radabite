@@ -194,6 +194,25 @@ namespace Radabite.Client.WebClient.Controllers
             }
         }
 
+        public PartialViewResult _InviteFriends(string u)
+        {
+            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
+
+            var userModel = new UserModel
+            {
+                User = user,
+                Friends = new List<User>()
+                {
+                    new User(){
+                        DisplayName = "Clint Eastwood",
+                        PhotoLink = "http://bit.ly/1hCIdbE"
+                    }
+                }
+            };
+
+            return PartialView(userModel);
+        }
+
         public ActionResult EventNotFound()
         {
             return View();

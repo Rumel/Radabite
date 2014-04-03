@@ -323,6 +323,7 @@
     </Content>
     <Content Include="ConfigurationStrings.config" />
     <Content Include="Client\WebClient\Views\Feed\Posts.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_InviteFriends.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
