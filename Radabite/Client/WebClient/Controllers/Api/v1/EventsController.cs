@@ -17,19 +17,19 @@ namespace Radabite.Controllers.Api
       
 
         // GET api/<controller>
-        public IEnumerable<Event> Get()
+        public IEnumerable<EventJson> Get()
         {
-            return ServiceManager.Kernel.Get<IEventManager>().GetAll();
+            return ServiceManager.Kernel.Get<IEventManager>().GetAll().Select(x => x.ToJson());
         }
 
         // GET api/<controller>/5
-        public Event Get(int id)
+        public EventJson Get(int id)
         {
-            return ServiceManager.Kernel.Get<IEventManager>().GetById(id);
+            return ServiceManager.Kernel.Get<IEventManager>().GetById(id).ToJson();
         }
 
         // POST api/<controller>
-        public Event Post([FromBody]string value)
+        public EventJson Post([FromBody]string value)
         {
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(new Event()
             {
@@ -43,10 +43,29 @@ namespace Radabite.Controllers.Api
                     LocationName = "My Location",
                     Longitude = 0
                 },
-                Title = "Cool party"
+                Title = "Cool party",
+                Owner = new User
+                {
+                    Email = "test@test.com",
+                },
+                Guests = new List<Invitation>
+                {
+                    new Invitation{
+                        Guest = new User {
+                            Email = "test@test.com",
+                        },
+                        Response = ResponseType.Accepted
+                    },
+                    new Invitation {
+                        Guest = new User {
+                            Email = "test@test.com",
+                        },
+                        Response = ResponseType.WaitingReply
+                    }
+                }
             });
 
-            return result.Result;
+            return result.Result.ToJson();
         }
 
         // PUT api/<controller>/5

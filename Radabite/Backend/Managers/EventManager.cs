@@ -20,7 +20,8 @@ namespace Radabite.Backend.Managers
 
         public IEnumerable<Event> GetAll()
         {
-            return ServiceManager.Kernel.Get<IEventAccessor>().GetAll();
+            var all = ServiceManager.Kernel.Get<IEventAccessor>().GetAll();
+            return all;
         }
 
 
