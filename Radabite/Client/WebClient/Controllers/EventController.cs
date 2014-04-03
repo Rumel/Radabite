@@ -233,6 +233,12 @@ namespace Radabite.Client.WebClient.Controllers
             return PartialView(userModel);
         }
 
+        [HttpPost]
+        public void Invite(List<String> names)
+        {
+            return;
+        }
+
         public ActionResult EventNotFound()
         {
             return View();

@@ -24,7 +24,7 @@
 </div>
 <br />
 <div class="row">
-    <a class="radius button" href="#">Submit Invitations</a>
+    <a class="radius button" id="submit-invitations" href="#">Submit Invitations</a>
 </div>
 
 <script>
@@ -41,6 +41,21 @@
             invitationList.splice($.inArray($(this).parent().siblings().children('h3').text(), invitationList), 1);
         }
     });
+
+    $('a#submit-invitations').click(function () {
+        console.log(invitationList);
+        $.ajax({
+            url: "/Event/Invite",
+            type: 'POST',
+            dataType: "json",
+            data: {
+                names : invitationList
+            },
+            traditional: true
+        });
+    });
+
+    
 
 </script>
 
