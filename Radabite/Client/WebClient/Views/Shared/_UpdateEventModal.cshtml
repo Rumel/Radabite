@@ -46,7 +46,8 @@
         </div>
         <div class="row">
             <div class="large-8 columns">
-                Private Event: @Html.RadioButtonFor(m => m.IsPrivate, "Private")
+                Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, (Model.IsPrivate) ? "" : "new { @checked = \"checked\" }")
+                Private Event: @Html.RadioButtonFor(m => m.IsPrivate,  true, (Model.IsPrivate) ? "new { @checked = \"checked\" }" : "")
             </div>
             @Html.HiddenFor(m => m.Id);
         </div>
