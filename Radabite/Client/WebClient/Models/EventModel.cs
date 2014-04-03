@@ -32,6 +32,8 @@ namespace Radabite.Models
         
         public List<Post> Posts { get; set; }
 
+        public List<User> Attendees { get; set; }
+
         public EventModel()
         {
             IsActive = true;
