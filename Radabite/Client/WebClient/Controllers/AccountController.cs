@@ -251,7 +251,7 @@ namespace Radabite.Client.WebClient.Controllers
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
                 RegisterExternalLoginModel loginModel;
-                if (ViewBag.ProviderDisplayName == "facebook")
+                if (ViewBag.ProviderDisplayName == "Facebook")
                 {
                     loginModel = new RegisterExternalLoginModel
                     {
