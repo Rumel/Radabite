@@ -47,5 +47,17 @@ namespace Radabite.Tests.Mocks.Accessors
                 new Event()
             };
         }
+
+        public List<Event> GetByOwnerId(long ownerId)
+        {
+            return new List<Event>
+            {
+                new Event(),
+                new Event(),
+                new Event(),
+                new Event(),
+                new Event()
+            };
+        }
     }
 }

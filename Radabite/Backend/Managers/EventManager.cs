@@ -24,10 +24,14 @@ namespace Radabite.Backend.Managers
             return all;
         }
 
-
         public Event GetById(long id)
         {
             return ServiceManager.Kernel.Get<IEventAccessor>().GetById(id);
+        }
+
+        public List<Event> GetByOwnerId(long ownerId)
+        {
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetByOwnerId(ownerId);
         }
 
     }

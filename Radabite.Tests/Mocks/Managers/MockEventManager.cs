@@ -24,5 +24,10 @@ namespace Radabite.Tests.Mocks.Managers
         {
             throw new NotImplementedException();
         }
+
+        public List<Event> GetByOwnerId(long ownerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

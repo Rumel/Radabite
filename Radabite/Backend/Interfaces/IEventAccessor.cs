@@ -10,5 +10,7 @@ namespace Radabite.Backend.Interfaces
 {
     public interface IEventAccessor : IGenericAccessor<Event>
     {
+        List<Event> GetByOwnerId(long ownerId);
+
     }
 }
