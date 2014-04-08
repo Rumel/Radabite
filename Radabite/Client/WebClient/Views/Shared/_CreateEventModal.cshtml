@@ -1,18 +1,6 @@
 ﻿@model Radabite.Models.EventModel
 
 <script>
-	$(document).on('close', '[data-reveal]', function () {
-		var modal = $(this);
-
-		if (modal.attr('id') == 'CreateEventModal') {
-			document.getElementById('Title').value = '';
-			document.getElementById('Description').value = '';
-			document.getElementById('locationInput').value = '';
-			document.getElementById('startTimeInput').value = '';
-			document.getElementById('endTimeInput').value = '';
-		}
-	});
-
 	var calledFrom;
 	$(document).on('opened', '[data-reveal]', function () {
 
@@ -60,9 +48,17 @@
 
 		if (modal.attr('id') == 'CreateEvent-MapModal' && calledFrom == 'UpdateEventModal') {
 
-			document.getElementById('address').value = document.getElementById('locationInputUpdate').value;
-			google.maps.event.trigger(map, 'resize');
+			var lat = document.getElementById('mapLatitudeUpdate').value;
+
+			//loads the address into the map if it was valid
+			if (lat != -1000) {
+				document.getElementById('address').value = document.getElementById('locationInputUpdate').value;
+			} else {
+				document.getElementById('address').value = 'Lincoln, NE';
+			}
+
 			searchAddress();
+			google.maps.event.trigger(map, 'resize');
 		}
 	});
 	backToCaller = function () {
@@ -128,8 +124,8 @@
 		<a class="close-reveal-modal">&#215;</a>
 
 
-		@Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude" })
-		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude" })
+		@Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude", Value = "-1000" })
+		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude", Value = "-1000" })
 	}
 </div>
 
@@ -139,7 +135,6 @@
 
 <script>
 	$('#CreateSubmitButton').on('click', function () {
-		console.log('hello:)');
 		ga('send', {
 			'hitType': 'event',
 			'eventCategory': 'Event created',
