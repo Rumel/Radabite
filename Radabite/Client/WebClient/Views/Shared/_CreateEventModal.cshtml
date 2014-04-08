@@ -135,10 +135,18 @@
 
 <script>
 	$('#CreateSubmitButton').on('click', function () {
+		console.log('creating event');
+		var usedMap;
+		if (document.getElementById('mapLatitude').value == -1000) {
+			usedMap = 'no map';
+		} else {
+			usedMap = 'map';
+		}
+
 		ga('send', {
 			'hitType': 'event',
 			'eventCategory': 'Event created',
-			'eventAction': 'click',
+			'eventLabel': usedMap,
 		});
 	});
 </script>
