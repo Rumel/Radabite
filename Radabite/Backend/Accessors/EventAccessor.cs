@@ -21,6 +21,7 @@ namespace Radabite.Backend.Accessors
                     db.Entry(e).State = EntityState.Modified;
                 } else {
                     db.Entry(e).State = EntityState.Added;
+                    db.Entry(e.Owner).State = EntityState.Unchanged;
                 }
                 db.SaveChanges();
             }
@@ -44,6 +45,17 @@ namespace Radabite.Backend.Accessors
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
                                 .FirstOrDefault(x => x.Id == id && x.IsActive == true);
+            }
+        }
+
+        public List<Event> GetByOwnerId(long OwnerId)
+        {
+            using (var db = new Db())
+            {
+                return db.Events.Include(e => e.Location)
+                                .Include(e => e.Owner)
+                                .Where(x => x.Owner.Id == OwnerId && x.IsActive == true)
+                                .ToList();
             }
         }
     }
