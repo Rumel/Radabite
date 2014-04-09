@@ -12,21 +12,21 @@
     	<h3>Title: @Model.Title</h3>
     </div>
     <div class="large-2 medium-2 columns" style="direction:rtl">
-        <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
+        <a class="radius button" data-reveal-id="UpdateEventModal" href="#" id="EditEventButton">Edit</a>
     </div>
     <div class="large-2 medium-2 columns">
-        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
+        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)" id="DeleteEventButton">Delete</a>
     </div>
 </div>
 
 <div class="row">
     <div class="large-12 medium-12 columns">
-        <h4>Description: @Model.Description</h4>
+	<h4>Description: @Model.Description</h4>
 	    <h4>Time: @Model.StartTime - @Model.EndTime</h4>
 	    <h4>Location: @Model.LocationName</h4>
         @{if (Model.IsPrivate) 
             { <h4>Privacy: Private</h4> }
-        else
+      else
             { <h4>Privacy: Public</h4> } }
     </div>
 </div>
@@ -37,14 +37,14 @@
         @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model);
     </div>
     <div class="large-8 medium-8 columns">
-        <div class="panel">
-            <form method="post" action="/Event/AddPost">
-                <input type="text" name="message" placeholder="Enter a Message to post!" />
-                <input type="submit" value="Post" />
-            </form>
-        </div>
-        @foreach (var post in Model.Posts)
-        {
+    <div class="panel">
+                <form method="post" action="/Event/AddPost">
+                    <input type="text" name="message" placeholder="Enter a Message to post!" />
+                    <input type="submit" value="Post" id="PostSubmitButton"/>
+                </form>
+            </div>
+    @foreach (var post in Model.Posts)
+    {
         <div class="panel">
             <div class ="row">
                 <div class="large-3 medium-3 columns">
@@ -66,8 +66,8 @@
                 </div>
             </div>
        </div>
-        }
-    </div>
+    }
+</div>
 </div>
 
 @Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
@@ -79,7 +79,7 @@
         <div class="medium-12 medium-centered columns">
             @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post))
             {
-                <input type="submit" value="Yes, Delete" />
+                <input type="submit" value="Yes, Delete" id="DeleteSubmitButton" />
             }
             @*<a class="radius button" id="confirm-delete" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
             <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>*@
@@ -88,7 +88,7 @@
     
     <a class="close-reveal-modal">&#215;</a>
 </div>
-
+    
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
     @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name })
     <a class="close-reveal-modal">&#215;</a>
@@ -105,3 +105,5 @@
         });
     });*/
 </script>
+
+@Scripts.Render("~/Client/WebClient/Scripts/google-analytics-eventindex.js")
