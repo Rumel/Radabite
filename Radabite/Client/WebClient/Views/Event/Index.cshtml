@@ -90,7 +90,7 @@
 </div>
 
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
-    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name })
+    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name, eventId = Model.Id })
     <a class="close-reveal-modal">&#215;</a>
 </div>
 

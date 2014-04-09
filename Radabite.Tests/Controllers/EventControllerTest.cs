@@ -108,7 +108,7 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            PartialViewResult result = controller._InviteFriends("abcd") as PartialViewResult;
+            PartialViewResult result = controller._InviteFriends("abcd", 1) as PartialViewResult;
 
             Assert.IsNotNull(result);
         }
