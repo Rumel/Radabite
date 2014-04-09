@@ -16,9 +16,12 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                
                 if(e.Id != 0){
                     db.Entry(e).State = EntityState.Modified;
+                    foreach(var g in e.Guests.Where(h => h.Id == 0))
+                    {
+                        db.Entry(g).State = EntityState.Added;
+                    }
                 } else {
                     db.Entry(e).State = EntityState.Added;
                     db.Entry(e.Owner).State = EntityState.Unchanged;
@@ -33,7 +36,9 @@ namespace Radabite.Backend.Accessors
             using (var db = new Db())
             {
                 return db.Events.Include(e => e.Location)
-                                .Include(e => e.Owner).ToList();
+                                .Include(e => e.Owner)
+                                .Include(e => e.Guests)
+                                .ToList();
             }
         }
 
@@ -44,6 +49,7 @@ namespace Radabite.Backend.Accessors
             {
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
+                                .Include(e => e.Guests)
                                 .FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
         }
@@ -54,6 +60,7 @@ namespace Radabite.Backend.Accessors
             {
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
+                                .Include(e => e.Guests)
                                 .Where(x => x.Owner.Id == OwnerId && x.IsActive == true)
                                 .ToList();
             }
@@ -65,7 +72,8 @@ namespace Radabite.Backend.Accessors
             {
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
-                                .Where(x => x.Guests.Where(y => y.Id == GuestId).Count() > 0 && x.IsActive == true)
+                                .Include(e => e.Guests)
+                                .Where(x => x.Guests.Where(y => y.Guest.Id == GuestId).Count() > 0 && x.IsActive == true)
                                 .ToList();
             }
         }
