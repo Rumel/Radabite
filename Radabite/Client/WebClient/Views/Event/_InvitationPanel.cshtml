@@ -1,0 +1,25 @@
+﻿@model Radabite.Models.EventModel
+
+<div class="panel">
+    <h4>Friends</h4>
+    <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
+</div>
+
+ @if(Model.Guests == null) {
+    <div class="panel">
+        <h5>No people currently attending</h5>
+    </div>
+} else {
+    foreach (var u in Model.Guests){
+        <div class="panel">
+            <div class="row">
+                <div class="large-2 medium-2 columns">
+                    <img src="@u.PhotoLink"  />
+                </div>
+                <div class="large-6 medium-6 columns">
+                    @Html.ActionLink("Profile", "../UserProfile", new { u = u.DisplayName })
+                </div>
+            </div>
+        </div>
+    }
+}

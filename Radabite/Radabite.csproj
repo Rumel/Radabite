@@ -254,6 +254,7 @@
     <Content Include="Client\WebClient\App_Data\Radabite_log.ldf">
       <DependentUpon>Radabite.mdf</DependentUpon>
     </Content>
+    <Content Include="App_Data\Radabite_log.ldf" />
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
@@ -333,6 +334,8 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Client\WebClient\Views\Feed\Posts.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_InviteFriends.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_InvitationPanel.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -428,6 +431,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Client\WebClient\App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
