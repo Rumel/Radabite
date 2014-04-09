@@ -26,10 +26,6 @@ namespace Radabite.Backend.Managers
         // http://facebooksdk.net/docs/making-asynchronous-requests/
         public IList<FacebookPostModel> GetPosts(string userAccessToken, DateTime startTime, DateTime endTime) 
         {
-
-            // if we were using the facebook sdk we would do this.
-        //  var fb = new FacebookClient(accessToken);
-        //  fb.Get("cassey.lottman");
     
             double unixStartTime = ConvertToUnixTimestamp(startTime);
             double unixEndTime = ConvertToUnixTimestamp(endTime);
@@ -44,8 +40,7 @@ namespace Radabite.Backend.Managers
                 
                 string facebookAccessToken = userAccessToken;
                 StringBuilder sb = new StringBuilder("/me?fields=statuses.fields(message,from,id)&");
-                sb.Append("access_token=");
-                sb.Append(facebookAccessToken);
+                sb.Append(userAccessToken);
                 sb.Append("&since=");
                 sb.Append(unixStartTime);
                 sb.Append("&until=");
@@ -86,6 +81,43 @@ namespace Radabite.Backend.Managers
                 return posts;
             }
         }
+        /*
+         * GET /oauth/access_token?  
+                grant_type=fb_exchange_token&           
+                client_id={app-id}&
+                client_secret={app-secret}&
+                fb_exchange_token={short-lived-token} 
+         */
+        public string GetFacebookLongTermAccessCode(string shortTermAccessToken)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://graph.facebook.com");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //HTTP GET
+
+                StringBuilder sb = new StringBuilder("/oauth/access_token?grant_type=fb_exchange_token&");
+                sb.Append("client_id=");
+                sb.Append(ConfigurationManager.AppSettings["facebookAppId"]);
+                sb.Append("&client_secret=");
+                sb.Append(ConfigurationManager.AppSettings["facebookAppSecret"]);
+                sb.Append("&fb_exchange_token=");
+                sb.Append(shortTermAccessToken);
+                var finalResponse = client.GetAsync(sb.ToString()).Result;
+
+                var accessToken = finalResponse.Content.ReadAsStringAsync().Result;
+                return accessToken;
+            }
+        }
+        
+        public FacebookPublishResult PublishStatus(string accessToken, string message)
+        {
+
+            return new FacebookPublishResult();
+        }
+
 
         public DateTime ConvertFromUnixTimestamp(double timestamp)
         {
