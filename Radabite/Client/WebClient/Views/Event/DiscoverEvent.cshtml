@@ -23,13 +23,13 @@
 			<thead><tr><th>Events</th></tr></thead>
 			<tbody>
 				@{
-					if (Model.Events.Count == 0)
+					if (Model.DiscoverEvents.Count == 0)
 					{
-						<tr><td>You have no events.</td></tr>
+						<tr><td>There are no events near you.</td></tr>
 					}
 					else
 					{
-						foreach (Event e in Model.Events)
+                        foreach (Event e in Model.DiscoverEvents)
 						{
 							<tr><td>@Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })</td></tr>
 						}
@@ -37,5 +37,24 @@
 				}
 			</tbody>
 		</table>
+        <table style="width: 100%">
+            <thead><tr><th>Invitations</th></tr></thead>
+            <tbody>
+				@{
+					if (Model.EventInvitations.Count == 0)
+					{
+						<tr><td>You haven't been invited to any events.</td></tr>
+					}
+					else
+					{
+						foreach (Event e in Model.EventInvitations)
+						{
+							<tr><td>@Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })</td></tr>
+						}
+					}
+				}
+			</tbody>
+        </table>
 	</div>
 </div>
+
