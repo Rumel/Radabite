@@ -10,5 +10,7 @@ namespace Radabite.Backend.Interfaces
     public interface IEventManager : IGenericManager<Event>
     {
         List<Event> GetByOwnerId(long userId);
+
+        List<Event> GetByGuestId(long guestId);
     }
 }

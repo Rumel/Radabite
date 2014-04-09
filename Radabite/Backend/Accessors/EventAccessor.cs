@@ -58,5 +58,16 @@ namespace Radabite.Backend.Accessors
                                 .ToList();
             }
         }
+
+        public List<Event> GetByGuestId(long GuestId)
+        {
+            using (var db = new Db())
+            {
+                return db.Events.Include(e => e.Location)
+                                .Include(e => e.Owner)
+                                .Where(x => x.Guests.Where(y => y.Id == GuestId).Count() > 0 && x.IsActive == true)
+                                .ToList();
+            }
+        }
     }
 }

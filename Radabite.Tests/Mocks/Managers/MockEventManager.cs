@@ -29,5 +29,10 @@ namespace Radabite.Tests.Mocks.Managers
         {
             throw new NotImplementedException();
         }
+
+        public List<Event> GetByGuestId(long guestId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
