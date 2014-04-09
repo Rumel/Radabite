@@ -90,7 +90,9 @@ namespace Radabite.Client.WebClient.Controllers
 
             userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            userModel.Events = new List<Event> { };
+            userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
+
+            userModel.EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(user.Id);
             
 			return View(userModel);
 		}
@@ -130,6 +132,7 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RedirectToRouteResult Create(EventModel model)
         {
             var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
@@ -196,48 +199,35 @@ namespace Radabite.Client.WebClient.Controllers
             }
         }
 
-        public PartialViewResult _InviteFriends(string u)
+        public PartialViewResult _InviteFriends(string u, long eventId)
         {
-            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
+            User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
+            user.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            var userModel = new UserModel
+
+            var invitationModel = new InvitationModel
             {
                 User = user,
-                Friends = new List<User>()
-                {
-                    new User(){
-                        DisplayName = "Clint Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clift Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clirt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clipt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clizt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clixt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    }
-                }
+                EventId = eventId
             };
 
-            return PartialView(userModel);
+            return PartialView(invitationModel);
         }
 
         [HttpPost]
-        public void Invite(List<String> names)
+        public void Invite(List<String> friends, long eventId)
         {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+            foreach (var f in friends)
+            {
+                e.Guests.Add(new Invitation 
+                {
+                    Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
+                    Response = ResponseType.WaitingReply
+                });
+            }
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
             return;
         }
 
