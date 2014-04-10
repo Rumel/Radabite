@@ -16,16 +16,42 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                if(e.Id != 0){
-                    db.Entry(e).State = EntityState.Modified;
-                    foreach(var g in e.Guests.Where(h => h.Id == 0))
+                if(e.Id != 0)
+                {
+                    var ev = db.Events.FirstOrDefault(x => x.Id == e.Id);
+                    ev.Title = e.Title;
+                    ev.StartTime = e.StartTime;
+                    ev.EndTime = e.EndTime;
+                    ev.IsPrivate = e.IsPrivate;
+                    ev.Description = e.Description;
+                    ev.Location = e.Location;
+                    ev.FinishedGettingPosts = e.FinishedGettingPosts;
+                    ev.IsActive = e.IsActive;
+                    if (e.Guests != null)
                     {
-                        db.Entry(g).State = EntityState.Added;
+                        foreach (var i in e.Guests)
+                        {
+                            if (i.Id != 0)
+                            {
+                                db.Entry<Invitation>(i).State = EntityState.Modified;
+                            }
+                            else
+                            {
+                                db.Entry<Invitation>(i).State = EntityState.Added;
+                            }
+                            db.Entry<User>(i.Guest).State = EntityState.Modified;
+                        }
                     }
-                } else {
-                    db.Entry(e).State = EntityState.Added;
-                    db.Entry(e.Owner).State = EntityState.Unchanged;
+                    ev.Guests = e.Guests;
+                    db.Entry<Event>(ev).State = EntityState.Modified;
+                    db.Entry<User>(ev.Owner).State = EntityState.Unchanged;
+                } 
+                else 
+                {
+                    db.Events.Add(e);
+                    //db.Entry<User>(e.Owner).State = EntityState.Unchanged;
                 }
+
                 db.SaveChanges();
             }
             return new SaveResult<Event>(true, e);
