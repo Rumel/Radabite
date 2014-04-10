@@ -99,15 +99,14 @@ namespace Radabite.Backend.Accessors
 					{
 						Value = response,
 
-						//With post as it is, there is no HttpResponse, so it is always OK here
 						StatusCode = HttpStatusCode.OK
 					};
 				}
-				catch
+				catch(Exception e)
 				{
 					fooResult = new FooResponse()
 					{
-						Value = null,
+						Value = e,
 						StatusCode = HttpStatusCode.InternalServerError
 					};
 				}
