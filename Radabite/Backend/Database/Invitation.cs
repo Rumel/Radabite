@@ -24,7 +24,7 @@ namespace Radabite.Backend.Database
     public enum ResponseType
     {
         Accepted,
-        Rejeced,
+        Rejected,
         WaitingReply
     }
 

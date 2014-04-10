@@ -231,6 +231,23 @@ namespace Radabite.Client.WebClient.Controllers
             return;
         }
 
+        [HttpPost]
+        public void RespondToInvitation(string userId, string eventId, string response)
+        {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            var r = ResponseType.WaitingReply;
+            if (response.Equals("Accept"))
+                r = ResponseType.Accepted;
+            else if (response.Equals("Decline"))
+                r = ResponseType.Rejected;
+
+            e.Guests.FirstOrDefault(g => g.Guest.Id == long.Parse(userId)).Response = r;
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+            return;
+        }
+
         public ActionResult EventNotFound()
         {
             return View();

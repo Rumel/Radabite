@@ -20,7 +20,38 @@
 	</div>
 	<div class="large-8 medium-8 columns">
 		<table style="width: 100%">
-			<thead><tr><th>Events</th></tr></thead>
+            <thead><tr><th>Invitations</th></tr></thead>
+            <tbody>
+				@{
+					if (Model.EventInvitations.Count == 0)
+					{
+						<tr><td>You haven't been invited to any events.</td></tr>
+					}
+					else
+					{
+						foreach (Event e in Model.EventInvitations)
+						{
+							<tr>
+                                <td>
+                                    <div id="eventId"style="display: none">@e.Id</div>
+                                    <div class="large-8 medium-8 columns">
+                                        @Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })
+                                    </div>
+                                    <div class="large-2 medium-2 columns">
+                                        <a href="#" id="eventInvitation" class="button tiny" style="margin-bottom: 0px">Accept</a>
+                                    </div>
+                                    <div class="large-2 medium-2 columns">
+                                        <a href="#" id="eventInvitation" class="button tiny" style="margin-bottom: 0px; background: rgb(199, 15, 15)" >Decline</a>
+                                    </div>
+                                </td>
+							</tr>
+						}
+					}
+				}
+			</tbody>
+        </table>
+        <table style="width: 100%">
+			<thead><tr><th>Events @Model.DiscoverEvents.Count()</th></tr></thead>
 			<tbody>
 				@{
 					if (Model.DiscoverEvents.Count == 0)
@@ -37,24 +68,25 @@
 				}
 			</tbody>
 		</table>
-        <table style="width: 100%">
-            <thead><tr><th>Invitations</th></tr></thead>
-            <tbody>
-				@{
-					if (Model.EventInvitations.Count == 0)
-					{
-						<tr><td>You haven't been invited to any events.</td></tr>
-					}
-					else
-					{
-						foreach (Event e in Model.EventInvitations)
-						{
-							<tr><td>@Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })</td></tr>
-						}
-					}
-				}
-			</tbody>
-        </table>
 	</div>
 </div>
 
+<script type="text/javascript">
+    $('a#eventInvitation').click(function () {
+        var eId = $(this).parent().parent().children('div#eventId').text();
+        var uId = @Model.User.Id
+        console.log(eId + ", " + uId);
+        $.ajax({
+            url: "/Event/RespondToInvitation",
+            type: 'POST',
+            dataType: "json",
+            data: {
+                userId: uId,
+                eventId: eId,
+                response: $(this).text()
+            },
+            traditional: true
+        });
+        $('a.close-reveal-modal').trigger('click');
+    });
+</script>
