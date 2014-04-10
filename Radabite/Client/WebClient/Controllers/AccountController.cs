@@ -261,7 +261,8 @@ namespace Radabite.Client.WebClient.Controllers
                         Link = result.ExtraData["link"],
                         Gender = result.ExtraData["gender"],
                         ExternalLoginData = loginData,
-                        FacebookToken = ltAccess
+                        FacebookToken = ltAccess,
+                        FacebookUserId = result.ProviderUserId 
                     };
                     
 
@@ -343,7 +344,8 @@ namespace Radabite.Client.WebClient.Controllers
                             Gender = model.Gender,
                             FacebookProfileLink = model.Link,
                             FacebookProfile = userProfile,
-                            FacebookToken = model.FacebookToken
+                            FacebookToken = model.FacebookToken,
+                            FacebookUserId = model.FacebookUserId
                         };
                         SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 

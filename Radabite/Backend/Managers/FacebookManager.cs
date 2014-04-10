@@ -17,6 +17,7 @@ using System.IO;
 using Microsoft.Web.WebPages.OAuth;
 using DotNetOpenAuth.AspNet;
 using Microsoft.CSharp.RuntimeBinder;
+using Radabite.Backend.Database;
 
 
 namespace Radabite.Backend.Managers
@@ -38,7 +39,6 @@ namespace Radabite.Backend.Managers
 
                 //HTTP GET
                 
-                string facebookAccessToken = userAccessToken;
                 StringBuilder sb = new StringBuilder("/me?fields=statuses.fields(message,from,id)&");
                 sb.Append(userAccessToken);
                 sb.Append("&since=");
@@ -111,13 +111,69 @@ namespace Radabite.Backend.Managers
                 return accessToken;
             }
         }
-        
-        public FacebookPublishResult PublishStatus(string accessToken, string message)
-        {
 
-            return new FacebookPublishResult();
+        public FacebookPublishResult PublishStatus(User user, string message)
+        {
+            using (var client = new HttpClient())
+            {
+                var result = new FacebookPublishResult();
+
+                var accessToken = user.FacebookToken;
+                if (accessToken == null || accessToken == "")
+                {
+                    result.hasErrors = true;
+                    result.errorMessage = "No Facebook access token found for user.";
+                }
+                else { 
+                    client.BaseAddress = new Uri("https://graph.facebook.com");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    //HTTP GET
+
+                    StringBuilder apiUri = new StringBuilder("/");
+                    apiUri.Append(user.FacebookUserId);
+                    apiUri.Append("/feed?");
+                    apiUri.Append(accessToken);
+                    apiUri.Append("&message=");
+                    apiUri.Append(message);
+                    
+                    var finalResponse = client.PostAsync(apiUri.ToString(), new StringContent("")).Result;
+                    StreamContent respContent = (StreamContent)finalResponse.Content;
+                    var respContentString = respContent.ReadAsStringAsync().Result;
+                    dynamic jsonResp = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(respContentString);
+
+                    if (finalResponse.StatusCode == HttpStatusCode.OK && jsonResp.id != null)
+                    {
+                        result.hasErrors = false;
+                    }
+                    else
+                    {
+                        result.hasErrors = true;
+                        result.errorMessage = jsonResp.errors.message;
+                    }
+
+                }
+                return result;
+            }
         }
 
+        private string HttpPost(string url, string postData)
+        {
+            HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create(url);
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.Method = "POST";
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(postData);
+            string responseData = "";
+            using (var responseStream = webRequest.GetResponse().GetResponseStream())
+            {
+                using (var responseReader = new StreamReader(responseStream))
+                {
+                    responseData = responseReader.ReadToEnd();
+                    return responseData;
+                }
+            }
+        }
 
         public DateTime ConvertFromUnixTimestamp(double timestamp)
         {

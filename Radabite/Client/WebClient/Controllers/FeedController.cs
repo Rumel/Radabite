@@ -35,20 +35,19 @@ namespace Radabite.Client.WebClient.Controllers
         [Authorize]
         public ActionResult Invite()
         {
-            if (Session["facebookUserToken"] != null)
-            {
-                var accessToken = Session["facebookUserToken"].ToString();
-                var message = "help I'm trapped in Radabite.";
-                var postResponse = ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(accessToken, message);
-              
-                return Content(postResponse.hasErrors.ToString());
-            }
-            else
-            {
-                return RedirectToAction("Login", "Account", new { returnUrl = "/feed/invite" });;
-
-            }
-
+                var message = "help Im trapped in Radabite.";
+                User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+                var accessToken = user.FacebookToken;
+                    var postResponse = ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, message);
+                    if (postResponse.hasErrors)
+                    {
+                        return Content(postResponse.errorMessage.ToString());
+                    }
+                    else 
+                    { 
+                        return Content("Posted!");
+                    }
+                //return RedirectToAction("Login", "Account", new { returnUrl = "/feed/invite" });;
         }
 
         /*
