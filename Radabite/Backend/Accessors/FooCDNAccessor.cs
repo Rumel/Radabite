@@ -87,19 +87,33 @@ namespace Radabite.Backend.Accessors
 
 		public FooResponse Post(string blobID, string filename)
 		{
-			WebClient fooCDN = new WebClient();
-
-			byte[] response = fooCDN.UploadFile("http://foocdn.azurewebsites.net/api/content/" + blobID, filename);
-
-			FooResponse fooResult = new FooResponse()
+			using (WebClient fooCDN = new WebClient())
 			{
-				Value = response,
+				FooResponse fooResult;
 
-				//With post as it is, there is no HttpResponse, so it is always OK here
-				StatusCode = HttpStatusCode.OK
-			};
+				try
+				{
+					byte[] response = fooCDN.UploadFile("http://foocdn.azurewebsites.net/api/content/" + blobID, filename);
 
-			return fooResult;
+					fooResult = new FooResponse()
+					{
+						Value = response,
+
+						//With post as it is, there is no HttpResponse, so it is always OK here
+						StatusCode = HttpStatusCode.OK
+					};
+				}
+				catch
+				{
+					fooResult = new FooResponse()
+					{
+						Value = null,
+						StatusCode = HttpStatusCode.InternalServerError
+					};
+				}
+
+				return fooResult;
+			}
 		}
 
 		public FooResponse Put(string blobID, StorageType type)
