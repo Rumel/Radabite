@@ -24,62 +24,73 @@ namespace Radabite.Backend.Managers
 {
     public class FacebookManager : IFacebookManager
     {
+        const string badUserToken = "No Facebook access token found for user.";
+
         // http://facebooksdk.net/docs/making-asynchronous-requests/
-        public IList<FacebookPostModel> GetPosts(string userAccessToken, DateTime startTime, DateTime endTime) 
+        public FacebookGetPostsResult GetPosts(User user, DateTime startTime, DateTime endTime) 
         {
     
             double unixStartTime = ConvertToUnixTimestamp(startTime);
             double unixEndTime = ConvertToUnixTimestamp(endTime);
 
-            using (var client = new HttpClient())
+            var result = new FacebookGetPostsResult();
+            var userAccessToken = user.FacebookToken;
+            if (userAccessToken == null || userAccessToken == "")
             {
-                client.BaseAddress = new Uri("https://graph.facebook.com");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //HTTP GET
-                
-                StringBuilder sb = new StringBuilder("/me?fields=statuses.fields(message,from,id)&");
-                sb.Append(userAccessToken);
-                sb.Append("&since=");
-                sb.Append(unixStartTime);
-                sb.Append("&until=");
-                sb.Append(unixEndTime);
-                sb.Append("&limit=50");
-
-                var finalResponse = client.GetAsync(sb.ToString()).Result;
-                
-                var resString = finalResponse.Content.ReadAsStringAsync().Result;
-                List<FacebookPostModel> posts = new List<FacebookPostModel>();
-                // Creates a dynamic object with properties of the response
-                // this is what we'll use to read the responses into FacebookPostModel objects.
-                dynamic fdata = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
-                try
+                result.hasErrors = true;
+                result.errorMessage = badUserToken;
+            }
+            else {
+                using (var client = new HttpClient())
                 {
-                    if (fdata != null)
+                    client.BaseAddress = new Uri("https://graph.facebook.com");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    //HTTP GET
+
+                    StringBuilder sb = new StringBuilder("/me?fields=statuses.fields(message,from,id)&");
+                    sb.Append(userAccessToken);
+                    sb.Append("&since=");
+                    sb.Append(unixStartTime);
+                    sb.Append("&until=");
+                    sb.Append(unixEndTime);
+                    sb.Append("&limit=50");
+
+                    var finalResponse = client.GetAsync(sb.ToString()).Result;
+
+                    var resString = finalResponse.Content.ReadAsStringAsync().Result;
+                    List<FacebookPostModel> posts = new List<FacebookPostModel>();
+                    // Creates a dynamic object with properties of the response
+                    // this is what we'll use to read the responses into FacebookPostModel objects.
+                    dynamic fdata = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
+                    try
                     {
-                        dynamic fstatuses = fdata.statuses.data;
-                        foreach (dynamic status in fstatuses)
+                        if (fdata != null)
                         {
-                            // double unixTime = Convert.ToDouble(status.updated_time);
-                            // DateTime aspTime = ConvertFromUnixTimestamp(unixTime);
-                            FacebookPostModel post = new FacebookPostModel
+                            dynamic fstatuses = fdata.statuses.data;
+                            foreach (dynamic status in fstatuses)
                             {
-                                message = status.message,
-                                created_time = status.updated_time
-                            };
-                            posts.Add(post);
+                                // double unixTime = Convert.ToDouble(status.updated_time);
+                                // DateTime aspTime = ConvertFromUnixTimestamp(unixTime);
+                                FacebookPostModel post = new FacebookPostModel
+                                {
+                                    message = status.message,
+                                    created_time = status.updated_time
+                                };
+                                posts.Add(post);
+                            }
                         }
                     }
+                    catch (RuntimeBinderException e)
+                    {
+                        // this exception probably means part of the json response wasn't what we expected.
+                        // just keep going.
+                    }
+                    result.posts = posts;
                 }
-                catch (RuntimeBinderException e)
-                {
-                    // this exception probably means part of the json response wasn't what we expected.
-                    // just keep going.
-                }
-
-                return posts;
             }
+            return result;
         }
         /*
          * GET /oauth/access_token?  
@@ -122,7 +133,7 @@ namespace Radabite.Backend.Managers
                 if (accessToken == null || accessToken == "")
                 {
                     result.hasErrors = true;
-                    result.errorMessage = "No Facebook access token found for user.";
+                    result.errorMessage = badUserToken;
                 }
                 else { 
                     client.BaseAddress = new Uri("https://graph.facebook.com");

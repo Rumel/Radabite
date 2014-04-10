@@ -5,14 +5,10 @@ using System.Web;
 
 namespace Radabite.Client.WebClient.Models
 {
-    public class FacebookPublishResult
+    public class FacebookGetPostsResult
     {
         public bool hasErrors { get; set; }
         public string errorMessage { get; set; }
-
-        public FacebookPublishResult()
-        {
-            hasErrors = false;
-        }
+        public IList<FacebookPostModel> posts { get; set; }
     }
 }
