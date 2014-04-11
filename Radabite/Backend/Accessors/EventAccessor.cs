@@ -37,12 +37,12 @@ namespace Radabite.Backend.Accessors
                             }
                             else
                             {
+                                ev.Guests.Add(i);
                                 db.Entry<Invitation>(i).State = EntityState.Added;
                             }
                             db.Entry<User>(i.Guest).State = EntityState.Modified;
                         }
                     }
-                    ev.Guests = e.Guests;
                     db.Entry<Event>(ev).State = EntityState.Modified;
                     db.Entry<User>(ev.Owner).State = EntityState.Unchanged;
                 } 

@@ -59,6 +59,13 @@ namespace Radabite.Client.WebClient.Controllers
             posts.Add(post1);
             posts.Add(post2);
 
+            var invitationList = eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted);
+            var guestList = new List<User>();
+            foreach(var i in invitationList)
+            {
+                guestList.Add(ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId));
+            }
+
             var eventViewModel = new EventModel()
             {
                 Id = eventRequest.Id,
@@ -71,7 +78,8 @@ namespace Radabite.Client.WebClient.Controllers
                 Latitude = eventRequest.Location.Latitude,
                 Longitude = eventRequest.Location.Longitude,
                 Posts = posts,
-                Owner = eventRequest.Owner
+                Owner = eventRequest.Owner,
+                Guests = guestList
             };
 
             return View(eventViewModel);
@@ -223,6 +231,7 @@ namespace Radabite.Client.WebClient.Controllers
                 e.Guests.Add(new Invitation 
                 {
                     Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
+                    GuestId = long.Parse(f),
                     Response = ResponseType.WaitingReply
                 });
             }
@@ -241,7 +250,7 @@ namespace Radabite.Client.WebClient.Controllers
             else if (response.Equals("Decline"))
                 r = ResponseType.Rejected;
 
-            e.Guests.FirstOrDefault(g => g.Guest.Id == long.Parse(userId)).Response = r;
+            e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
 
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
