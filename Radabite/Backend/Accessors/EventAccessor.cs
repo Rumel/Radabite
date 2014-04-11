@@ -48,8 +48,8 @@ namespace Radabite.Backend.Accessors
                 } 
                 else 
                 {
+                    e.Owner = db.Users.FirstOrDefault(x => x.Id == e.Owner.Id);
                     db.Events.Add(e);
-                    //db.Entry<User>(e.Owner).State = EntityState.Unchanged;
                 }
 
                 db.SaveChanges();
