@@ -8,7 +8,7 @@ namespace Radabite.Backend.Helpers
 {
 	public class FooSimplex
 	{
-		private  SimplexSolver _solver;
+		private SimplexSolver _solver;
 
 		public FooSimplex()
 		{
@@ -17,7 +17,56 @@ namespace Radabite.Backend.Helpers
 
 		public void RunLP()
 		{
-			//lol :)
+			//Mixed integer linear programming, with 0,1,2 for the storage types?
+
+			/*
+			 * Note: changes a lot if you allow the time to load media to depend on its size :)
+			 */
+
+			/*
+			 * Estimates needed:
+			 * 
+			 * 1. number of views for the event page ~ invitees + time to event
+			 * 2. total size of media for the event ~ invitees
+			 * 
+			 * use those to create a cost per event page view thingy
+			 */
+
+			/*
+			 *	Options for file staging algorithm:
+			 * 
+			 *	Have each event assigned a storage type, put all media for that event in that storage type
+			 *			^^^^^I think you want to do this, because if its asynchronously getting things,
+			 *					then the time waiting for the things should be equal to the delay for
+			 *					worst storage type it uses, so if they were on different things, it would
+			 *					be silly
+			 *				Also avoids needing to keep track of counters and things for each event post/view/whatever
+			 * 
+			 *		Once you have the total size for mem and disk, iterate through the events smartly to assign the
+			 *		"biggest" ones to mem (while it has room) (also be smart about remainder? internal fragmentation:) )
+			 *		then do the same for disk
+			 *
+			 */
+
+			/*
+			 * Decision variables:
+			 * sm := total size to allocate to mem
+			 * sd := total size to allocate to disk
+			 */
+
+			/*
+			 * 
+			 */
+
+			//objective function: minimize waiting time
+			//waiting time = yucky
+
+			//contraints:
+				//cost < 15
+			//cost = 
+
+
+			_solver.Solve(new SimplexSolverParams());
 		}
 	}
 }
