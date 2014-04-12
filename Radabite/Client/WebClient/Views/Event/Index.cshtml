@@ -37,36 +37,7 @@
         @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
     </div>
     <div class="large-8 medium-8 columns">
-        <div class="panel">
-            <form method="post" action="/Event/AddPost">
-                <input type="text" name="message" placeholder="Enter a Message to post!" />
-                <input type="submit" value="Post" />
-            </form>
-        </div>
-        @foreach (var post in Model.Posts)
-        {
-        <div class="panel">
-            <div class ="row">
-                <div class="large-3 medium-3 columns">
-                   <img src="@post.From.PhotoLink" alt="" />
-                </div>
-                <div class="large-9 medium 9 columns">
-                    <p>
-                        <a href="/Home/UserProfile?userid=@post.From.Id">@post.From.DisplayName</a>
-                    </p>
-                    <p>@post.Message</p>
-                    <div class="row">
-                        <div class="large-3 medium-3 columns">
-                            Likes: @post.Likes
-                        </div>
-                        <div class="large-9 medium-9 columns" style="direction:rtl">
-                            Sent at: @post.SendTime
-                        </div>
-                    </div>
-                </div>
-            </div>
-       </div>
-        }
+        @Html.Partial("~/Client/WebClient/Views/Event/_PostFeed.cshtml", Model)
     </div>
 </div>
 
