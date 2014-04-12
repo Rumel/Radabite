@@ -36,8 +36,14 @@
     <div class="large-4 medium-4 columns">
         @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
     </div>
-    <div class="large-8 medium-8 columns">
-        @Html.Partial("~/Client/WebClient/Views/Event/_PostFeed.cshtml", Model)
+    <div id="post-container" class="large-8 medium-8 columns">
+        <div class="panel" id="post-editor">
+            <input type="text" name="message" placeholder="Enter a Message to post!" />
+            <a onclick="ProcessPost(this,'@Url.Action("/PostFromRadabite")')" href="#posts" class="radius button">Post</a>
+        </div>
+        <div id="posts">
+            @Html.Partial("~/Client/WebClient/Views/Event/_PostFeed.cshtml", Model)
+        </div>
     </div>
 </div>
 
@@ -75,4 +81,32 @@
             // do stuff;
         });
     });*/
+</script>
+
+<script type="text/javascript">
+    function ProcessPost(a, action) {
+
+        var container = $(a).parents('div#post-container');
+        var resultDiv = $($(a).attr('href'), container);
+
+        var m = $(a).siblings('input').val();
+        var e = @Model.Id;
+        var u = "@User.Identity.Name";
+
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: {
+                userName: u,
+                eventId: e,
+                message: m
+            },
+            dataType: "html",
+            success: function(response) {
+                resultDiv.html('');
+                resultDiv.html(response);
+                $(a).siblings('input').val("")
+            }
+        });
+    }
 </script>

@@ -230,7 +230,7 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
-        public void PostFromRadabite(string username, string eventId, string message)
+        public PartialViewResult PostFromRadabite(string username, string eventId, string message)
         {
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
             e.Posts.Add(new Post 
@@ -242,9 +242,15 @@ namespace Radabite.Client.WebClient.Controllers
             });
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-            return;
-        }
+            var eventViewModel = new EventModel()
+            {
+                Id = e.Id,
+                Posts = e.Posts.ToList()
+            };
 
+            return PartialView("_PostFeed", eventViewModel);
+        }
+        
         public ActionResult EventNotFound()
         {
             return View();

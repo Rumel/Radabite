@@ -2,12 +2,6 @@
 
 @model EventModel
 
-<div class="panel">
-    <form method="post" action="/Event/AddPost">
-        <input type="text" name="message" placeholder="Enter a Message to post!" />
-        <a href="#" id="radabite-post" class="radius button">Post</a>
-    </form>
-</div>
 @foreach (var post in Model.Posts)
 {
 <div class="panel">
@@ -32,23 +26,3 @@
     </div>
 </div>
 }
-
-<script type="text/javascript">
-    $('a#radabite-post').click(function () {
-        var m = $(this).siblings('input').val();
-        var e = @Model.Id;
-        var u = "@User.Identity.Name";
-        console.log(m);
-        $.ajax({
-            url: "/Event/PostFromRadabite",
-            type: 'POST',
-            dataType: "json",
-            data: {
-                userName: u,
-                eventId: e,
-                message: m
-            },
-            traditional: true
-        });
-    });
-</script>
