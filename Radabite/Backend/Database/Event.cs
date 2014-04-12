@@ -28,6 +28,8 @@ namespace Radabite.Backend.Database
 
         public virtual ICollection<Invitation> Guests { get; set; }
 
+        public virtual ICollection<Post> Posts { get; set; }
+
         public EventJson ToJson()
         {
             var ej = new EventJson

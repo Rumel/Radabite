@@ -196,10 +196,10 @@
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
+    <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
     <Compile Include="Client\WebClient\Models\InvitationModel.cs" />
-    <Compile Include="Client\WebClient\Models\Post.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
@@ -331,6 +331,7 @@
     <Content Include="Client\WebClient\Views\Feed\Posts.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_InviteFriends.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_InvitationPanel.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_PostFeed.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>

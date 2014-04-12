@@ -9,6 +9,7 @@ namespace Radabite.Models
     public class InvitationModel
     {
         public User User { get; set; }
+
         public long EventId { get; set; }
     }
 }
