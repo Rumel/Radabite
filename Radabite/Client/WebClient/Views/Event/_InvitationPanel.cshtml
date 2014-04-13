@@ -17,7 +17,7 @@
                     <img src="@u.PhotoLink"  />
                 </div>
                 <div class="large-10 medium-10 columns">
-                    @Html.ActionLink(u.DisplayName, "../UserProfile", new { u = u.DisplayName })
+                    <a href="/UserProfile?u=@u.UserName">@u.DisplayName</a>
                 </div>
             </div>
         </div>

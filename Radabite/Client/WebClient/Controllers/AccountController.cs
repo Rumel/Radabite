@@ -305,7 +305,8 @@ namespace Radabite.Client.WebClient.Controllers
                             DisplayName = model.PersonName,
                             Gender = model.Gender,
                             FacebookProfileLink = model.Link,
-                            FacebookProfile = userProfile
+                            FacebookProfile = userProfile,
+                            UserName = model.UserName
                         };
                         SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 

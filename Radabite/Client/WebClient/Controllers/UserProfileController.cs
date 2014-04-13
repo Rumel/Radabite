@@ -15,10 +15,9 @@ namespace Radabite.Client.WebClient.Controllers
 	{
 
 		public ActionResult Index(string u)
-        {	
-
-             var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
-             var userModel = new UserModel { User = user };
+        {
+            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
+            var userModel = new UserModel { User = user };
 
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
 			//var friends = ServiceManager.Kernel.Get<IUserManager>().GetById(userId).Friends;
@@ -30,6 +29,5 @@ namespace Radabite.Client.WebClient.Controllers
             userModel.Friends = friends;
             return View(userModel);
         }
-
 	}
 }
