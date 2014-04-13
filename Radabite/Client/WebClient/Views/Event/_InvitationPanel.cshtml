@@ -2,7 +2,10 @@
 
 <div class="panel">
     <h4>Friends</h4>
-    <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
+    @if(!Model.IsPrivate || Model.CurrentUser.Id == Model.Owner.Id)
+    {
+        <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
+    }
 </div>
 
  @if(Model.Guests.Count == 0) {
