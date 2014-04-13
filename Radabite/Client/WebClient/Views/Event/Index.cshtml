@@ -11,12 +11,16 @@
     <div class="large-8 medium-8 columns">
     	<h3>Title: @Model.Title</h3>
     </div>
-    <div class="large-2 medium-2 columns" style="direction:rtl">
-        <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
-    </div>
-    <div class="large-2 medium-2 columns">
-        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
-    </div>
+    @if(Model.CurrentUser.Id == Model.Owner.Id) {
+        <div class="large-2 medium-2 columns" style="direction:rtl">
+            <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
+        </div>
+        <div class="large-2 medium-2 columns">
+            <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
+        </div>
+    } else {
+        <div class="large-4 medium-4 columns"></div>
+    }
 </div>
 
 <div class="row">
@@ -67,7 +71,7 @@
 </div>
 
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
-    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name, eventId = Model.Id })
+    @Html.Partial("_InviteFriends", Model )
     <a class="close-reveal-modal">&#215;</a>
 </div>
 

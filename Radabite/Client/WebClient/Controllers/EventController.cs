@@ -51,8 +51,11 @@ namespace Radabite.Client.WebClient.Controllers
                 Longitude = eventRequest.Location.Longitude,
                 Posts = eventRequest.Posts.ToList(),
                 Owner = eventRequest.Owner,
+                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
                 Guests = guestList
             };
+
+            eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
             return View(eventViewModel);
         }
@@ -134,11 +137,21 @@ namespace Radabite.Client.WebClient.Controllers
                 Owner = user
             };
 
+            ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            newEvent.Guests = new List<Invitation>(){
+                new Invitation{
+                    Guest = user,
+                    GuestId = user.Id,
+                    Response = ResponseType.Accepted
+                }
+            };
+
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
             if (result.Success)
             {
-                return RedirectToAction("Index", new { userId = user.Id, eventId = result.Result.Id });
+                return RedirectToAction("Index", new { eventId = result.Result.Id });
             }
             else
             {
@@ -171,27 +184,12 @@ namespace Radabite.Client.WebClient.Controllers
 
             if (result.Success)
             {
-                return RedirectToAction("Index", new { userId = 123, eventId = result.Result.Id });
+                return RedirectToAction("Index", new { eventId = result.Result.Id });
             }
             else
             {
                 throw new Exception();
             }
-        }
-
-        public PartialViewResult _InviteFriends(string u, long eventId)
-        {
-            User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
-            user.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
-
-
-            var invitationModel = new InvitationModel
-            {
-                User = user,
-                EventId = eventId
-            };
-
-            return PartialView(invitationModel);
         }
 
         [HttpPost]

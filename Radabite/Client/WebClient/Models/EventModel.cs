@@ -31,6 +31,8 @@ namespace Radabite.Models
         public bool IsActive { get; set; }
 
         public User Owner { get; set; }
+
+        public User CurrentUser { get; set; }
         
         public List<Post> Posts { get; set; }
 

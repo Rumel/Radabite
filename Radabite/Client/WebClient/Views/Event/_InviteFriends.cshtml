@@ -1,9 +1,9 @@
 ﻿@using Radabite.Models
 
-@model InvitationModel
+@model EventModel
 <div class="row" style="overflow: auto; height:80%">
     <form>
-        @{foreach (var f in Model.User.Friends)
+        @{foreach (var f in Model.CurrentUser.Friends)
             {
                 <div class="panel">
                     <div class="row">
@@ -30,7 +30,7 @@
 
 <script>
     var invitationList = [];
-    var modelId = @Model.EventId
+    var modelId = @Model.Id
 
     $('a#invite').click(function () {
         if ($(this).text() == "Invite") {
