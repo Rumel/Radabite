@@ -38,6 +38,11 @@ namespace Radabite.Client.WebClient.Controllers
                 guestList.Add(ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId));
             }
 
+            foreach (var p in eventRequest.Posts)
+            {
+                p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
+            }
+
             var eventViewModel = new EventModel()
             {
                 Id = eventRequest.Id,
@@ -233,9 +238,11 @@ namespace Radabite.Client.WebClient.Controllers
         public PartialViewResult PostFromRadabite(string username, string eventId, string message)
         {
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
             e.Posts.Add(new Post 
             {
-                From = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username),
+                From = u,
+                FromId = u.Id,
                 Message = message,
                 SendTime = DateTime.Now,
                 Likes = 0
