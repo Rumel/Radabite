@@ -139,8 +139,10 @@ namespace Radabite.Client.WebClient.Controllers
 
             ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-            newEvent.Guests = new List<Invitation>(){
-                new Invitation{
+            newEvent.Guests = new List<Invitation>()
+            {
+                new Invitation
+                {
                     Guest = user,
                     GuestId = user.Id,
                     Response = ResponseType.Accepted

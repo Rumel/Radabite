@@ -31,6 +31,7 @@ namespace Radabite.Backend.Accessors
                     {
                         foreach (var i in e.Guests)
                         {
+                            i.Guest = db.Users.FirstOrDefault(x => x.Id == i.GuestId);
                             if (i.Id != 0)
                             {
                                 db.Entry<Invitation>(i).State = EntityState.Modified;
@@ -40,7 +41,6 @@ namespace Radabite.Backend.Accessors
                                 ev.Guests.Add(i);
                                 db.Entry<Invitation>(i).State = EntityState.Added;
                             }
-                            db.Entry<User>(i.Guest).State = EntityState.Modified;
                         }
                     }
 
