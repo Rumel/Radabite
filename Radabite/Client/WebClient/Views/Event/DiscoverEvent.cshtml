@@ -16,7 +16,10 @@
 
 <div class="row">
 	<div class="large-4 medium-4 columns">
-		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", Model.Friends);}
+		<table style="width: 100%">
+	        <thead><tr><th style="text-align: center">Friends</th></tr></thead>
+		    @{Html.RenderPartial("~/Client/WebClient/Views/Shared/_UserTable.cshtml", @Model.Friends);}
+        </table>
 	</div>
 	<div class="large-8 medium-8 columns">
 		<table style="width: 100%">

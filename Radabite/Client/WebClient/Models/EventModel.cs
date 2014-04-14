@@ -36,7 +36,7 @@ namespace Radabite.Models
         
         public List<Post> Posts { get; set; }
 
-        public List<User> Guests { get; set; }
+        public List<Invitation> Guests { get; set; }
 
         public EventModel()
         {

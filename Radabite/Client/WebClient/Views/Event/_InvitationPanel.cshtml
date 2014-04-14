@@ -8,21 +8,24 @@
     }
 </div>
 
- @if(Model.Guests.Count == 0) {
-    <div class="panel">
-        <h5>No people currently attending</h5>
-    </div>
-} else {
-    foreach (var u in Model.Guests){
-        <div class="panel">
-            <div class="row">
-                <div class="large-2 medium-2 columns">
-                    <img src="@u.PhotoLink"  />
-                </div>
-                <div class="large-10 medium-10 columns">
-                    <a href="/UserProfile?u=@u.UserName">@u.DisplayName</a>
-                </div>
-            </div>
-        </div>
+<table style="width: 100%">
+	<thead><tr><th style="text-align: center">Attending</th></tr></thead>
+    @foreach (var i in Model.Guests.Where(x => x.Response == Radabite.Backend.Database.ResponseType.Accepted).ToList())
+    {
+        <tr><td>@Html.ActionLink(i.Guest.DisplayName, "../UserProfile", new { UserProfile = i.Guest.UserName })</td></tr>
     }
-}
+</table>
+
+<table style="width: 100%">
+	<thead><tr><th style="text-align: center">Invited</th></tr></thead>
+    @foreach (var i in Model.Guests.Where(x => x.Response == Radabite.Backend.Database.ResponseType.WaitingReply).ToList())
+    {
+        <tr><td>@Html.ActionLink(i.Guest.DisplayName, "../UserProfile", new { UserProfile = i.Guest.UserName })</td></tr>
+    }</table>
+
+<table style="width: 100%">
+	<thead><tr><th style="text-align: center">Not Attending</th></tr></thead>
+    @foreach (var i in Model.Guests.Where(x => x.Response == Radabite.Backend.Database.ResponseType.Rejected).ToList())
+    {
+        <tr><td>@Html.ActionLink(i.Guest.DisplayName, "../UserProfile", new { UserProfile = i.Guest.UserName })</td></tr>
+    }</table>

@@ -1,0 +1,19 @@
+﻿@using Radabite.Backend.Database;
+
+@model List<User>
+<tbody>
+	@{
+		if (Model.Count() == 0)
+		{
+			<tr><td>You have no friends :(</td></tr>
+		}
+		else
+		{
+			foreach (User friend in Model)
+			{
+							<!--These links currently link to the friend's personal profile - should be a different page?-->
+				<tr><td>@friend.DisplayName</td></tr>
+			}
+		}
+	}
+</tbody>

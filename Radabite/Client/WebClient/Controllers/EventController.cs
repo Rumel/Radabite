@@ -31,11 +31,9 @@ namespace Radabite.Client.WebClient.Controllers
                 return Redirect("Event/EventNotFound");                    
             }
                         
-            var invitationList = eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted);
-            var guestList = new List<User>();
-            foreach(var i in invitationList)
+            foreach(var i in eventRequest.Guests)
             {
-                guestList.Add(ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId));
+                i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
             }
 
             foreach (var p in eventRequest.Posts)
@@ -57,7 +55,7 @@ namespace Radabite.Client.WebClient.Controllers
                 Posts = eventRequest.Posts.ToList(),
                 Owner = eventRequest.Owner,
                 CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
-                Guests = guestList
+                Guests = eventRequest.Guests.ToList()
             };
 
             eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
