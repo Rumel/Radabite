@@ -35,43 +35,4 @@
         }
     </form>
 </div>
-<br />
-<div class="row">
-    <a class="radius button" id="submit-invitations" href="#">Submit Invitations</a>
-</div>
-
-<script>
-    var invitationList = [];
-    var modelId = @Model.Id
-
-    $('a#invite').click(function () {
-        if ($(this).text() == "Invite") {
-            $(this).attr("style", "background-color:rgb(199, 15, 15)");
-            $(this).text("Cancel");
-            invitationList.push($(this).parent().siblings('div#friendId').text());
-        } else {
-            $(this).attr("style", "background-color:#008cba");
-            $(this).text("Invite");
-            invitationList.splice($.inArray($(this).parent().siblings('div#friendId').text(), invitationList), 1);
-        }
-    });
-
-    $('a#submit-invitations').click(function () {
-        console.log(invitationList);
-        $.ajax({
-            url: "/Event/Invite",
-            type: 'POST',
-            dataType: "json",
-            data: {
-                friends: invitationList,
-                eventId : modelId
-            },
-            traditional: true
-        });
-        $('a.close-reveal-modal').trigger('click');
-    });
-
-    
-
-</script>
 

@@ -198,7 +198,7 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
-        public void Invite(List<String> friends, long eventId)
+        public PartialViewResult Invite(List<String> friends, long eventId)
         {
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
             foreach (var f in friends)
@@ -212,7 +212,13 @@ namespace Radabite.Client.WebClient.Controllers
             }
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-            return;
+            var eventModel = new EventModel
+            {
+                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
+                Guests = e.Guests.ToList()
+            };
+
+            return PartialView("_InvitationPanel", eventModel);
         }
 
         [HttpPost]

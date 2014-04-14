@@ -37,8 +37,10 @@
 
 <br />
 <div class="row">
-    <div class="large-4 medium-4 columns">
-        @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
+    <div class="large-4 medium-4 columns" id="invitation-container">
+        <div id="invitations">
+            @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
+        </div>
     </div>
     <div id="post-container" class="large-8 medium-8 columns">
         <div class="panel" id="post-editor">
@@ -72,6 +74,10 @@
 
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
     @Html.Partial("_InviteFriends", Model )
+    <br />
+    <div class="row">
+        <a class="radius button" onclick="ProcessInvitations(this,'@Url.Action("/Invite")')" href="#invitations">Submit Invitations</a>
+    </div>
     <a class="close-reveal-modal">&#215;</a>
 </div>
 
@@ -112,5 +118,47 @@
                 $(a).siblings('input').val("")
             }
         });
+    }
+</script>
+
+<script>
+    var invitationList = [];
+    var modelId = @Model.Id
+
+    $('a#invite').click(function () {
+        if ($(this).text() == "Invite") {
+            $(this).attr("style", "background-color:rgb(199, 15, 15)");
+            $(this).text("Cancel");
+            invitationList.push($(this).parent().siblings('div#friendId').text());
+        } else {
+            $(this).attr("style", "background-color:#008cba");
+            $(this).text("Invite");
+            invitationList.splice($.inArray($(this).parent().siblings('div#friendId').text(), invitationList), 1);
+        }
+    });
+
+    function ProcessInvitations(a, action) {
+
+        var container = $('div#invitation-container');
+        var resultDiv = $($(a).attr('href'), container);
+        console.log(container);
+        console.log(resultDiv);
+        console.log(invitationList);
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: {
+                friends: invitationList,
+                eventId: modelId
+            },
+            traditional: true,
+            dataType: "html",
+            success: function(response) {
+                resultDiv.html('');
+                resultDiv.html(response);
+            }
+        });
+
+        $('a.close-reveal-modal').trigger('click');
     }
 </script>
