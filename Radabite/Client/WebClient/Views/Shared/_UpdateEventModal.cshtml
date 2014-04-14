@@ -51,7 +51,7 @@
             </div>
             @Html.HiddenFor(m => m.Id);
         </div>
-        <input type="submit" value="Update">
+		<input type="submit" value="Update" id="UpdateSubmitButton">
         <a class="close-reveal-modal">&#215;</a>
         @Html.HiddenFor(m => m.Latitude, new { placeholder = Model.Latitude, id = "mapLatitudeUpdate" })
 		@Html.HiddenFor(m => m.Longitude, new { placeholder = Model.Longitude, id = "mapLongitudeUpdate" })
