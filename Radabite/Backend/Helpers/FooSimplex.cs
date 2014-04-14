@@ -18,6 +18,7 @@ namespace Radabite.Backend.Helpers
 		public void RunLP()
 		{
 			//Mixed integer linear programming, with 0,1,2 for the storage types?
+					//nah
 
 			/*
 			 * Note: changes a lot if you allow the time to load media to depend on its size :)
@@ -52,6 +53,7 @@ namespace Radabite.Backend.Helpers
 			 * Decision variables:
 			 * sm := total size to allocate to mem
 			 * sd := total size to allocate to disk
+			 * st := total size to allocate to tape
 			 */
 
 			/*
@@ -61,9 +63,20 @@ namespace Radabite.Backend.Helpers
 			//objective function: minimize waiting time
 			//waiting time = yucky
 
+			//alternative objective function
+			/*
+			 * maximize: a * (size in mem) + b * sd + c * st
+			 * a, b, and c are constants determined by relative access times to the different types
+			 */
+
 			//contraints:
 				//cost < 15
-			//cost = 
+			/*
+			 * cost = (size in mem) * storage in mem + (views/day for an average event) * (size in mem / # events)
+			 *			+ same for disk
+			 *			+ same for tape
+			 */
+				
 
 
 			_solver.Solve(new SimplexSolverParams());
