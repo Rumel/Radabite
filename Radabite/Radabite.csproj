@@ -251,6 +251,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\WebClient\App_Data\Radabite.mdf" />
+    <Content Include="Client\WebClient\App_Data\Radabite_log.ldf">
+      <DependentUpon>Radabite.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\Radabite_log.ldf" />
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
@@ -314,6 +318,8 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
     <Content Include="Client\WebClient\Content\themes\base\zocial.css" />
+    <Content Include="Client\WebClient\Scripts\google-analytics-eventindex.js" />
+    <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config">
@@ -424,9 +430,7 @@
       <DependentUpon>201404020253074_First.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Client\WebClient\App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
