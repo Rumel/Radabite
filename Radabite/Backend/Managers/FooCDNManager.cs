@@ -24,9 +24,9 @@ namespace Radabite.Backend.Managers
 			return ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo(blobID);
 		}
 
-		public FooResponse Post(string blobID, string filename)
+		public FooResponse Post(string blobID, byte[] data)
 		{
-			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(blobID, filename);
+			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(blobID, data);
 		}
 
 		public FooResponse Put(string blobID, FooCDNAccessor.StorageType type)
