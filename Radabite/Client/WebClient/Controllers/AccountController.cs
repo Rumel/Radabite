@@ -313,7 +313,7 @@ namespace Radabite.Client.WebClient.Controllers
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
 
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToLocal("/UserProfile?u=" + model.UserName);
                     }
                     else
                     {
