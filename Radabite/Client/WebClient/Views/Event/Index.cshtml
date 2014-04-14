@@ -25,12 +25,12 @@
 
 <div class="row">
     <div class="large-12 medium-12 columns">
-        <h4>Description: @Model.Description</h4>
+	<h4>Description: @Model.Description</h4>
 	    <h4>Time: @Model.StartTime - @Model.EndTime</h4>
 	    <h4>Location: @Model.LocationName</h4>
         @{if (Model.IsPrivate) 
             { <h4>Privacy: Private</h4> }
-        else
+      else
             { <h4>Privacy: Public</h4> } }
     </div>
 </div>
@@ -62,7 +62,7 @@
         <div class="medium-12 medium-centered columns">
             @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post))
             {
-                <input type="submit" value="Yes, Delete" />
+                <input type="submit" value="Yes, Delete" id="DeleteSubmitButton" />
             }
             @*<a class="radius button" id="confirm-delete" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
             <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>*@
@@ -71,7 +71,7 @@
     
     <a class="close-reveal-modal">&#215;</a>
 </div>
-
+    
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
     @Html.Partial("_InviteFriends", Model )
     <br />
@@ -162,3 +162,5 @@
         $('a.close-reveal-modal').trigger('click');
     }
 </script>
+
+@Scripts.Render("~/Client/WebClient/Scripts/google-analytics-eventindex.js")

@@ -1,28 +1,33 @@
 ﻿@model Radabite.Models.EventModel
 
 <script>
-	$(document).on('close', '[data-reveal]', function () {
-		var modal = $(this);
-
-		if (modal.attr('id') == 'CreateEventModal') {
-			document.getElementById('Title').value = '';
-			document.getElementById('Description').value = '';
-			document.getElementById('locationInput').value = '';
-			document.getElementById('startTimeInput').value = '';
-			document.getElementById('endTimeInput').value = '';
-		}
-	});
-
-	//functions for dealing with different between CreateEventModal and UpdateEventModal
 	var calledFrom;
 	$(document).on('opened', '[data-reveal]', function () {
+
 		var modal = $(this);
 
+		//Google Analytics
+		if (modal.attr('id') == 'CreateEvent-MapModal') {
+			ga('send', {
+				'hitType': 'event',
+				'eventCategory': 'Map Click',
+				'eventAction': 'click',
+			});
+		}
+		if (modal.attr('id') == 'CreateEvent-CalendarModal') {
+			ga('send', {
+				'hitType': 'event',
+				'eventCategory': 'Calendar Click',
+				'eventAction': 'click',
+			});
+		}
+
+		//for dealing with different between CreateEventModal and UpdateEventModal:
 		if (modal.attr('id') == 'CreateEventModal' || modal.attr('id') == 'UpdateEventModal') {
 			calledFrom = modal.attr('id');
 		}
 
-		if(modal.attr('id') == 'CreateEvent-CalendarModal' && calledFrom == 'UpdateEventModal') {
+		if (modal.attr('id') == 'CreateEvent-CalendarModal' && calledFrom == 'UpdateEventModal') {
 			//fill the values in the time modal with the values from the event being edited
 			var startDate = document.getElementById('startDatepicker');
 			var startTime = document.getElementById('startTimepickerSelect');
@@ -43,9 +48,17 @@
 
 		if (modal.attr('id') == 'CreateEvent-MapModal' && calledFrom == 'UpdateEventModal') {
 
-			document.getElementById('address').value = document.getElementById('locationInputUpdate').value;
-			google.maps.event.trigger(map, 'resize');
+			var lat = document.getElementById('mapLatitudeUpdate').value;
+
+			//loads the address into the map if it was valid
+			if (lat != -1000) {
+				document.getElementById('address').value = document.getElementById('locationInputUpdate').value;
+			} else {
+				document.getElementById('address').value = 'Lincoln, NE';
+			}
+
 			searchAddress();
+			google.maps.event.trigger(map, 'resize');
 		}
 	});
 	backToCaller = function () {
@@ -91,12 +104,12 @@
 				@Html.TextBoxFor(m => m.EndTime, new { id = "endTimeInput" })
 				@Html.ValidationMessageFor(m => m.EndTime)
 			</div>
-			
+
 			@*Not used yet
-			<div class="medium-2 columns">
-				<a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
-			</div>*@
-			
+				<div class="medium-2 columns">
+					<a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
+				</div>*@
+
 			<div class="medium-4 columns">
 				<a class="radius button" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
 			</div>
@@ -107,15 +120,32 @@
                 Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
 			</div>
 		</div>
-		<input type="submit" value="Create">
+		<input type="submit" value="Create" id="CreateSubmitButton">
 		<a class="close-reveal-modal">&#215;</a>
 
 
-		@Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude" })
-		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude" })
+		@Html.HiddenFor(m => m.Latitude, new { id = "mapLatitude", Value = "-1000" })
+		@Html.HiddenFor(m => m.Longitude, new { id = "mapLongitude", Value = "-1000" })
 	}
 </div>
 
 
 @Html.Partial("~/Client/WebClient/Views/Shared/_LocationPicker.cshtml", Model)
 @Html.Partial("~/Client/WebClient/Views/Shared/_DateTimeModal.cshtml", Model)
+
+<script>
+	$('#CreateSubmitButton').on('click', function () {
+		var usedMap;
+		if (document.getElementById('mapLatitude').value == -1000) {
+			usedMap = 'no map';
+		} else {
+			usedMap = 'map';
+		}
+
+		ga('send', {
+			'hitType': 'event',
+			'eventCategory': 'Event created',
+			'eventLabel': usedMap,
+		});
+	});
+</script>
