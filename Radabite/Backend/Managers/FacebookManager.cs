@@ -34,13 +34,13 @@ namespace Radabite.Backend.Managers
             double unixEndTime = ConvertToUnixTimestamp(endTime);
 
             var result = new FacebookGetPostsResult();
-            var userAccessToken = user.FacebookToken;
-            if (userAccessToken == null || userAccessToken == "")
+            if (!hasFacebookToken(user))
             {
                 result.hasErrors = true;
                 result.errorMessage = badUserToken;
             }
             else {
+                var userAccessToken = user.FacebookToken;
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("https://graph.facebook.com");
@@ -123,19 +123,61 @@ namespace Radabite.Backend.Managers
             }
         }
 
+
+        public string GetProfilePictureUrl(User user) 
+        {
+            using (var client = new HttpClient())
+            {
+                var result = new FacebookPublishResult();
+                string url = "";
+                if (!hasFacebookToken(user))
+                {
+                    result.hasErrors = true;
+                    result.errorMessage = badUserToken;
+                }
+                else
+                {
+                    var accessToken = user.FacebookToken;
+                    client.BaseAddress = new Uri("https://graph.facebook.com");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    //HTTP GET
+
+                    StringBuilder apiUri = new StringBuilder("/");
+                    apiUri.Append(user.FacebookUserId);
+                    // redirect false to get the url as json instead of a redirect to the picture
+                    apiUri.Append("/picture?height=300&width=300&redirect=false");
+                    var response = client.GetAsync(apiUri.ToString()).Result;
+                    var resString = response.Content.ReadAsStringAsync().Result;
+                    dynamic resJson = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
+                    try {
+                        url = resJson.data.url;
+                    }
+                    catch (RuntimeBinderException e) {
+                        /* json wasn't as expected. carry on. */
+                        /* if we cared more we would log this and fix the json parse */
+                    }
+                }
+                return url;
+            }
+            
+        }
+
+
         public FacebookPublishResult PublishStatus(User user, string message)
         {
             using (var client = new HttpClient())
             {
                 var result = new FacebookPublishResult();
 
-                var accessToken = user.FacebookToken;
-                if (accessToken == null || accessToken == "")
+                if (!hasFacebookToken(user))
                 {
                     result.hasErrors = true;
                     result.errorMessage = badUserToken;
                 }
-                else { 
+                else {
+                    var accessToken = user.FacebookToken;
                     client.BaseAddress = new Uri("https://graph.facebook.com");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -167,6 +209,17 @@ namespace Radabite.Backend.Managers
                 }
                 return result;
             }
+        }
+
+        private bool hasFacebookToken(User user)
+        {
+            var userAccessToken = user.FacebookToken;
+            bool hasToken = true;
+            if (userAccessToken == null || userAccessToken == "")
+            {
+                hasToken = false;
+            }
+            return hasToken;
         }
 
         private string HttpPost(string url, string postData)

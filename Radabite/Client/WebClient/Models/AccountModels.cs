@@ -27,6 +27,7 @@ namespace Radabite.Models
         public string PersonName { get; set; }
         public string Gender { get; set; }
         public string Link { get; set; }
+        public string PhotoLink { get; set; }
         public string ExternalLoginData { get; set; }
         public string FacebookToken { get; set; }
         public string FacebookUserId { get; set; }

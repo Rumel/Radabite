@@ -17,6 +17,8 @@ namespace Radabite.Backend.Interfaces
         string GetAccessToken(FacebookClient fb);
         FacebookPublishResult PublishStatus(User user, string message);
         string GetFacebookLongTermAccessCode(string shortTermAccessToken);
+        string GetProfilePictureUrl(User user);
+
 
         double ConvertToUnixTimestamp(DateTime date);
         DateTime ConvertFromUnixTimestamp(double timestamp);

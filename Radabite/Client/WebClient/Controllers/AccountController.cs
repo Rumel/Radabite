@@ -253,7 +253,6 @@ namespace Radabite.Client.WebClient.Controllers
                 {
                     string stAccess = result.ExtraData["accesstoken"];
                     string ltAccess = ServiceManager.Kernel.Get<IFacebookManager>().GetFacebookLongTermAccessCode(stAccess);
-                    
                     loginModel = new RegisterExternalLoginModel
                     {
                         UserName = result.UserName,
@@ -342,12 +341,14 @@ namespace Radabite.Client.WebClient.Controllers
                         User userData = new User {
                             DisplayName = model.PersonName,
                             Gender = model.Gender,
-                            FacebookProfileLink = model.Link,
+                            FacebookProfileLink = model.PhotoLink,
                             FacebookProfile = userProfile,
                             FacebookToken = model.FacebookToken,
                             FacebookUserId = model.FacebookUserId,
                             UserName = model.UserName
                         };
+                        string fbProfilePic = ServiceManager.Kernel.Get<IFacebookManager>().GetProfilePictureUrl(userData);
+                        userData.PhotoLink = fbProfilePic;
                         SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
