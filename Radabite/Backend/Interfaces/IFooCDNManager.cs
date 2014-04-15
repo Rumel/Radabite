@@ -13,7 +13,7 @@ namespace Radabite.Backend.Interfaces
 
 		FooResponse GetInfo(string blobID);
 
-		FooResponse Post(string blobID, string filename);
+		FooResponse Post(string blobID, byte[] data);
 
 		FooResponse Put(string blobID, FooCDNAccessor.StorageType type);
 

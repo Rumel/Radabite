@@ -85,31 +85,26 @@ namespace Radabite.Backend.Accessors
 			}
 		}
 
-		public FooResponse Post(string blobID, string filename)
+		public FooResponse Post(string blobID, byte[] data)
 		{
-			using (WebClient fooCDN = new WebClient())
+			using (var fooCDN = new HttpClient())
 			{
-				FooResponse fooResult;
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
 
-				try
+				MultipartFormDataContent content = new MultipartFormDataContent();
+				HttpContent internalContent = new ByteArrayContent(data);
+				content.Add(internalContent);
+
+				HttpResponseMessage response = fooCDN.PostAsync("/api/content/" + blobID, content).Result;
+
+				var result = response.Content.ReadAsByteArrayAsync().Result;
+
+				FooResponse fooResult = new FooResponse()
 				{
-					byte[] response = fooCDN.UploadFile("http://foocdn.azurewebsites.net/api/content/" + blobID, filename);
-
-					fooResult = new FooResponse()
-					{
-						Value = response,
-
-						StatusCode = HttpStatusCode.OK
-					};
-				}
-				catch(Exception e)
-				{
-					fooResult = new FooResponse()
-					{
-						Value = e,
-						StatusCode = HttpStatusCode.InternalServerError
-					};
-				}
+					Value = result,
+					StatusCode = response.StatusCode
+				};
 
 				return fooResult;
 			}
