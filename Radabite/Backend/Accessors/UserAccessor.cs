@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Radabite.Models;
+using System.Data.Entity;
 
 namespace Radabite.Backend.Accessors
 {
@@ -15,7 +16,9 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.FirstOrDefault(x => x.Id == id);
+                return db.Users.Include(e => e.Friends)
+                                .Include(e => e.Events)
+                                .FirstOrDefault(x => x.Id == id);
             } 
         }
 
@@ -23,7 +26,9 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.FirstOrDefault(x => x.TwitterProfile.UserId == p || x.FacebookProfile.UserId == p);
+                return db.Users.Include(e => e.Friends)
+                                .Include(e => e.Events)
+                    .FirstOrDefault(x => x.TwitterProfile.UserId == p || x.FacebookProfile.UserId == p);
             }
         }
 
@@ -35,32 +40,22 @@ namespace Radabite.Backend.Accessors
             }
         }
 
-        public SaveResult<User> SaveOrUpdate(User t)
+        public SaveResult<User> SaveOrUpdate(User u)
         {
             using (var db = new Db())
             {
-                if (t.Id != 0)
+                if (u.Id != 0)
                 {
-                    var obj = GetById(t.Id);
-                    obj.Id = t.Id;
-                    obj.Age = t.Age;
-                    obj.DisplayName = t.DisplayName;
-                    obj.Email = t.Email;
-                    obj.FacebookProfile = t.FacebookProfile;
-                    obj.FacebookProfileLink = t.FacebookProfileLink;
-                    obj.Friends = t.Friends;
-                    obj.Gender = t.Gender;
-                    obj.PhotoLink = t.PhotoLink;
-                    obj.SelfDescription = t.SelfDescription;
-                    obj.TwitterProfile = t.TwitterProfile;
-                    db.Entry(obj).State = System.Data.EntityState.Modified;
+                    db.Entry(u).State = EntityState.Modified;
                 }
                 else
                 {
-                db.Users.Add(t);
+                    db.Users.Add(u);
                 }
+
                 db.SaveChanges();
-                return new SaveResult<User>(true, t);
+                
+                return new SaveResult<User>(true, u);
             }
         }
 
@@ -68,7 +63,9 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.ToList();
+                return db.Users.Include(e => e.Friends)
+                                .Include(e => e.Events)
+                                .ToList();
             }
         }
     }

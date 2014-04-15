@@ -41,6 +41,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Facebook">
       <HintPath>..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
     </Reference>
@@ -57,7 +64,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -75,9 +81,6 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -193,10 +196,11 @@
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
+    <Compile Include="Backend\Database\Post.cs" />
+    <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
     <Compile Include="Client\WebClient\Models\FacebookGetPostsResult.cs" />
     <Compile Include="Client\WebClient\Models\FacebookPublishResult.cs" />
-    <Compile Include="Client\WebClient\Models\Post.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
@@ -240,6 +244,11 @@
     <Compile Include="Backend\Interfaces\IEventManager.cs" />
     <Compile Include="Backend\Managers\EventManager.cs" />
     <Compile Include="Client\WebClient\Models\AccountModels.cs" />
+    <Compile Include="Migrations\201404020253074_First.cs" />
+    <Compile Include="Migrations\201404020253074_First.Designer.cs">
+      <DependentUpon>201404020253074_First.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +256,7 @@
     <Content Include="Client\WebClient\App_Data\Radabite_log.ldf">
       <DependentUpon>Radabite.mdf</DependentUpon>
     </Content>
+    <Content Include="App_Data\Radabite_log.ldf" />
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
@@ -309,6 +319,8 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
     <Content Include="Client\WebClient\Content\themes\base\zocial.css" />
+    <Content Include="Client\WebClient\Scripts\google-analytics-eventindex.js" />
+    <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <Content Include="AppSettings.config">
@@ -323,8 +335,11 @@
     <Content Include="Client\WebClient\Views\Shared\_UpdateEventModal.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="ConfigurationStrings.config" />
     <Content Include="Client\WebClient\Views\Feed\Posts.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_InviteFriends.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_InvitationPanel.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_PostFeed.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_EventTable.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -401,11 +416,8 @@
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
     <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Shared\_FriendTable.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_UserTable.cshtml" />
     <Content Include="Client\WebClient\Views\Event\EventNotFound.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -416,6 +428,12 @@
       <Name>RadabiteServiceManager</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201404020253074_First.resx">
+      <DependentUpon>201404020253074_First.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

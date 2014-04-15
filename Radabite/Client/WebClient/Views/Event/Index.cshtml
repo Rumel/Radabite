@@ -6,75 +6,51 @@
 
 @model EventModel
 
-<div class="row">
-	<hgroup class="title">
-		<h2>@ViewBag.Message</h2>
-	</hgroup>
-</div>
-
+<br />  
 <div class="row">
     <div class="large-8 medium-8 columns">
     	<h3>Title: @Model.Title</h3>
     </div>
-    <div class="large-2 medium-2 columns" style="direction:rtl">
-        <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
-    </div>
-    <div class="large-2 medium-2 columns">
-        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
-    </div>
+    @if(Model.CurrentUser.Id == Model.Owner.Id) {
+        <div class="large-2 medium-2 columns" style="direction:rtl">
+            <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
+        </div>
+        <div class="large-2 medium-2 columns">
+            <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
+        </div>
+    } else {
+        <div class="large-4 medium-4 columns"></div>
+    }
 </div>
 
 <div class="row">
+    <div class="large-12 medium-12 columns">
 	<h4>Description: @Model.Description</h4>
-</div>
-
-<div class="row">
-	<h5>Time: @Model.StartTime - @Model.EndTime</h5>
-	<h5>Location: @Model.LocationName</h5>
-    @{if (Model.IsPrivate) { <h5>Privacy: Private</h5> }
+	    <h4>Time: @Model.StartTime - @Model.EndTime</h4>
+	    <h4>Location: @Model.LocationName</h4>
+        @{if (Model.IsPrivate) 
+            { <h4>Privacy: Private</h4> }
       else
-      { <h5>Privacy: Public</h5> } }
+            { <h4>Privacy: Public</h4> } }
+    </div>
 </div>
 
 <br />
 <div class="row">
-    <div class="panel">
-        <div class="row">
-            <div class="large-12 medium-12 columns">
-                <form method="post" action="/Event/AddPost">
-                    <input type="text" name="message" placeholder="Enter a Message to post!" />
-                    <input type="submit" value="Post" />
-                </form>
-            </div>
+    <div class="large-4 medium-4 columns" id="invitation-container">
+        <div id="invitations">
+            @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
         </div>
     </div>
-</div>
-
-<div class="row">
-    @foreach (var post in Model.Posts)
-    {
-        <div class="panel">
-            <div class ="row">
-                <div class="large-3 medium-3 columns">
-                   <img src="@post.From.PhotoLink" alt="" />
-                </div>
-                <div class="large-9 medium 9 columns">
-                    <p>
-                        <a href="/Home/UserProfile?userid=@post.From.Id">@post.From.DisplayName</a>
-                    </p>
-                    <p>@post.Message</p>
-                    <div class="row">
-                        <div class="large-3 medium-3 columns">
-                            Likes: @post.Likes
-                        </div>
-                        <div class="large-6 medium-6 columns" style="direction:rtl">
-                            Sent at: @post.SendTime
-                        </div>
-                    </div>
-                </div>
-            </div>
-       </div>
-    }
+    <div id="post-container" class="large-8 medium-8 columns">
+        <div class="panel" id="post-editor">
+            <input type="text" name="message" placeholder="Enter a Message to post!" />
+            <a onclick="ProcessPost(this,'@Url.Action("/PostFromRadabite")')" href="#posts" class="radius button">Post</a>
+        </div>
+        <div id="posts">
+            @Html.Partial("~/Client/WebClient/Views/Event/_PostFeed.cshtml", Model)
+        </div>
+    </div>
 </div>
 
 @Html.Partial("~/Client/WebClient/Views/Shared/_UpdateEventModal.cshtml", Model)
@@ -86,14 +62,22 @@
         <div class="medium-12 medium-centered columns">
             @using (Html.BeginForm("Delete", "Event", Model, FormMethod.Post))
             {
-                <input type="submit" value="Yes, Delete" />
+                <input type="submit" value="Yes, Delete" id="DeleteSubmitButton" />
             }
             @*<a class="radius button" id="confirm-delete" href="#" style="background-color:rgb(199, 15, 15)">Yes, Delete!</a>
             <a class="radius button" id="cancel-delete" href="#">No, Keep my Event!</a>*@
         </div>
     </div>
     
+    <a class="close-reveal-modal">&#215;</a>
+</div>
     
+<div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
+    @Html.Partial("_InviteFriends", Model )
+    <br />
+    <div class="row">
+        <a class="radius button" onclick="ProcessInvitations(this,'@Url.Action("/Invite")')" href="#invitations">Submit Invitations</a>
+    </div>
     <a class="close-reveal-modal">&#215;</a>
 </div>
 
@@ -108,3 +92,75 @@
         });
     });*/
 </script>
+
+<script type="text/javascript">
+    function ProcessPost(a, action) {
+
+        var container = $(a).parents('div#post-container');
+        var resultDiv = $($(a).attr('href'), container);
+
+        var m = $(a).siblings('input').val();
+        var e = @Model.Id;
+        var u = "@User.Identity.Name";
+
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: {
+                userName: u,
+                eventId: e,
+                message: m
+            },
+            dataType: "html",
+            success: function(response) {
+                resultDiv.html('');
+                resultDiv.html(response);
+                $(a).siblings('input').val("")
+            }
+        });
+    }
+</script>
+
+<script>
+    var invitationList = [];
+    var modelId = @Model.Id
+
+    $('a#invite').click(function () {
+        if ($(this).text() == "Invite") {
+            $(this).attr("style", "background-color:rgb(199, 15, 15)");
+            $(this).text("Cancel");
+            invitationList.push($(this).parent().siblings('div#friendId').text());
+        } else {
+            $(this).attr("style", "background-color:#008cba");
+            $(this).text("Invite");
+            invitationList.splice($.inArray($(this).parent().siblings('div#friendId').text(), invitationList), 1);
+        }
+    });
+
+    function ProcessInvitations(a, action) {
+
+        var container = $('div#invitation-container');
+        var resultDiv = $($(a).attr('href'), container);
+        console.log(container);
+        console.log(resultDiv);
+        console.log(invitationList);
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: {
+                friends: invitationList,
+                eventId: modelId
+            },
+            traditional: true,
+            dataType: "html",
+            success: function(response) {
+                resultDiv.html('');
+                resultDiv.html(response);
+            }
+        });
+
+        $('a.close-reveal-modal').trigger('click');
+    }
+</script>
+
+@Scripts.Render("~/Client/WebClient/Scripts/google-analytics-eventindex.js")

@@ -246,10 +246,10 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 // User is new, ask for their desired membership name
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
-                ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName.ToLower();
+                ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
                 RegisterExternalLoginModel loginModel;
-                if (ViewBag.ProviderDisplayName == "facebook")
+                if (ViewBag.ProviderDisplayName.ToLower() == "facebook")
                 {
                     string stAccess = result.ExtraData["accesstoken"];
                     string ltAccess = ServiceManager.Kernel.Get<IFacebookManager>().GetFacebookLongTermAccessCode(stAccess);
@@ -296,7 +296,7 @@ namespace Radabite.Client.WebClient.Controllers
                     {
                         // if it doesn't work here, just return false so they can reauthorize
                         isAuthorized = false;
-                    }
+        }
 
                     if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
                     {
@@ -345,14 +345,15 @@ namespace Radabite.Client.WebClient.Controllers
                             FacebookProfileLink = model.Link,
                             FacebookProfile = userProfile,
                             FacebookToken = model.FacebookToken,
-                            FacebookUserId = model.FacebookUserId
+                            FacebookUserId = model.FacebookUserId,
+                            UserName = model.UserName
                         };
                         SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
 
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToLocal("/UserProfile?u=" + model.UserName);
                     }
                     else
                     {

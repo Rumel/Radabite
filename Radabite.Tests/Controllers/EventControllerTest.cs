@@ -10,6 +10,7 @@ using Radabite.Backend.Interfaces;
 using Radabite.Backend.Managers;
 using Radabite.Tests.Mocks.Accessors;
 using Radabite.Models;
+using Moq;
 
 namespace Radabite.Tests.Controllers
 {
@@ -31,7 +32,7 @@ namespace Radabite.Tests.Controllers
                 Longitude = 1.01,
             };
         }
-        
+
         [TestInitialize]
         public void Setup()
         {
@@ -56,7 +57,7 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            ViewResult result = controller.DiscoverEvent() as ViewResult;
+            ViewResult result = controller.DiscoverEvent("abcd") as ViewResult;
 
             Assert.IsNotNull(result);
         }
@@ -64,9 +65,14 @@ namespace Radabite.Tests.Controllers
         [TestMethod]
         public void CreateEvent()
         {
-            EventController controller = new EventController();
+            var controller = new EventController();
 
             var e = getNewEventModel();
+
+            var mock = new Mock<ControllerContext>();
+            mock.SetupGet(x => x.HttpContext.User.Identity.Name).Returns("Bob");
+            mock.SetupGet(x => x.HttpContext.Request.IsAuthenticated).Returns(true);
+            controller.ControllerContext = mock.Object;
 
             RedirectToRouteResult result = controller.Create(e) as RedirectToRouteResult;
 

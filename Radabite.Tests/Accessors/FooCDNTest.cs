@@ -1,13 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
 using Ninject;
 using Radabite.Backend.Accessors;
-using System.Net.Http;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
+using System.Text;
 
 namespace Radabite.Tests.Accessors
 {
@@ -46,7 +44,7 @@ namespace Radabite.Tests.Accessors
 			//GET from the test blob
 			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(jpegBlob, "image/jpeg");
 
-			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Value);
 		}
 
 		[TestMethod]
@@ -54,14 +52,14 @@ namespace Radabite.Tests.Accessors
 		{
 			//GET from the test blob
 			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(plainTextBlob, "text/plain");
-			var mString = System.Text.Encoding.ASCII.GetString(result);
+			var mString = Encoding.ASCII.GetString(result.Value as byte[]);
 			Assert.AreEqual(mString, "test");
 		}
 
 		[TestMethod]
 		public void FooGetInfoTest()
 		{
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo(jpegBlob);
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo(jpegBlob).Value as Dictionary<string, dynamic>;
 
 			Assert.AreEqual(result["BlobID"], jpegBlob);
 			Assert.AreEqual(result["MimeType"], "image/jpeg");
@@ -72,19 +70,19 @@ namespace Radabite.Tests.Accessors
 		{
 			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Put(jpegBlob, FooCDNAccessor.StorageType.Tape);
 
-			Assert.IsTrue(result.IsSuccessStatusCode);
+			//Status code 204 (No Content) is intentional, because we do not pass content for PUT
+			Assert.IsTrue(result.StatusCode == HttpStatusCode.NoContent);
 		}
 
 		[TestMethod]
 		public void FooPostTest()
 		{
-			string testFilename = "testFile.txt";
+			byte[] testData = Encoding.ASCII.GetBytes("Testing Post");
 
-			File.WriteAllText(testFilename, "Testing post");
-			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(postTextBlob, testFilename);
-			File.Delete(testFilename);
+			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(postTextBlob, testData);
 
-			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Value);
+			Assert.IsTrue(result.StatusCode == HttpStatusCode.Created);
 		}
 
 		// NOTE: This test uses DELETE to avoid creating garbage blobs on runs
@@ -96,7 +94,7 @@ namespace Radabite.Tests.Accessors
 			//the returned result is the new blob's ID
 			Assert.IsNotNull(result);
 
-			var deleteResult = ServiceManager.Kernel.Get<IFooCDNAccessor>().Delete(result);
+			var deleteResult = ServiceManager.Kernel.Get<IFooCDNAccessor>().Delete(result.Value as string);
 		}
 
 		// NOTE: This test for delete depends on functioning POST (create blob) and POST (upload to blob)
@@ -104,11 +102,9 @@ namespace Radabite.Tests.Accessors
 		public void FooDeleteTest()
 		{
 			/* Creates a new blob, and puts text in it */
-			var createdBlob = ServiceManager.Kernel.Get<IFooCDNAccessor>().CreateBlob("text/plain");
-			string testFilename = "testFile.txt";
-			File.WriteAllText(testFilename, "Testing delete");
-			ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(createdBlob, testFilename);
-			File.Delete(testFilename);
+			var createdBlob = ServiceManager.Kernel.Get<IFooCDNAccessor>().CreateBlob("text/plain").Value as string;
+			byte[] testData = Encoding.ASCII.GetBytes("Testing Delete");
+			ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(createdBlob, testData);
 
 			var result = ServiceManager.Kernel.Get<IFooCDNAccessor>().Delete(createdBlob);
 
@@ -117,7 +113,26 @@ namespace Radabite.Tests.Accessors
 			 * 500 (InternalServerError) status code
 			 * If the blob has contents, it is deleted, and status code is 200 (OK)
 			 */
-			Assert.IsTrue(result.IsSuccessStatusCode);
+			Assert.IsTrue(result.StatusCode == HttpStatusCode.OK);
+		}
+
+		[TestMethod]
+		public void FooChainTest()
+		{
+			string originalString = "Testing the Foo chain";
+
+			/* Creates a new blob, and puts text in it */
+			var createdBlob = ServiceManager.Kernel.Get<IFooCDNAccessor>().CreateBlob("text/plain").Value as string;
+			byte[] testData = Encoding.ASCII.GetBytes(originalString);
+			ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(createdBlob, testData);
+
+			var getResult = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(createdBlob, "text/plain");
+
+			string fooString = Encoding.ASCII.GetString(getResult.Value as byte[]);
+			Assert.AreEqual(fooString, originalString);
+
+			//for cleanup
+			ServiceManager.Kernel.Get<IFooCDNAccessor>().Delete(createdBlob);
 		}
 	}
 }

@@ -9,16 +9,16 @@ namespace Radabite.Backend.Interfaces
 {
 	public interface IFooCDNAccessor
 	{
-		byte[] Get(string blobID, string mediaType);
+		FooResponse Get(string blobID, string mediaType);
 
-		IDictionary<string, dynamic> GetInfo(string blobID);
+		FooResponse GetInfo(string blobID);
 
-		byte[] Post(string blobID, string filename);
+		FooResponse Post(string blobID, byte[] data);
 
-		HttpResponseMessage Put(string blobID, FooCDNAccessor.StorageType type);
+		FooResponse Put(string blobID, FooCDNAccessor.StorageType type);
 
-		string CreateBlob(string mimeType);
+		FooResponse CreateBlob(string mimeType);
 
-		HttpResponseMessage Delete(string blobID);
+		FooResponse Delete(string blobID);
 	}
 }

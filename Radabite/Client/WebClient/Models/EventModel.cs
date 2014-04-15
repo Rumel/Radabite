@@ -29,8 +29,14 @@ namespace Radabite.Models
         public double Longitude { get; set; }
 
         public bool IsActive { get; set; }
+
+        public User Owner { get; set; }
+
+        public User CurrentUser { get; set; }
         
         public List<Post> Posts { get; set; }
+
+        public List<Invitation> Guests { get; set; }
 
         public EventModel()
         {

@@ -11,6 +11,8 @@ namespace Radabite.Backend.Database
     {
         public string DisplayName { get; set; }
 
+        public string UserName { get; set; }
+
         public UserProfile TwitterProfile { get; set; }
 
         public UserProfile FacebookProfile { get; set; }
@@ -31,6 +33,8 @@ namespace Radabite.Backend.Database
 
         public string FacebookProfileLink { get; set; }
 
-        public virtual IList<User> Friends { get; set; }
+        public virtual ICollection<User> Friends { get; set; }
+
+        public virtual ICollection<Event> Events { get; set; }
     }
 }

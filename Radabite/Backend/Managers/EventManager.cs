@@ -20,13 +20,23 @@ namespace Radabite.Backend.Managers
 
         public IEnumerable<Event> GetAll()
         {
-            return ServiceManager.Kernel.Get<IEventAccessor>().GetAll();
+            var all = ServiceManager.Kernel.Get<IEventAccessor>().GetAll();
+            return all;
         }
-
 
         public Event GetById(long id)
         {
             return ServiceManager.Kernel.Get<IEventAccessor>().GetById(id);
+        }
+
+        public List<Event> GetByOwnerId(long ownerId)
+        {
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetByOwnerId(ownerId);
+        }
+
+        public List<Event> GetByGuestId(long guestId)
+        {
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetByGuestId(guestId);
         }
 
     }

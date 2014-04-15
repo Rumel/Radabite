@@ -1,0 +1,37 @@
+﻿@using Radabite.Models
+
+@model EventModel
+<div class="row" style="overflow: auto; height:80%">
+    <form>
+        @{ var toInvite = Model.CurrentUser.Friends.Where(x => Model.Guests.TrueForAll(y => y.GuestId != x.Id)).ToList();
+            if (toInvite.Count == 0)
+            {
+                <div class="panel">
+                    <h3>
+                        No more friends to invite!
+                    </h3>
+                </div>
+            }
+            else 
+            {
+                foreach (var f in toInvite)
+                {
+                    <div class="panel">
+                        <div class="row">
+                            <div class="large-2 medium-2 columns">
+                                <img src="@f.PhotoLink"  />
+                            </div>
+                            <div class="large-6 medium-6 columns">
+                                <h3>@f.DisplayName</h3>
+                            </div>
+                            <div id="friendId" style="display: none">@f.Id</div>
+                            <div class="large-4 medium-4 columns" style="direction:rtl; padding-right:0">
+                                <a class="radius button" id="invite" style="margin-bottom:0px">Invite</a>
+                            </div>
+                        </div>
+                    </div>
+                }   
+            }
+        }
+    </form>
+</div>

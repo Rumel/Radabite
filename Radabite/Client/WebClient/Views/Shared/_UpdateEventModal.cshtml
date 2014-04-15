@@ -46,11 +46,12 @@
         </div>
         <div class="row">
             <div class="large-8 columns">
-                Private Event: @Html.RadioButtonFor(m => m.IsPrivate, "Private")
+                Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, (Model.IsPrivate) ? "" : "new { @checked = \"checked\" }")
+                Private Event: @Html.RadioButtonFor(m => m.IsPrivate,  true, (Model.IsPrivate) ? "new { @checked = \"checked\" }" : "")
             </div>
             @Html.HiddenFor(m => m.Id);
         </div>
-        <input type="submit" value="Update">
+		<input type="submit" value="Update" id="UpdateSubmitButton">
         <a class="close-reveal-modal">&#215;</a>
         @Html.HiddenFor(m => m.Latitude, new { placeholder = Model.Latitude, id = "mapLatitudeUpdate" })
 		@Html.HiddenFor(m => m.Longitude, new { placeholder = Model.Longitude, id = "mapLongitudeUpdate" })
