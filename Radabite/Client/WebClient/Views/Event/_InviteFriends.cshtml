@@ -1,9 +1,9 @@
-﻿@using Radabite.Client.WebClient.Models
+﻿@using Radabite.Models
 
-@model UserModel
+@model InvitationModel
 <div class="row" style="overflow: auto; height:80%">
     <form>
-        @{foreach (var f in Model.Friends)
+        @{foreach (var f in Model.User.Friends)
             {
                 <div class="panel">
                     <div class="row">
@@ -13,6 +13,7 @@
                         <div class="large-6 medium-6 columns">
                             <h3>@f.DisplayName</h3>
                         </div>
+                        <div id="friendId" style="display: none">@f.Id</div>
                         <div class="large-4 medium-4 columns" style="direction:rtl; padding-right:0">
                             <a class="radius button" id="invite" style="margin-bottom:0px">Invite</a>
                         </div>
@@ -29,16 +30,17 @@
 
 <script>
     var invitationList = [];
+    var modelId = @Model.EventId
 
     $('a#invite').click(function () {
         if ($(this).text() == "Invite") {
             $(this).attr("style", "background-color:rgb(199, 15, 15)");
             $(this).text("Cancel");
-            invitationList.push($(this).parent().siblings().children('h3').text());
+            invitationList.push($(this).parent().siblings('div#friendId').text());
         } else {
             $(this).attr("style", "background-color:#008cba");
             $(this).text("Invite");
-            invitationList.splice($.inArray($(this).parent().siblings().children('h3').text(), invitationList), 1);
+            invitationList.splice($.inArray($(this).parent().siblings('div#friendId').text(), invitationList), 1);
         }
     });
 
@@ -49,7 +51,8 @@
             type: 'POST',
             dataType: "json",
             data: {
-                names : invitationList
+                friends: invitationList,
+                eventId : modelId
             },
             traditional: true
         });
@@ -59,4 +62,3 @@
     
 
 </script>
-

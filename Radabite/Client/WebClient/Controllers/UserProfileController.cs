@@ -26,7 +26,7 @@ namespace Radabite.Client.WebClient.Controllers
 			var friends = new List<User>();			
 
             //Get list of events that user is involved in
-            userModel.Events = ServiceManager.Kernel.Get<IEventManager>().GetByOwnerId(user.Id);
+            userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetByOwnerId(user.Id);
             userModel.Friends = friends;
             return View(userModel);
         }

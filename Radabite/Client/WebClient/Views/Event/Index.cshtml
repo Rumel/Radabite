@@ -34,7 +34,7 @@
 <br />
 <div class="row">
     <div class="large-4 medium-4 columns">
-        @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model);
+        @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
     </div>
     <div class="large-8 medium-8 columns">
     <div class="panel">
@@ -90,7 +90,7 @@
 </div>
     
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
-    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name })
+    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name, eventId = Model.Id })
     <a class="close-reveal-modal">&#215;</a>
 </div>
 

@@ -7,7 +7,9 @@ namespace Radabite.Backend.Database
 {
     public class Invitation : DataObject
     {
-        public  virtual User Guest { get; set; }
+        public virtual User Guest { get; set; }
+
+        public long GuestId { get; set; }
 
         public ResponseType Response { get; set; }
 
@@ -24,7 +26,7 @@ namespace Radabite.Backend.Database
     public enum ResponseType
     {
         Accepted,
-        Rejeced,
+        Rejected,
         WaitingReply
     }
 
