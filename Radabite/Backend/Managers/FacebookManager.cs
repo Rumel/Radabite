@@ -147,6 +147,7 @@ namespace Radabite.Backend.Managers
                     StringBuilder apiUri = new StringBuilder("/");
                     apiUri.Append(user.FacebookUserId);
                     // redirect false to get the url as json instead of a redirect to the picture
+                    // for size, can also do type=large instead of hard-coding height and width
                     apiUri.Append("/picture?height=300&width=300&redirect=false");
                     var response = client.GetAsync(apiUri.ToString()).Result;
                     var resString = response.Content.ReadAsStringAsync().Result;

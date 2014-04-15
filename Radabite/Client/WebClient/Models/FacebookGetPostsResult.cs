@@ -9,6 +9,6 @@ namespace Radabite.Client.WebClient.Models
     {
         public bool hasErrors { get; set; }
         public string errorMessage { get; set; }
-        public IList<FacebookPostModel> posts { get; set; }
+        public IList<FacebookPostModel> posts { get; set; }        
     }
 }
