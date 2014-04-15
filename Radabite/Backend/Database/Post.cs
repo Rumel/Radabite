@@ -9,6 +9,8 @@ namespace Radabite.Backend.Database
     {
         public virtual User From { get; set; }
 
+        public long FromId { get; set; }
+
         public String Message { get; set; }
 
         public int Likes { get; set; }

@@ -199,7 +199,6 @@
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
-    <Compile Include="Client\WebClient\Models\InvitationModel.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />
@@ -338,6 +337,7 @@
     <Content Include="Client\WebClient\Views\Event\_InviteFriends.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_InvitationPanel.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_PostFeed.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_EventTable.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
@@ -414,7 +414,7 @@
     <Content Include="Client\WebClient\Views\Event\DiscoverEvent.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_NavigationBar.cshtml" />
     <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Shared\_FriendTable.cshtml" />
+    <Content Include="Client\WebClient\Views\Shared\_UserTable.cshtml" />
     <Content Include="Client\WebClient\Views\Event\EventNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>

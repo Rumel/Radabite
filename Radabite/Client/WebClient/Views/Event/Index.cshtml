@@ -11,12 +11,16 @@
     <div class="large-8 medium-8 columns">
     	<h3>Title: @Model.Title</h3>
     </div>
-    <div class="large-2 medium-2 columns" style="direction:rtl">
-        <a class="radius button" data-reveal-id="UpdateEventModal" href="#" id="EditEventButton">Edit</a>
-    </div>
-    <div class="large-2 medium-2 columns">
-        <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)" id="DeleteEventButton">Delete</a>
-    </div>
+    @if(Model.CurrentUser.Id == Model.Owner.Id) {
+        <div class="large-2 medium-2 columns" style="direction:rtl">
+            <a class="radius button" data-reveal-id="UpdateEventModal" href="#">Edit</a>
+        </div>
+        <div class="large-2 medium-2 columns">
+            <a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
+        </div>
+    } else {
+        <div class="large-4 medium-4 columns"></div>
+    }
 </div>
 
 <div class="row">
@@ -33,8 +37,10 @@
 
 <br />
 <div class="row">
-    <div class="large-4 medium-4 columns">
-        @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
+    <div class="large-4 medium-4 columns" id="invitation-container">
+        <div id="invitations">
+            @Html.Partial("~/Client/WebClient/Views/Event/_InvitationPanel.cshtml", Model)
+        </div>
     </div>
     <div id="post-container" class="large-8 medium-8 columns">
         <div class="panel" id="post-editor">
@@ -67,7 +73,11 @@
 </div>
     
 <div id="InviteModal" class="reveal-modal small" data-reveal style="height:400px">
-    @Html.Action("_InviteFriends", "Event", new { u = User.Identity.Name, eventId = Model.Id })
+    @Html.Partial("_InviteFriends", Model )
+    <br />
+    <div class="row">
+        <a class="radius button" onclick="ProcessInvitations(this,'@Url.Action("/Invite")')" href="#invitations">Submit Invitations</a>
+    </div>
     <a class="close-reveal-modal">&#215;</a>
 </div>
 
@@ -108,6 +118,48 @@
                 $(a).siblings('input').val("")
             }
         });
+    }
+</script>
+
+<script>
+    var invitationList = [];
+    var modelId = @Model.Id
+
+    $('a#invite').click(function () {
+        if ($(this).text() == "Invite") {
+            $(this).attr("style", "background-color:rgb(199, 15, 15)");
+            $(this).text("Cancel");
+            invitationList.push($(this).parent().siblings('div#friendId').text());
+        } else {
+            $(this).attr("style", "background-color:#008cba");
+            $(this).text("Invite");
+            invitationList.splice($.inArray($(this).parent().siblings('div#friendId').text(), invitationList), 1);
+        }
+    });
+
+    function ProcessInvitations(a, action) {
+
+        var container = $('div#invitation-container');
+        var resultDiv = $($(a).attr('href'), container);
+        console.log(container);
+        console.log(resultDiv);
+        console.log(invitationList);
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: {
+                friends: invitationList,
+                eventId: modelId
+            },
+            traditional: true,
+            dataType: "html",
+            success: function(response) {
+                resultDiv.html('');
+                resultDiv.html(response);
+            }
+        });
+
+        $('a.close-reveal-modal').trigger('click');
     }
 </script>
 

@@ -2,24 +2,30 @@
 
 <div class="panel">
     <h4>Friends</h4>
-    <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
+    @if(!Model.IsPrivate || Model.CurrentUser.Id == Model.Owner.Id)
+    {
+        <a class="radius button" data-reveal-id="InviteModal" href="#">Invite Friends</a>
+    }
 </div>
 
- @if(Model.Guests.Count == 0) {
-    <div class="panel">
-        <h5>No people currently attending</h5>
-    </div>
-} else {
-    foreach (var u in Model.Guests){
-        <div class="panel">
-            <div class="row">
-                <div class="large-2 medium-2 columns">
-                    <img src="@u.PhotoLink"  />
-                </div>
-                <div class="large-10 medium-10 columns">
-                    @Html.ActionLink(u.DisplayName, "../UserProfile", new { u = u.DisplayName })
-                </div>
-            </div>
-        </div>
+<table style="width: 100%">
+	<thead><tr><th style="text-align: center">Attending</th></tr></thead>
+    @foreach (var i in Model.Guests.Where(x => x.Response == Radabite.Backend.Database.ResponseType.Accepted).ToList())
+    {
+        <tr><td>@Html.ActionLink(i.Guest.DisplayName, "../UserProfile", new { UserProfile = i.Guest.UserName })</td></tr>
     }
-}
+</table>
+
+<table style="width: 100%">
+	<thead><tr><th style="text-align: center">Invited</th></tr></thead>
+    @foreach (var i in Model.Guests.Where(x => x.Response == Radabite.Backend.Database.ResponseType.WaitingReply).ToList())
+    {
+        <tr><td>@Html.ActionLink(i.Guest.DisplayName, "../UserProfile", new { UserProfile = i.Guest.UserName })</td></tr>
+    }</table>
+
+<table style="width: 100%">
+	<thead><tr><th style="text-align: center">Not Attending</th></tr></thead>
+    @foreach (var i in Model.Guests.Where(x => x.Response == Radabite.Backend.Database.ResponseType.Rejected).ToList())
+    {
+        <tr><td>@Html.ActionLink(i.Guest.DisplayName, "../UserProfile", new { UserProfile = i.Guest.UserName })</td></tr>
+    }</table>
