@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.SolverFoundation.Solvers;
+using RadabiteServiceManager;
+using Radabite.Backend.Interfaces;
+using Ninject;
 
 namespace Radabite.Backend.Helpers
 {
@@ -17,67 +20,47 @@ namespace Radabite.Backend.Helpers
 
 		public void RunLP()
 		{
-			//Mixed integer linear programming, with 0,1,2 for the storage types?
-					//nah
-
-			/*
-			 * Note: changes a lot if you allow the time to load media to depend on its size :)
-			 */
+			var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 
 			/*
 			 * Estimates needed:
-			 * 
-			 * 1. number of views for the event page ~ invitees + time to event
-			 * 2. total size of media for the event ~ invitees
-			 * 
-			 * use those to create a cost per event page view thingy
+			 *		average number of views for an event in a day
+			 *		total storage that will be needed by the end of the day
 			 */
 
-			/*
-			 *	Options for file staging algorithm:
-			 * 
-			 *	Have each event assigned a storage type, put all media for that event in that storage type
-			 *			^^^^^I think you want to do this, because if its asynchronously getting things,
-			 *					then the time waiting for the things should be equal to the delay for
-			 *					worst storage type it uses, so if they were on different things, it would
-			 *					be silly
-			 *				Also avoids needing to keep track of counters and things for each event post/view/whatever
-			 * 
-			 *		Once you have the total size for mem and disk, iterate through the events smartly to assign the
-			 *		"biggest" ones to mem (while it has room) (also be smart about remainder? internal fragmentation:) )
-			 *		then do the same for disk
-			 *
-			 */
+
+
 
 			/*
 			 * Decision variables:
-			 * sm := total size to allocate to mem
-			 * sd := total size to allocate to disk
-			 * st := total size to allocate to tape
+			 *		Sm := size allocated to memcache in GB
+			 *		Sd
+			 *		St
 			 */
 
 			/*
+			 * Objective function:
+			 *		Maximize: Cm * Sm + Cd * Sd + Ct * St
+			 *		
+			 *		Cm, Cd, Ct are constants based on relative values of storage types
+			 */
+
+			/*
+			 * Constraints:
 			 * 
+			 *		Cost:
+			 *			(3.025 + 0.3*v) * Sm + (1.0025 + 0.1*v) * Sd <= 15
+			 *			
+			 *			v is the average number of views per day for an event page
+			 *		
+			 *		Storage:
+			 *			Sm + Sd + St => estimated total content (in GB)
+			 *			
+			 *		Note: it might be useful to set this ^ estimate to be at least
+			 *			15 / (3.025 + .3v), because if we don't have enough content
+			 *			to use up all $15 if we put it all in mem, then at least act like
+			 *			we do so that it all goes in mem?
 			 */
-
-			//objective function: minimize waiting time
-			//waiting time = yucky
-
-			//alternative objective function
-			/*
-			 * maximize: a * (size in mem) + b * sd + c * st
-			 * a, b, and c are constants determined by relative access times to the different types
-			 */
-
-			//contraints:
-				//cost < 15
-			/*
-			 * cost = (size in mem) * storage in mem + (views/day for an average event) * (size in mem / # events)
-			 *			+ same for disk
-			 *			+ same for tape
-			 */
-				
-
 
 			_solver.Solve(new SimplexSolverParams());
 		}
