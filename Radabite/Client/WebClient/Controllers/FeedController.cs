@@ -35,9 +35,8 @@ namespace Radabite.Client.WebClient.Controllers
 
 
         [Authorize]
-        public ActionResult Invite()
+        public ActionResult Invite(string message)
         {
-                var message = "help Im trapped in Radabite.";
                 User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
                 var accessToken = user.FacebookToken;
                     var postResponse = ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, message);
