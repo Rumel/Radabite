@@ -43,6 +43,21 @@ namespace Radabite.Backend.Accessors
                             db.Entry<User>(i.Guest).State = EntityState.Modified;
                         }
                     }
+
+                    if (e.Posts != null)
+                    {
+                        foreach (var p in e.Posts)
+                        {
+                            if (p.Id == 0)
+                            {
+                                p.From = db.Users.FirstOrDefault(x => x.Id == p.From.Id);
+                                ev.Posts.Add(p);
+                                db.Entry<Post>(p).State = EntityState.Added;
+                                db.Entry<User>(p.From).State = EntityState.Modified;
+                            }
+                        }
+                    }
+
                     db.Entry<Event>(ev).State = EntityState.Modified;
                     db.Entry<User>(ev.Owner).State = EntityState.Unchanged;
                 } 
@@ -64,6 +79,7 @@ namespace Radabite.Backend.Accessors
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
+                                .Include(e => e.Posts)
                                 .ToList();
             }
         }
@@ -76,6 +92,7 @@ namespace Radabite.Backend.Accessors
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
+                                .Include(e => e.Posts)
                                 .FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
         }
@@ -87,6 +104,7 @@ namespace Radabite.Backend.Accessors
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
+                                .Include(e => e.Posts)
                                 .Where(x => x.Owner.Id == OwnerId && x.IsActive == true)
                                 .ToList();
             }
@@ -99,6 +117,7 @@ namespace Radabite.Backend.Accessors
                 return db.Events.Include(e => e.Location)
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
+                                .Include(e => e.Posts)
                                 .Where(x => x.Guests.Where(y => y.Guest.Id == GuestId).Count() > 0 && x.IsActive == true)
                                 .ToList();
             }

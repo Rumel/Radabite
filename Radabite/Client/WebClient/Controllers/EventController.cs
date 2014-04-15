@@ -30,35 +30,7 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 return Redirect("Event/EventNotFound");                    
             }
-
-            //var posts = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
-            var posts = new List<Post>();
-
-            var owner = new User
-            {
-                DisplayName = "Tom Jones",
-                PhotoLink = "http://bit.ly/1nHr6dG"
-            };
-
-            var post1 = new Post()
-            {
-                From = owner,
-                Message = "Guys please come to this event",
-                SendTime = new DateTime(2013, 12, 12, 8, 59, 0),
-                Likes = 0
-            };
-
-            var post2 = new Post()
-            {
-                From = owner,
-                Message = "I have Doritos!",
-                SendTime = new DateTime(2013, 12, 12, 9, 0, 0),
-                Likes = 1
-            };
-
-            posts.Add(post1);
-            posts.Add(post2);
-
+                        
             var invitationList = eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted);
             var guestList = new List<User>();
             foreach(var i in invitationList)
@@ -77,7 +49,7 @@ namespace Radabite.Client.WebClient.Controllers
                 LocationName = eventRequest.Location.LocationName,
                 Latitude = eventRequest.Location.Latitude,
                 Longitude = eventRequest.Location.Longitude,
-                Posts = posts,
+                Posts = eventRequest.Posts.ToList(),
                 Owner = eventRequest.Owner,
                 Guests = guestList
             };
@@ -257,6 +229,28 @@ namespace Radabite.Client.WebClient.Controllers
             return;
         }
 
+        [HttpPost]
+        public PartialViewResult PostFromRadabite(string username, string eventId, string message)
+        {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            e.Posts.Add(new Post 
+            {
+                From = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username),
+                Message = message,
+                SendTime = DateTime.Now,
+                Likes = 0
+            });
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+            var eventViewModel = new EventModel()
+            {
+                Id = e.Id,
+                Posts = e.Posts.ToList()
+            };
+
+            return PartialView("_PostFeed", eventViewModel);
+        }
+        
         public ActionResult EventNotFound()
         {
             return View();
