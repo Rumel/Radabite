@@ -35,8 +35,13 @@ namespace Radabite.Tests.Mocks.Accessors
 				IsActive = true,
 				Guests = new List<Invitation>(),
 				Posts = new List<Post>()
+<<<<<<< HEAD
 			};
 		}
+=======
+            };
+        }
+>>>>>>> master
 
 		public IEnumerable<Event> GetAll()
 		{
