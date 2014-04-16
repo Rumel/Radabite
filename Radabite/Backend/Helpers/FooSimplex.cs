@@ -23,6 +23,24 @@ namespace Radabite.Backend.Helpers
 
 		public double[] GetAllocated()
 		{
+			//Estimates for events
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			double averageViews = EstimateAverageViews();
+			double totalStorage = EstimateTotalStorage(events);
+
+			//if we estimate that we can fit all of our media in memory, do so immediately
+			if(totalStorage < 15 / (3.025 + 0.3 * averageViews))
+			{
+				return new double[] {15 / (3.025 + 0.3 * averageViews), 0, 0};
+			}
+			else
+			{
+				return SimplexAllocate(averageViews, totalStorage);
+			}
+		}
+
+		public double[] SimplexAllocate(double averageViews, double totalStorage) 
+		{
 			double[] allocations = new double[3]; 
 
 			/*
@@ -34,18 +52,6 @@ namespace Radabite.Backend.Helpers
 			double memConstant = 10,
 				diskConstant = 5,
 				tapeConstant = 1;
-
-
-			//Estimates for events
-			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
-			double averageViews = EstimateAverageViews();
-			double totalStorage = EstimateTotalStorage(events);
-
-			//if we estimate that we can fit all of our media in memory, do so immediately
-			if(totalStorage < 15 / (3.025 + 0.3 * averageViews))
-			{
-				return new double[] {15 / (3.025 + 0.3 * averageViews), 0, 0};
-			}
 
 			int sizeMem, sizeDisk, sizeTape, storageConstant, cost, storage;
 
@@ -110,16 +116,26 @@ namespace Radabite.Backend.Helpers
 						if (p is MediaPost)
 						{
 							var blobId = ((MediaPost)p).BlobId;
-							var fooResult = ServiceManager.Kernel.Get<IFooCDNAccessor>().GetInfo(blobId);
+							var fooResult = ServiceManager.Kernel.Get<IFooCDNManager>().GetInfo(blobId);
 							
 							if(fooResult.StatusCode == HttpStatusCode.OK)
 							{
 								var dictionary = fooResult.Value as Dictionary<string, dynamic>;
-								storageUsed = dictionary["BlobSize"] / 1e6;
+								storageUsed = Double.Parse(dictionary["BlobSize"]) / 1e6;
 							}							
 						}
 					}
 				}
+			}
+
+			double storagePerUser;
+			if(numPeople > 0)
+			{
+				storagePerUser = storageUsed / numPeople;
+			}
+			else
+			{
+				storagePerUser = 0;
 			}
 
 			double gigabytes = 0;
@@ -127,7 +143,7 @@ namespace Radabite.Backend.Helpers
 			{
 				if (e.StartTime < DateTime.Now.AddDays(1))
 				{
-					gigabytes += e.Guests.Count * (storageUsed / numPeople);
+					gigabytes += e.Guests.Count * storagePerUser;
 				}
 			}
 
