@@ -24,6 +24,8 @@ namespace Radabite.Client.WebClient.Controllers
             ViewBag.Message = "Event " + eventId.ToString();
             ViewBag.eventId = eventId;
 
+            var currentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+
             var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
             if (eventRequest == null)
@@ -40,6 +42,21 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
             }
+            
+            foreach(var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
+            {
+                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                foreach (var p in postModel.posts)
+                {
+                    eventRequest.Posts.Add(new Post
+                    {
+                        From = i.Guest,
+                        FromId = i.GuestId,
+                        Message = p.message,
+                        SendTime = p.created_time.DateTime
+                    });
+                }
+            }
 
             var eventViewModel = new EventModel()
             {
@@ -52,9 +69,9 @@ namespace Radabite.Client.WebClient.Controllers
                 LocationName = eventRequest.Location.LocationName,
                 Latitude = eventRequest.Location.Latitude,
                 Longitude = eventRequest.Location.Longitude,
-                Posts = eventRequest.Posts.ToList(),
+                Posts = eventRequest.Posts.OrderBy(p => p.SendTime).Reverse().ToList(),
                 Owner = eventRequest.Owner,
-                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
+                CurrentUser = currentUser,
                 Guests = eventRequest.Guests.ToList()
             };
 
@@ -239,24 +256,43 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult PostFromRadabite(string username, string eventId, string message)
+        public PartialViewResult PostFromRadabite(string eventId, string username, string message)
         {
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
             var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
-            e.Posts.Add(new Post 
+            var newPost = new Post 
             {
                 From = u,
                 FromId = u.Id,
                 Message = message,
                 SendTime = DateTime.Now,
                 Likes = 0
-            });
+            };
+            
+            e.Posts.Add(newPost);
+            
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-            var eventViewModel = new EventModel()
+            var dbPosts = e.Posts;
+            foreach (var i in e.Guests.Where(x => x.Response == ResponseType.Accepted))
             {
-                Id = e.Id,
-                Posts = e.Posts.ToList()
+                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, e.StartTime, e.EndTime);
+                foreach (var p in postModel.posts)
+                {
+                    dbPosts.Add(new Post
+                    {
+                        From = i.Guest,
+                        FromId = i.GuestId,
+                        Message = p.message,
+                        SendTime = p.created_time.DateTime
+                    });
+                }
+            }
+
+            var eventViewModel = new EventModel
+            {
+                Id = long.Parse(eventId),
+                Posts = dbPosts.OrderBy(p => p.SendTime).Reverse().ToList()
             };
 
             return PartialView("_PostFeed", eventViewModel);

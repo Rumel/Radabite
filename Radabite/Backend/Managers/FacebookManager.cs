@@ -73,12 +73,16 @@ namespace Radabite.Backend.Managers
                             {
                                 // double unixTime = Convert.ToDouble(status.updated_time);
                                 // DateTime aspTime = ConvertFromUnixTimestamp(unixTime);
-                                FacebookPostModel post = new FacebookPostModel
+                                DateTimeOffset offset = status.updated_time;
+                                if (offset.DateTime >= startTime && offset.DateTime < endTime)
                                 {
-                                    message = status.message,
-                                    created_time = status.updated_time
-                                };
-                                posts.Add(post);
+                                    FacebookPostModel post = new FacebookPostModel
+                                    {
+                                        message = status.message,
+                                        created_time = status.updated_time
+                                    };
+                                    posts.Add(post);
+                                }
                             }
                         }
                     }
