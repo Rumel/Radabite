@@ -32,7 +32,9 @@ namespace Radabite.Tests.Mocks.Accessors
 					Latitude = 0,
 					Longitude = 0,
 				},
-				IsActive = true
+				IsActive = true,
+				Guests = new List<Invitation>(),
+				Posts = new List<Post>()
             };
         }
 
