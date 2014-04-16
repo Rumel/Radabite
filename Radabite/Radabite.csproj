@@ -199,6 +199,8 @@
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
+    <Compile Include="Client\WebClient\Models\FacebookGetPostsResult.cs" />
+    <Compile Include="Client\WebClient\Models\FacebookPublishResult.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />
     <Compile Include="Backend\Database\Location.cs" />

@@ -7,29 +7,48 @@ using System.Web;
 using System.Web.Mvc;
 using Ninject;
 using Newtonsoft.Json.Linq;
+using Radabite.Backend.Database; 
 
 namespace Radabite.Client.WebClient.Controllers
 {
     public class FeedController : AsyncController
     {
 
-
-
         [Authorize]
         public ActionResult GetPosts() 
         {
             DateTime startDate = new DateTime(2014, 1, 01);
             DateTime endDate = new DateTime(2014, 4, 1);
-            if (Session["facebookUserToken"] != null)
+            User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+            var getResult = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(user, startDate, endDate);
+
+            if (getResult.hasErrors == false)
             {
-                var accessToken = Session["facebookUserToken"].ToString();
-                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(accessToken, startDate, endDate);
-                return View("Posts", postModel);
+                return View("Posts", getResult.posts);
             }
             else
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = "/feed/getposts" });
             }
+            
+        }
+
+
+        [Authorize]
+        public ActionResult Invite(string message)
+        {
+                User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+                var accessToken = user.FacebookToken;
+                    var postResponse = ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, message);
+                    if (postResponse.hasErrors)
+                    {
+                        return Content(postResponse.errorMessage.ToString());
+                    }
+                    else 
+                    { 
+                        return Content("Posted!");
+                    }
+                //return RedirectToAction("Login", "Account", new { returnUrl = "/feed/invite" });;
         }
 
         /*
