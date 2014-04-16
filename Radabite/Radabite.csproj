@@ -199,11 +199,11 @@
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
+    <Compile Include="Backend\Database\MediaPost.cs" />
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
     <Compile Include="Backend\Helpers\FooSimplex.cs" />
-    <Compile Include="Client\WebClient\Models\Post.cs" />
     <Compile Include="Client\WebClient\Models\FacebookGetPostsResult.cs" />
     <Compile Include="Client\WebClient\Models\FacebookPublishResult.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
