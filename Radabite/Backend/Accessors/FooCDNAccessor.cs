@@ -16,133 +16,178 @@ using System.Configuration;
 
 namespace Radabite.Backend.Accessors
 {
-    public class FooCDNAccessor : IFooCDNAccessor
-    {
-        public enum StorageType
-        {
-            MemCache = 0,
-            Disk = 1,
-            Tape = 2
-        }
+	public class FooCDNAccessor : IFooCDNAccessor
+	{
+		public enum StorageType
+		{
+			MemCache = 0,
+			Disk = 1,
+			Tape = 2
+		}
 
-        JavaScriptSerializer _serializer = new JavaScriptSerializer();
-        Uri _baseUri = new Uri("http://foocdn.azurewebsites.net");
-        
-        public byte[] Get(string blobID, string mediaType)
-        {
-            using (var fooCDN = new HttpClient())
-            {
-                fooCDN.BaseAddress = _baseUri;
-                fooCDN.DefaultRequestHeaders.Accept.Clear();
-                fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+		JavaScriptSerializer _serializer = new JavaScriptSerializer();
+		Uri _baseUri = new Uri("http://foocdn.azurewebsites.net");
 
-                HttpResponseMessage response = fooCDN.GetAsync("/api/content/" + blobID).Result;
+		public FooResponse Get(string blobID, string mediaType)
+		{
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
+				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var bytes = response.Content.ReadAsByteArrayAsync().Result;
+				HttpResponseMessage response = fooCDN.GetAsync("/api/content/" + blobID).Result;
 
-                    return bytes;
-                }
-                else
-                {
-                    throw new Exception("FooCDN GET not successful");
-                }
-            }
-        }
+				byte[] bytes = null;
+				if(response.IsSuccessStatusCode)
+				{
+					bytes = response.Content.ReadAsByteArrayAsync().Result;
+				}
+
+				FooResponse fooResult = new FooResponse()
+				{
+					Value = bytes,
+					StatusCode = response.StatusCode
+				};
+
+				return fooResult;
+			}
+		}
 
 
-        public IDictionary<string, dynamic> GetInfo(string blobID)
-        {
-            using (var fooCDN = new HttpClient())
-            {
-                fooCDN.BaseAddress = _baseUri;
-                fooCDN.DefaultRequestHeaders.Accept.Clear();
-                fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+		public FooResponse GetInfo(string blobID)
+		{
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
+				fooCDN.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage response = fooCDN.GetAsync("/api/content/" + blobID + "/info").Result;
+				HttpResponseMessage response = fooCDN.GetAsync("/api/content/" + blobID + "/info").Result;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = response.Content.ReadAsAsync<Object>().Result;
-                    
-                    //Into a dictionary for now
-                    return _serializer.Deserialize<Dictionary<string, dynamic>>(result.ToString());					
-                }
-                else
-                {
-                    throw new Exception("FooCDN GET info not successful");
-                }			
-            }
-        }
+				var result = response.Content.ReadAsAsync<Object>().Result;
 
-        public byte[] Post(string blobID, string filename)
-        {
-            WebClient fooCDN = new WebClient();
+				//Into a dictionary for now
+				Dictionary<string, dynamic> dictionaryResult = null;
 
-            byte[] response = fooCDN.UploadFile("http://foocdn.azurewebsites.net/api/content/" + blobID, filename);
+				if(response.IsSuccessStatusCode)
+				{
+					dictionaryResult = _serializer.Deserialize<Dictionary<string, dynamic>>(result.ToString());
+				}
 
-            return response;
-        }
+				FooResponse fooResult = new FooResponse()
+				{
+					Value = dictionaryResult,
+					StatusCode = response.StatusCode
+				};
 
-        public HttpResponseMessage Put(string blobID, StorageType type)
-        {
-            using(var fooCDN = new HttpClient())
-            {
-                fooCDN.BaseAddress = _baseUri;
-                fooCDN.DefaultRequestHeaders.Accept.Clear();
+				return fooResult;
+			}
+		}
 
-                HttpContent empty = new StringContent("");
-                empty.Headers.Add("Content-Length", "0");
+		public FooResponse Post(string blobID, byte[] data)
+		{
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
 
-                HttpResponseMessage response = fooCDN.PutAsync("/api/content/" + blobID + "?type=" + type.ToString(), empty).Result;
+				MultipartFormDataContent content = new MultipartFormDataContent();
+				HttpContent internalContent = new ByteArrayContent(data);
+				content.Add(internalContent);
 
-                return response;
-            }
-        }
+				HttpResponseMessage response = fooCDN.PostAsync("/api/content/" + blobID, content).Result;
 
-        public string CreateBlob(string mimeType)
-        {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://foocdn.azurewebsites.net/api/content/add/");
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-            var cdnKey = ConfigurationManager.AppSettings["fooCdnKey"];
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                    string json = String.Format("{{ \"AccountKey\": \"{0}\", \"MimeType\":\"" + mimeType + "\"}}", cdnKey);
-                    streamWriter.Write(json);
-            }
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+				var result = response.Content.ReadAsByteArrayAsync().Result;
 
-            if (httpResponse.StatusCode == HttpStatusCode.OK)
-            {
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    var createdBlob = streamReader.ReadToEnd();
+				FooResponse fooResult = new FooResponse()
+				{
+					Value = result,
+					StatusCode = response.StatusCode
+				};
 
-                    //get rid of the quotes surrounding it
-                    createdBlob = createdBlob.Substring(1, createdBlob.Length - 2);
+				return fooResult;
+			}
+		}
 
-                    return createdBlob;
-                }
-            }
-            else
-            {
-                throw new Exception("POST: create new blob not successful");
-            }
-        }
+		public FooResponse Put(string blobID, StorageType type)
+		{
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
 
-        public HttpResponseMessage Delete(string blobID)
-        {
-            using (var fooCDN = new HttpClient())
-            {
-                fooCDN.BaseAddress = _baseUri;
-                fooCDN.DefaultRequestHeaders.Accept.Clear();
+				HttpContent empty = new StringContent("");
+				empty.Headers.Add("Content-Length", "0");
 
-                HttpResponseMessage response = fooCDN.DeleteAsync("/api/content/" + blobID).Result;
+				HttpResponseMessage response = fooCDN.PutAsync("/api/content/" + blobID + "?type=" + type.ToString(), empty).Result;
 
-                return response;
-            }
-        }
-    }
+				FooResponse fooResult = new FooResponse()
+				{
+					StatusCode = response.StatusCode
+				};
+				var x = response.IsSuccessStatusCode;
+				return fooResult;
+			}
+		}
+
+		public FooResponse CreateBlob(string mimeType)
+		{
+			var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://foocdn.azurewebsites.net/api/content/add/");
+			httpWebRequest.ContentType = "application/json";
+			httpWebRequest.Method = "POST";
+			var cdnKey = ConfigurationManager.AppSettings["fooCdnKey"];
+			using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+			{
+				string json = String.Format("{{ \"AccountKey\": \"{0}\", \"MimeType\":\"" + mimeType + "\"}}", cdnKey);
+				streamWriter.Write(json);
+			}
+			var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+			string createdBlob = null;
+
+			if (httpResponse.StatusCode == HttpStatusCode.OK)
+			{
+				using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+				{
+					createdBlob = streamReader.ReadToEnd();
+
+					//get rid of the quotes surrounding it
+					createdBlob = createdBlob.Substring(1, createdBlob.Length - 2);
+				}
+			}
+
+			FooResponse fooResult = new FooResponse()
+			{
+				Value = createdBlob,
+				StatusCode = httpResponse.StatusCode
+			};
+
+			return fooResult;
+		}
+
+		public FooResponse Delete(string blobID)
+		{
+			using (var fooCDN = new HttpClient())
+			{
+				fooCDN.BaseAddress = _baseUri;
+				fooCDN.DefaultRequestHeaders.Accept.Clear();
+
+				HttpResponseMessage response = fooCDN.DeleteAsync("/api/content/" + blobID).Result;
+
+				FooResponse fooResult = new FooResponse()
+				{
+					StatusCode = response.StatusCode
+				};
+
+				return fooResult;
+			}
+		}
+	}
+
+	public class FooResponse
+	{
+		public Object Value { get; set; }
+		public HttpStatusCode StatusCode { get; set; }
+	}
 }

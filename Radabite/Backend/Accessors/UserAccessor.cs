@@ -16,7 +16,9 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.FirstOrDefault(x => x.Id == id);
+                return db.Users.Include(e => e.Friends)
+                                .Include(e => e.Events)
+                                .FirstOrDefault(x => x.Id == id);
             } 
         }
 
@@ -24,7 +26,9 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.FirstOrDefault(x => x.TwitterProfile.UserId == p || x.FacebookProfile.UserId == p);
+                return db.Users.Include(e => e.Friends)
+                                .Include(e => e.Events)
+                    .FirstOrDefault(x => x.TwitterProfile.UserId == p || x.FacebookProfile.UserId == p);
             }
         }
 
@@ -59,7 +63,9 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                return db.Users.ToList();
+                return db.Users.Include(e => e.Friends)
+                                .Include(e => e.Events)
+                                .ToList();
             }
         }
     }

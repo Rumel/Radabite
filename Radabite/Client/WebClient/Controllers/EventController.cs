@@ -30,34 +30,16 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 return Redirect("Event/EventNotFound");                    
             }
-
-            //var posts = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
-            var posts = new List<Post>();
-
-            var owner = new User
+                        
+            foreach(var i in eventRequest.Guests)
             {
-                DisplayName = "Tom Jones",
-                PhotoLink = "http://bit.ly/1nHr6dG"
-            };
+                i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
+            }
 
-            var post1 = new Post()
+            foreach (var p in eventRequest.Posts)
             {
-                From = owner,
-                Message = "Guys please come to this event",
-                SendTime = new DateTime(2013, 12, 12, 8, 59, 0),
-                Likes = 0
-            };
-
-            var post2 = new Post()
-            {
-                From = owner,
-                Message = "I have Doritos!",
-                SendTime = new DateTime(2013, 12, 12, 9, 0, 0),
-                Likes = 1
-            };
-
-            posts.Add(post1);
-            posts.Add(post2);
+                p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
+            }
 
             var eventViewModel = new EventModel()
             {
@@ -70,9 +52,13 @@ namespace Radabite.Client.WebClient.Controllers
                 LocationName = eventRequest.Location.LocationName,
                 Latitude = eventRequest.Location.Latitude,
                 Longitude = eventRequest.Location.Longitude,
-                Posts = posts,
-                Owner = eventRequest.Owner
+                Posts = eventRequest.Posts.ToList(),
+                Owner = eventRequest.Owner,
+                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
+                Guests = eventRequest.Guests.ToList()
             };
+
+            eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
             return View(eventViewModel);
         }
@@ -90,7 +76,9 @@ namespace Radabite.Client.WebClient.Controllers
 
             userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            userModel.Events = new List<Event> { };
+            userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
+
+            userModel.EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(user.Id);
             
 			return View(userModel);
 		}
@@ -130,6 +118,7 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RedirectToRouteResult Create(EventModel model)
         {
             var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
@@ -151,11 +140,23 @@ namespace Radabite.Client.WebClient.Controllers
                 Owner = user
             };
 
+            ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+            newEvent.Guests = new List<Invitation>()
+            {
+                new Invitation
+                {
+                    Guest = user,
+                    GuestId = user.Id,
+                    Response = ResponseType.Accepted
+                }
+            };
+
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
             if (result.Success)
             {
-                return RedirectToAction("Index", new { userId = user.Id, eventId = result.Result.Id });
+                return RedirectToAction("Index", new { eventId = result.Result.Id });
             }
             else
             {
@@ -188,7 +189,7 @@ namespace Radabite.Client.WebClient.Controllers
 
             if (result.Success)
             {
-                return RedirectToAction("Index", new { userId = 123, eventId = result.Result.Id });
+                return RedirectToAction("Index", new { eventId = result.Result.Id });
             }
             else
             {
@@ -196,51 +197,71 @@ namespace Radabite.Client.WebClient.Controllers
             }
         }
 
-        public PartialViewResult _InviteFriends(string u)
+        [HttpPost]
+        public PartialViewResult Invite(List<String> friends, long eventId)
         {
-            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
-
-            var userModel = new UserModel
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+            foreach (var f in friends)
             {
-                User = user,
-                Friends = new List<User>()
+                e.Guests.Add(new Invitation 
                 {
-                    new User(){
-                        DisplayName = "Clint Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clift Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clirt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clipt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clizt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    },
-                    new User(){
-                        DisplayName = "Clixt Eastwood",
-                        PhotoLink = "http://bit.ly/1hCIdbE"
-                    }
-                }
+                    Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
+                    GuestId = long.Parse(f),
+                    Response = ResponseType.WaitingReply
+                });
+            }
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+            var eventModel = new EventModel
+            {
+                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
+                Guests = e.Guests.ToList()
             };
 
-            return PartialView(userModel);
+            return PartialView("_InvitationPanel", eventModel);
         }
 
         [HttpPost]
-        public void Invite(List<String> names)
+        public void RespondToInvitation(string userId, string eventId, string response)
         {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            var r = ResponseType.WaitingReply;
+            if (response.Equals("Accept"))
+                r = ResponseType.Accepted;
+            else if (response.Equals("Decline"))
+                r = ResponseType.Rejected;
+
+            e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
             return;
         }
 
+        [HttpPost]
+        public PartialViewResult PostFromRadabite(string username, string eventId, string message)
+        {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
+            e.Posts.Add(new Post 
+            {
+                From = u,
+                FromId = u.Id,
+                Message = message,
+                SendTime = DateTime.Now,
+                Likes = 0
+            });
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+            var eventViewModel = new EventModel()
+            {
+                Id = e.Id,
+                Posts = e.Posts.ToList()
+            };
+
+            return PartialView("_PostFeed", eventViewModel);
+        }
+        
         public ActionResult EventNotFound()
         {
             return View();

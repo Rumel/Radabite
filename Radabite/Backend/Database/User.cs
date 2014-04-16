@@ -11,9 +11,15 @@ namespace Radabite.Backend.Database
     {
         public string DisplayName { get; set; }
 
+        public string UserName { get; set; }
+
         public UserProfile TwitterProfile { get; set; }
 
         public UserProfile FacebookProfile { get; set; }
+
+        public string FacebookUserId { get; set; }
+
+        public string FacebookToken { get; set; }
 
         public string Email { get; set; }
 

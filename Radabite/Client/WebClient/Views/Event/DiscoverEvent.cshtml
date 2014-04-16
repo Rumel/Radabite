@@ -16,26 +16,97 @@
 
 <div class="row">
 	<div class="large-4 medium-4 columns">
-		@{Html.RenderPartial("~/Client/WebClient/Views/Shared/_FriendTable.cshtml", Model.Friends);}
+		<table style="width: 100%">
+	        <thead><tr><th style="text-align: center">Friends</th></tr></thead>
+		    @{Html.RenderPartial("~/Client/WebClient/Views/Shared/_UserTable.cshtml", @Model.Friends);}
+        </table>
 	</div>
 	<div class="large-8 medium-8 columns">
 		<table style="width: 100%">
-			<thead><tr><th>Events</th></tr></thead>
-			<tbody>
+            <thead><tr><th>Invitations</th></tr></thead>
+            <tbody>
 				@{
-					if (Model.Events.Count == 0)
+					if (Model.EventInvitations.Count == 0)
 					{
-						<tr><td>You have no events.</td></tr>
+						<tr><td>You haven't been invited to any events.</td></tr>
 					}
 					else
 					{
-						foreach (Event e in Model.Events)
+						foreach (Event e in Model.EventInvitations)
 						{
+							<tr>
+                                <td>
+                                    <div id="eventId"style="display: none">@e.Id</div>
+                                    <div class="large-8 medium-8 columns">
+                                        @Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })
+                                    </div>
+                                    @switch(e.Guests.FirstOrDefault(x => x.GuestId == Model.User.Id).Response)
+                                    {
+                                        case ResponseType.Accepted: 
+                                            <div class="large-4 medium-4 columns">
+                                                Attending
+                                            </div>
+                                            break;
+                                        case ResponseType.Rejected: 
+                                            <div class="large-4 medium-4 columns">
+                                                Declined
+                                            </div>
+                                            break;
+                                        case ResponseType.WaitingReply: 
+                                                <div class="large-2 medium-2 columns">
+                                                    <a href="#" id="eventInvitation" class="button tiny" style="margin-bottom: 0px">Accept</a>
+                                                </div>
+                                                <div class="large-2 medium-2 columns">
+                                                    <a href="#" id="eventInvitation" class="button tiny" style="margin-bottom: 0px; background: rgb(199, 15, 15)" >Decline</a>
+                                                </div>
+                                            break;
+
+                                    }
+                                    
+                                </td>
+							</tr>
+                        }
+                    }
+				}
+			</tbody>
+        </table>
+        <table style="width: 100%">
+			<thead><tr><th>Events @Model.DiscoverEvents.Count()</th></tr></thead>
+			<tbody>
+				@{
+                    if (Model.DiscoverEvents.Count == 0)
+                    {
+						<tr><td>There are no events near you.</td></tr>
+                    }
+                    else
+                    {
+                        foreach (Event e in Model.DiscoverEvents)
+                        {
 							<tr><td>@Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })</td></tr>
-						}
-					}
+                        }
+                    }
 				}
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<script type="text/javascript">
+    $('a#eventInvitation').click(function () {
+        var eId = $(this).parent().parent().children('div#eventId').text();
+        var uId = @Model.User.Id
+        console.log(eId + ", " + uId);
+        $.ajax({
+            url: "/Event/RespondToInvitation",
+            type: 'POST',
+            dataType: "json",
+            data: {
+                userId: uId,
+                eventId: eId,
+                response: $(this).text()
+            },
+            traditional: true
+        });
+        $('a.close-reveal-modal').trigger('click');
+    });
+</script>

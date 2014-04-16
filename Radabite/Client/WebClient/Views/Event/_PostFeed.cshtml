@@ -1,0 +1,28 @@
+﻿@using Radabite.Models
+
+@model EventModel
+
+@foreach (var post in Model.Posts)
+{
+<div class="panel">
+    <div class ="row">
+        <div class="large-3 medium-3 columns">
+            <img src="@post.From.PhotoLink" alt="" />
+        </div>
+        <div class="large-9 medium 9 columns">
+            <p>
+                <a href="/UserProfile?u=@post.From.UserName">@post.From.DisplayName</a>
+            </p>
+            <p>@post.Message</p>
+            <div class="row">
+                <div class="large-3 medium-3 columns">
+                    Likes: @post.Likes
+                </div>
+                <div class="large-9 medium-9 columns" style="direction:rtl">
+                    Sent at: @post.SendTime
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

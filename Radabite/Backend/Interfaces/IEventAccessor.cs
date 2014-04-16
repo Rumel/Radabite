@@ -12,5 +12,6 @@ namespace Radabite.Backend.Interfaces
     {
         List<Event> GetByOwnerId(long ownerId);
 
+        List<Event> GetByGuestId(long guestId);
     }
 }

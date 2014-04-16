@@ -34,5 +34,10 @@ namespace Radabite.Backend.Managers
             return ServiceManager.Kernel.Get<IEventAccessor>().GetByOwnerId(ownerId);
         }
 
+        public List<Event> GetByGuestId(long guestId)
+        {
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetByGuestId(guestId);
+        }
+
     }
 }
