@@ -32,7 +32,9 @@ namespace Radabite.Tests.Mocks.Accessors
 					Latitude = 0,
 					Longitude = 0,
 				},
-				IsActive = true
+				IsActive = true,
+				Guests = new List<Invitation>(),
+				Posts = new List<Post>()
 			};
 		}
 
@@ -41,6 +43,26 @@ namespace Radabite.Tests.Mocks.Accessors
 			return new List<Event>
             {
                 new Event()
+				{ 
+					Guests = new List<Invitation>(),
+					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } }
+				},
+				new Event()
+				{ 
+					Guests = new List<Invitation>(),
+					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } }
+				},
+				new Event()
+				{ 
+					Guests = new List<Invitation>(),
+					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } }
+				},
+				new Event()
+				{ 
+					Guests = new List<Invitation>(),
+					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } }
+				},
+				new Event()
 				{ 
 					Guests = new List<Invitation>(),
 					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } }
