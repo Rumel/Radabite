@@ -6,6 +6,7 @@ using Microsoft.SolverFoundation.Solvers;
 using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
 using Ninject;
+using Radabite.Backend.Database;
 
 namespace Radabite.Backend.Helpers
 {
@@ -20,14 +21,20 @@ namespace Radabite.Backend.Helpers
 
 		public void RunLP()
 		{
-			var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			//Estimates for events
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			double averageViews = EstimateAverageViews();
+			double totalStorage = EstimateTotalStorage(events);
 
-			/*
-			 * Estimates needed:
-			 *		average number of views for an event in a day
-			 *		total storage that will be needed by the end of the day
-			 */
+			int sizeMem, sizeDisk, sizeTape;
 
+			//Decision variables
+			_solver.AddVariable("MemSize", out sizeMem);
+			_solver.SetBounds(sizeMem, 0, totalStorage);
+			_solver.AddVariable("DiskSize", out sizeDisk);
+			_solver.SetBounds(sizeDisk, 0, totalStorage);
+			_solver.AddVariable("TapeSize", out sizeTape);
+			_solver.SetBounds(sizeTape, 0, totalStorage);
 
 
 
@@ -63,6 +70,45 @@ namespace Radabite.Backend.Helpers
 			 */
 
 			_solver.Solve(new SimplexSolverParams());
+		}
+
+		private double EstimateTotalStorage(IEnumerable<Event> events)
+		{
+			/*
+			 * Estimates amount of storage needed by the end of the day
+			 * based on the amount of storage per user per event for
+			 * events that have already finished
+			 */
+
+			int numPeople = 0;
+			double storageUsed = 0;
+
+			foreach(Event e in events)
+			{
+				if(e.EndTime < DateTime.Now)
+				{
+					numPeople += e.Guests.Count;
+
+					//for all posts, get size, add to storageUsed
+				}
+			}
+
+			double gigabytes = 0;
+			foreach(Event e in events)
+			{
+				if (e.StartTime < DateTime.Now.AddDays(1))
+				{
+					gigabytes += e.Guests.Count * (storageUsed / numPeople);
+				}
+			}
+
+			return gigabytes;
+		}
+
+		private double EstimateAverageViews()
+		{
+			//For now, the average event page is viewed 30 times
+			return 30;
 		}
 	}
 }
