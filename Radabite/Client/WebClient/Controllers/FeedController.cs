@@ -33,6 +33,26 @@ namespace Radabite.Client.WebClient.Controllers
             
         }
 
+        [Authorize]
+        public ActionResult GetPhotos()
+        {
+            DateTime startDate = new DateTime(2014, 4, 01);
+            DateTime endDate = new DateTime(2014, 4, 15);
+            User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+            var getResult = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(user, startDate, endDate);
+
+            if (getResult.hasErrors == false)
+            {
+                return Content("good!");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = "/feed/getphotos" });
+            }
+
+
+
+        }
 
         [Authorize]
         public ActionResult Invite(string message)
