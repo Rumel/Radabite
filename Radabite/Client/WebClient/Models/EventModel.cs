@@ -20,6 +20,8 @@ namespace Radabite.Models
 
         public bool IsPrivate { get; set; }
 
+        public bool ToFacebook { get; set; }
+
         public string Description { get; set; }
 
         public string LocationName { get; set; }
