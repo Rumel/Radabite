@@ -10,6 +10,7 @@ using Radabite.Backend.Database;
 using System.Net;
 using Microsoft.SolverFoundation.Common;
 using Microsoft.SolverFoundation.Services;
+using Radabite.Backend.Accessors;
 
 namespace Radabite.Backend.Helpers
 {
@@ -22,10 +23,83 @@ namespace Radabite.Backend.Helpers
 			_solver = new SimplexSolver();
 		}
 
-		public SimplexDecision GetAllocation()
+		public void RunAlgorithm()
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			SimplexDecision allocation = GetAllocation(events);
+			AssignEvents(allocation, events);
+		}
+
+		public void AssignEvents(SimplexDecision allocation, IEnumerable<Event> events)
+		{
+			Dictionary<Event, double> eventViews = new Dictionary<Event, double>();
+
+			foreach (Event e in events)
+			{
+				eventViews.Add(e, EstimateViewCount(e));
+			}
+
+			eventViews = eventViews.OrderByDescending(d => d.Value) as Dictionary<Event, double>;
+
+			var averageStoragePerUser = GetStoragePerUser(events);
+
+			double sizeNeeded;
+			foreach (Event e in events)
+			{
+				if (e.EndTime < DateTime.Now)
+				{
+					sizeNeeded = GetEventStorageSize(e);
+				}
+				else if (e.StartTime > DateTime.Now && e.StartTime < DateTime.Now.AddDays(1))
+				{
+					sizeNeeded = e.Guests.Count * averageStoragePerUser;
+				}
+				else
+				{
+					sizeNeeded = 0;
+				}
+
+				if (allocation.Memory > sizeNeeded)
+				{
+					allocation.Memory -= sizeNeeded;
+					e.StorageLocation = FooCDNAccessor.StorageType.MemCache;
+				}
+				else if(allocation.Disk > sizeNeeded)
+				{
+					allocation.Disk -= sizeNeeded;
+					e.StorageLocation = FooCDNAccessor.StorageType.Disk;
+				}
+				else
+				{
+					//NOTE: tape can be less than 0, if events did not fit evenly into memory/disk
+					allocation.Tape -= sizeNeeded;
+					e.StorageLocation = FooCDNAccessor.StorageType.Tape;
+				}
+
+				var result = ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+				if(!result.Success)
+				{
+					throw new Exception("Error saving event by simplex allocator");
+				}
+			}
+
+			foreach (Event e in events)
+			{
+				foreach (Post p in e.Posts)
+				{
+					if (p is MediaPost)
+					{
+						ServiceManager.Kernel.Get<IFooCDNManager>().Put(((MediaPost)p).BlobId, e.StorageLocation);
+					}
+				}
+			}
+		}
+
+		public SimplexDecision GetAllocation(IEnumerable<Event> events)
 		{
 			//Estimates for events
-			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 			double averageViews = EstimateAverageViews(events);
 			double totalStorage = EstimateTotalStorage(events);
 
@@ -98,7 +172,7 @@ namespace Radabite.Backend.Helpers
 			{
 				return 0.5 * e.Guests.Count;
 			}
-			else if(e.StartTime > DateTime.Now && e.StartTime < DateTime.Now.AddDays(1))
+			else if (e.StartTime > DateTime.Now && e.StartTime < DateTime.Now.AddDays(1))
 			{
 				return 2 * (e.EndTime - e.StartTime).Hours * e.Guests.Count;
 			}
@@ -108,14 +182,9 @@ namespace Radabite.Backend.Helpers
 			}
 		}
 
-		public double EstimateTotalStorage(IEnumerable<Event> events)
+		public double GetStoragePerUser(IEnumerable<Event> events)
 		{
-			/*
-			 * Estimates amount of storage needed by the end of the day
-			 * based on the amount of storage per user per event for
-			 * events that have already finished
-			 */
-
+			//For all past events, gets the average amount of storage used per person
 			int numPeople = 0;
 			double storageUsed = 0;
 
@@ -125,7 +194,17 @@ namespace Radabite.Backend.Helpers
 			numPeople = previousEvents.Select<Event, int>(e => e.Guests.Count).Sum();
 			storageUsed = previousEvents.Select<Event, double>(e => GetEventStorageSize(e)).Sum();
 
-			double storagePerUser = (numPeople > 0) ? (storageUsed / numPeople) : 0;
+			return (numPeople > 0) ? (storageUsed / numPeople) : 0;
+		}
+
+		public double EstimateTotalStorage(IEnumerable<Event> events)
+		{
+			/*
+			 * Estimates amount of storage needed by the end of the day
+			 * based on the amount of storage per user per event for
+			 * events that have already finished
+			 */
+			var storagePerUser = GetStoragePerUser(events);
 
 			//sum of total users from events up until the end of today
 			var projectedUsers = events.Where<Event>(e => e.StartTime < DateTime.Now.AddDays(1))

@@ -7,12 +7,16 @@ using Ninject;
 using System.Collections.Generic;
 using Radabite.Backend.Helpers;
 using Radabite.Backend.Managers;
+using Radabite.Backend.Database;
+using Radabite.Backend.Accessors;
 
 namespace Radabite.Tests.Helpers
 {
 	[TestClass]
 	public class FooSimplexTest
 	{
+		FooSimplex _simplex = new FooSimplex();
+
 		[TestInitialize]
 		public void Setup()
 		{
@@ -26,11 +30,12 @@ namespace Radabite.Tests.Helpers
 		public void SimplexShortCircuitTest()
 		{
 			//Events have no content, so it will short circuit the simplex
-			FooSimplex simplex = new FooSimplex();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 
-			var result = simplex.GetAllocation();
+			var result = _simplex.GetAllocation(events);
+			var averageViews = _simplex.EstimateAverageViews(events);
 
-			Assert.IsTrue(result.Memory > 0);
+			Assert.AreEqual(15 / (0.25 + 0.3 * averageViews), result.Memory);
 			Assert.AreEqual(0, result.Disk);
 			Assert.AreEqual(0, result.Tape);
 		}
@@ -42,10 +47,9 @@ namespace Radabite.Tests.Helpers
 			 * If you have a high amount of views or storage,
 			 * it should move away from cache and toward memory
 			 */
-			FooSimplex simplex = new FooSimplex();
 			var numViews = 100;
 			var estimatedSize = 2;
-			var result = simplex.SimplexAllocate(numViews, estimatedSize);
+			var result = _simplex.SimplexAllocate(numViews, estimatedSize);
 
 			Assert.AreEqual(0, result.Memory);
 			Assert.IsTrue(result.Disk >= 0);
@@ -60,11 +64,10 @@ namespace Radabite.Tests.Helpers
 			 * At low enough amounts, some will be allocated to memory,
 			 * and none to tape
 			 */
-			FooSimplex simplex = new FooSimplex();
 			var numViews = 30;
 			var estimatedSize = 2;
 
-			var result = simplex.SimplexAllocate(numViews, estimatedSize);
+			var result = _simplex.SimplexAllocate(numViews, estimatedSize);
 
 			Assert.IsTrue(result.Memory >= 0);
 			Assert.IsTrue(result.Disk >= 0);
@@ -75,10 +78,9 @@ namespace Radabite.Tests.Helpers
 		[TestMethod]
 		public void StorageEstimateTest()
 		{
-			FooSimplex simplex = new FooSimplex();
 			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 
-			var estimate = simplex.EstimateTotalStorage(events);
+			var estimate = _simplex.EstimateTotalStorage(events);
 
 			Assert.AreEqual(2, estimate);
 		}
@@ -86,11 +88,64 @@ namespace Radabite.Tests.Helpers
 		[TestMethod]
 		public void ViewEstimateTest()
 		{
-			FooSimplex simplex = new FooSimplex();
 			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 
-			var estimate = simplex.EstimateAverageViews(events);
+			var estimate = _simplex.EstimateAverageViews(events);
 			Assert.AreEqual(0.9, estimate);
+		}
+
+		[TestMethod]
+		public void AllToMemTest()
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			SimplexDecision allocation = new SimplexDecision()
+			{
+				Memory = 10000,
+				Disk = 0,
+				Tape = 0
+			};
+			_simplex.AssignEvents(allocation, events);
+
+			foreach(Event e in events)
+			{
+				Assert.AreEqual(FooCDNAccessor.StorageType.MemCache, e.StorageLocation);
+			}
+		}
+
+		[TestMethod]
+		public void AllToDiskTest()
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			SimplexDecision allocation = new SimplexDecision()
+			{
+				Memory = 0,
+				Disk = 10000,
+				Tape = 0
+			};
+			_simplex.AssignEvents(allocation, events);
+
+			foreach (Event e in events)
+			{
+				Assert.AreEqual(FooCDNAccessor.StorageType.Disk, e.StorageLocation);
+			}
+		}
+
+		[TestMethod]
+		public void AllToTapeTest()
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			SimplexDecision allocation = new SimplexDecision()
+			{
+				Memory = 0,
+				Disk = 0,
+				Tape = 100000
+			};
+			_simplex.AssignEvents(allocation, events);
+
+			foreach (Event e in events)
+			{
+				Assert.AreEqual(FooCDNAccessor.StorageType.Tape, e.StorageLocation);
+			}
 		}
 
 		public bool CheckCost(SimplexDecision allocations, double numViews)

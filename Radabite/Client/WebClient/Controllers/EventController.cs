@@ -137,6 +137,7 @@ namespace Radabite.Client.WebClient.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 IsActive = model.IsActive,
+				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
                 Owner = user
             };
 
