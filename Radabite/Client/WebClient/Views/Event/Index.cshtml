@@ -45,7 +45,14 @@
     <div id="post-container" class="large-8 medium-8 columns">
         <div class="panel" id="post-editor">
             <input type="text" name="message" placeholder="Enter a Message to post!" />
-            <a onclick="ProcessPost(this,'@Url.Action("/PostFromRadabite")')" href="#posts" class="radius button">Post</a>
+            <div class="row">
+                <div class="medium-8 large-8 columns">
+                    <input type="checkbox" name="to-facebook" value="" />  Post to Facebook?
+                </div>
+                <div class="medium-4 large-4 columns">
+                    <a style="direction:rtl" onclick="ProcessPost(this,'@Url.Action("/PostFromRadabite")')" href="#posts" class="radius button">Post</a>
+                </div>
+            </div>
         </div>
         <div id="posts">
             @Html.Partial("~/Client/WebClient/Views/Event/_PostFeed.cshtml", Model)
@@ -102,6 +109,7 @@
         var m = $(a).siblings('input').val();
         var e = @Model.Id;
         var u = "@User.Identity.Name";
+        var f = $('input[name="to-facebook"]').is(':checked');
 
         $.ajax({
             type: "POST",
@@ -109,7 +117,8 @@
             data: {
                 userName: u,
                 eventId: e,
-                message: m
+                message: m,
+                toFacebook: f
             },
             dataType: "html",
             success: function(response) {

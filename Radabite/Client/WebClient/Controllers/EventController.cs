@@ -256,7 +256,7 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult PostFromRadabite(string eventId, string username, string message)
+        public PartialViewResult PostFromRadabite(string eventId, string username, string message, bool toFacebook)
         {
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
             var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
