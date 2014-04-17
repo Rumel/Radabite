@@ -273,6 +273,12 @@ namespace Radabite.Client.WebClient.Controllers
             
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
+            if (toFacebook)
+            {
+                ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(u, message);
+            }
+
+
             var dbPosts = e.Posts;
             foreach (var i in e.Guests.Where(x => x.Response == ResponseType.Accepted))
             {
