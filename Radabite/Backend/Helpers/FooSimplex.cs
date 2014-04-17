@@ -22,7 +22,7 @@ namespace Radabite.Backend.Helpers
 			_solver = new SimplexSolver();
 		}
 
-		public double[] GetAllocated()
+		public SimplexDecision GetAllocated()
 		{
 			//Estimates for events
 			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
@@ -30,9 +30,14 @@ namespace Radabite.Backend.Helpers
 			double totalStorage = EstimateTotalStorage(events);
 
 			//if we estimate that we can fit all of our media in memory, don't waste time doing simplex
-			if(totalStorage < 15 / (0.25 + 0.3 * averageViews))
+			if (totalStorage < 15 / (0.25 + 0.3 * averageViews))
 			{
-				return new double[] {15 / (0.25 + 0.3 * averageViews), 0, 0};
+				return new SimplexDecision()
+				{
+					Memory = 15 / (0.25 + 0.3 * averageViews),
+					Disk = 0,
+					Tape = 0
+				};
 			}
 			else
 			{
@@ -40,10 +45,8 @@ namespace Radabite.Backend.Helpers
 			}
 		}
 
-		public double[] SimplexAllocate(double averageViews, double totalStorage) 
+		public SimplexDecision SimplexAllocate(double averageViews, double totalStorage)
 		{
-			double[] allocations = new double[3]; 
-
 			/*
 			 * Goal is to maximize the storage constant
 			 *		storage constant = (memory constant) * (size in mem) 
@@ -66,16 +69,17 @@ namespace Radabite.Backend.Helpers
 			model.AddDecisions(sizeMem, sizeDisk, sizeTape);
 
 			model.AddConstraint("cost", 0 <= (0.25 + 0.3 * averageViews) * sizeMem + (0.025 + 0.1 * averageViews) * sizeDisk <= 15);
-			model.AddConstraint("storage", totalStorage == sizeMem + sizeDisk + sizeTape );
+			model.AddConstraint("storage", totalStorage == sizeMem + sizeDisk + sizeTape);
 			model.AddGoal("storageValue", GoalKind.Maximize, memConstant * sizeMem + diskConstant * sizeDisk + tapeConstant * sizeTape);
 
 			Solution sol = solver.Solve(new SimplexDirective());
 
-			allocations[0] = sizeMem.ToDouble();
-			allocations[1] = sizeDisk.ToDouble();
-			allocations[2] = sizeTape.ToDouble();
-
-			return allocations;
+			return new SimplexDecision()
+			{
+				Memory = sizeMem.ToDouble(),
+				Disk = sizeDisk.ToDouble(),
+				Tape = sizeTape.ToDouble()
+			};
 		}
 
 		private double EstimateTotalStorage(IEnumerable<Event> events)
@@ -89,49 +93,19 @@ namespace Radabite.Backend.Helpers
 			int numPeople = 0;
 			double storageUsed = 0;
 
-			foreach(Event e in events)
-			{
-				if(e.EndTime < DateTime.Now)
-				{
-					numPeople += e.Guests.Count;
+			//events that have finished before now
+			var previousEvents = events.Where<Event>(e => e.EndTime < DateTime.Now);
 
-					foreach (Post p in e.Posts)
-					{
-						if (p is MediaPost)
-						{
-							var blobId = ((MediaPost)p).BlobId;
-							var fooResult = ServiceManager.Kernel.Get<IFooCDNManager>().GetInfo(blobId);
-							
-							if(fooResult.StatusCode == HttpStatusCode.OK)
-							{
-								var dictionary = fooResult.Value as Dictionary<string, dynamic>;
-								storageUsed = Double.Parse(dictionary["BlobSize"]) / 1e6;
-							}							
-						}
-					}
-				}
-			}
+			numPeople = previousEvents.Select<Event, int>(e => e.Guests.Count).Sum();
+			storageUsed = previousEvents.Select<Event, double>(e => GetEventStorageSize(e)).Sum();
 
-			double storagePerUser;
-			if(numPeople > 0)
-			{
-				storagePerUser = storageUsed / numPeople;
-			}
-			else
-			{
-				storagePerUser = 0;
-			}
+			double storagePerUser = (numPeople > 0) ? (storageUsed / numPeople) : 0;
 
-			double gigabytes = 0;
-			foreach(Event e in events)
-			{
-				if (e.StartTime < DateTime.Now.AddDays(1))
-				{
-					gigabytes += e.Guests.Count * storagePerUser;
-				}
-			}
+			//sum of total users from events up until the end of today
+			var projectedUsers = events.Where<Event>(e => e.StartTime < DateTime.Now.AddDays(1))
+												.Select<Event, int>(e => e.Guests.Count).Sum();
 
-			return gigabytes;
+			return projectedUsers * storagePerUser;
 		}
 
 		private double EstimateAverageViews()
@@ -139,5 +113,36 @@ namespace Radabite.Backend.Helpers
 			//For now, the average event page is viewed 30 times
 			return 30;
 		}
+
+		private double GetEventStorageSize(Event e)
+		{
+			//For each MediaPost
+			var storageUsed = e.Posts.Where<Post>(p => p is MediaPost)
+									.Select<Post, double>(p =>
+			{
+				//Gets the storage used for that blob from FooCDN
+				var blobId = ((MediaPost)p).BlobId;
+				var fooResult = ServiceManager.Kernel.Get<IFooCDNManager>().GetInfo(blobId);
+
+				if (fooResult.StatusCode == HttpStatusCode.OK)
+				{
+					var dictionary = fooResult.Value as Dictionary<string, dynamic>;
+					return Double.Parse(dictionary["BlobSize"]) / 1e6;
+				}
+				else
+				{
+					return 0;
+				}
+			}).Sum();
+
+			return storageUsed;
+		}
+	}
+
+	public class SimplexDecision
+	{
+		public double Memory { get; set; }
+		public double Disk { get; set; }
+		public double Tape { get; set; }
 	}
 }

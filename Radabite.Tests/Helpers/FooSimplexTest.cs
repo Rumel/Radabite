@@ -30,9 +30,9 @@ namespace Radabite.Tests.Helpers
 
 			var result = simplex.GetAllocated();
 
-			Assert.IsTrue(result[0] > 0);
-			Assert.AreEqual(result[1], 0);
-			Assert.AreEqual(result[2], 0);
+			Assert.IsTrue(result.Memory > 0);
+			Assert.AreEqual(result.Disk, 0);
+			Assert.AreEqual(result.Tape, 0);
 		}
 
 		[TestMethod]
@@ -47,9 +47,9 @@ namespace Radabite.Tests.Helpers
 			var estimatedSize = 2;
 			var result = simplex.SimplexAllocate(numViews, estimatedSize);
 
-			Assert.IsTrue(result[0] == 0);
-			Assert.IsTrue(result[1] >= 0);
-			Assert.IsTrue(result[2] >= 0);
+			Assert.IsTrue(result.Memory == 0);
+			Assert.IsTrue(result.Disk >= 0);
+			Assert.IsTrue(result.Tape >= 0);
 			Assert.IsTrue(CheckCost(result, numViews));
 		}
 
@@ -66,16 +66,16 @@ namespace Radabite.Tests.Helpers
 
 			var result = simplex.SimplexAllocate(numViews, estimatedSize);
 
-			Assert.IsTrue(result[0] >= 0);
-			Assert.IsTrue(result[1] >= 0);
-			Assert.IsTrue(result[2] == 0);
+			Assert.IsTrue(result.Memory >= 0);
+			Assert.IsTrue(result.Disk >= 0);
+			Assert.IsTrue(result.Tape == 0);
 			Assert.IsTrue(CheckCost(result, numViews));
 		}
 
-		public bool CheckCost(double[] allocations, double numViews)
+		public bool CheckCost(SimplexDecision allocations, double numViews)
 		{
 			//rounding in case cost is 15.00000000001 (floating point silliness)
-			return Math.Round((0.25 + 0.3 * numViews) * allocations[0] + (0.025 + 0.1 * numViews) * allocations[1], 2) <= 15;
+			return Math.Round((0.25 + 0.3 * numViews) * allocations.Memory + (0.025 + 0.1 * numViews) * allocations.Disk, 2) <= 15;
 		}
 	}
 }
