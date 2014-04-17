@@ -18,7 +18,7 @@ namespace Radabite.Tests.Mocks.Accessors
 		public FooResponse GetInfo(string blobID)
 		{
 			Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
-			dict.Add("BlobSize", "10");
+			dict.Add("BlobSize", "1000000");
 
 			return new FooResponse()
 			{

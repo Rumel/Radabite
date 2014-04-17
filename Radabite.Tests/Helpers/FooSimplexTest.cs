@@ -28,11 +28,11 @@ namespace Radabite.Tests.Helpers
 			//Events have no content, so it will short circuit the simplex
 			FooSimplex simplex = new FooSimplex();
 
-			var result = simplex.GetAllocated();
+			var result = simplex.GetAllocation();
 
 			Assert.IsTrue(result.Memory > 0);
-			Assert.AreEqual(result.Disk, 0);
-			Assert.AreEqual(result.Tape, 0);
+			Assert.AreEqual(0, result.Disk);
+			Assert.AreEqual(0, result.Tape);
 		}
 
 		[TestMethod]
@@ -47,7 +47,7 @@ namespace Radabite.Tests.Helpers
 			var estimatedSize = 2;
 			var result = simplex.SimplexAllocate(numViews, estimatedSize);
 
-			Assert.IsTrue(result.Memory == 0);
+			Assert.AreEqual(0, result.Memory);
 			Assert.IsTrue(result.Disk >= 0);
 			Assert.IsTrue(result.Tape >= 0);
 			Assert.IsTrue(CheckCost(result, numViews));
@@ -68,8 +68,29 @@ namespace Radabite.Tests.Helpers
 
 			Assert.IsTrue(result.Memory >= 0);
 			Assert.IsTrue(result.Disk >= 0);
-			Assert.IsTrue(result.Tape == 0);
+			Assert.AreEqual(0, result.Tape);
 			Assert.IsTrue(CheckCost(result, numViews));
+		}
+
+		[TestMethod]
+		public void StorageEstimateTest()
+		{
+			FooSimplex simplex = new FooSimplex();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			var estimate = simplex.EstimateTotalStorage(events);
+
+			Assert.AreEqual(2, estimate);
+		}
+
+		[TestMethod]
+		public void ViewEstimateTest()
+		{
+			FooSimplex simplex = new FooSimplex();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			var estimate = simplex.EstimateAverageViews(events);
+			Assert.AreEqual(0.9, estimate);
 		}
 
 		public bool CheckCost(SimplexDecision allocations, double numViews)

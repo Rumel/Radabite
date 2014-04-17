@@ -22,11 +22,11 @@ namespace Radabite.Backend.Helpers
 			_solver = new SimplexSolver();
 		}
 
-		public SimplexDecision GetAllocated()
+		public SimplexDecision GetAllocation()
 		{
 			//Estimates for events
 			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
-			double averageViews = EstimateAverageViews();
+			double averageViews = EstimateAverageViews(events);
 			double totalStorage = EstimateTotalStorage(events);
 
 			//if we estimate that we can fit all of our media in memory, don't waste time doing simplex
@@ -82,7 +82,33 @@ namespace Radabite.Backend.Helpers
 			};
 		}
 
-		private double EstimateTotalStorage(IEnumerable<Event> events)
+		public double EstimateAverageViews(IEnumerable<Event> events)
+		{
+			var totalViews = events.Select<Event, double>(e => EstimateViewCount(e)).Sum();
+			return totalViews / events.Count();
+		}
+
+		private double EstimateViewCount(Event e)
+		{
+			/*
+			 * Past events will be viewed 0.5 times per user
+			 * Events today will be viewed twice per hour per user
+			 */
+			if (e.EndTime < DateTime.Now)
+			{
+				return 0.5 * e.Guests.Count;
+			}
+			else if(e.StartTime > DateTime.Now && e.StartTime < DateTime.Now.AddDays(1))
+			{
+				return 2 * (e.EndTime - e.StartTime).Hours * e.Guests.Count;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
+		public double EstimateTotalStorage(IEnumerable<Event> events)
 		{
 			/*
 			 * Estimates amount of storage needed by the end of the day
@@ -106,12 +132,6 @@ namespace Radabite.Backend.Helpers
 												.Select<Event, int>(e => e.Guests.Count).Sum();
 
 			return projectedUsers * storagePerUser;
-		}
-
-		private double EstimateAverageViews()
-		{
-			//For now, the average event page is viewed 30 times
-			return 30;
 		}
 
 		private double GetEventStorageSize(Event e)
