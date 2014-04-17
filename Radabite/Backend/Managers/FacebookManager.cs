@@ -151,6 +151,7 @@ namespace Radabite.Backend.Managers
                                 {
                                     post.created_time = photo.updated_time;
                                 }
+                                post.photoBytes = GetPhotoBytes(post.photoUrl);
                                 posts.Add(post);
                             }
                         }
@@ -167,6 +168,15 @@ namespace Radabite.Backend.Managers
                 }
             }
             return result;
+        }
+        public byte[] GetPhotoBytes(string url)
+        {
+            byte[] image;
+            using (var webClient = new WebClient())
+            {
+                image = webClient.DownloadData(url);
+                return image;
+            }
         }
 
 
