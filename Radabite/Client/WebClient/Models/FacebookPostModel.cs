@@ -10,7 +10,7 @@ namespace Radabite.Client.WebClient.Models
     {
         public string message { get; set; }
         public string fromName { get; set; } 
-        public string fromId {get; set;}
+        public double fromId {get; set;}
 
         //http://james.newtonking.com/json/help/index.html?topic=html/T_Newtonsoft_Json_Linq_JObject.htm to try to figure it out
         public DateTimeOffset created_time { get; set; }

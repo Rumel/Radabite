@@ -149,7 +149,7 @@ namespace Radabite.Backend.Managers
                                 }
                                 if (photo.created_time != null)
                                 {
-                                 //   post.created_time = photo.updated_time;
+                                    post.created_time = photo.updated_time;
                                 }
                                 posts.Add(post);
                             }
