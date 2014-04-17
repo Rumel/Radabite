@@ -171,6 +171,11 @@ namespace Radabite.Client.WebClient.Controllers
 
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
+            if (model.ToFacebook)
+            {
+                ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, "Hey guys, I just created an event on Radabite at http://localhost:3000/Event?eventId=" + result.Result.Id + ", make sure to check it out!");
+            }
+
             if (result.Success)
             {
                 return RedirectToAction("Index", new { eventId = result.Result.Id });
