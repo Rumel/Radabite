@@ -34,5 +34,48 @@ namespace Radabite.Tests.Helpers
 			Assert.AreEqual(result[1], 0);
 			Assert.AreEqual(result[2], 0);
 		}
+
+		[TestMethod]
+		public void SimplexFillDiskTest()
+		{
+			/*
+			 * If you have a high amount of views or storage,
+			 * it should move away from cache and toward memory
+			 */
+			FooSimplex simplex = new FooSimplex();
+			var numViews = 100;
+			var estimatedSize = 2;
+			var result = simplex.SimplexAllocate(numViews, estimatedSize);
+
+			Assert.IsTrue(result[0] == 0);
+			Assert.IsTrue(result[1] >= 0);
+			Assert.IsTrue(result[2] >= 0);
+			Assert.IsTrue(CheckCost(result, numViews));
+		}
+
+		[TestMethod]
+		public void SimplexMemTest()
+		{
+			/*
+			 * At low enough amounts, some will be allocated to memory,
+			 * and none to tape
+			 */
+			FooSimplex simplex = new FooSimplex();
+			var numViews = 30;
+			var estimatedSize = 2;
+
+			var result = simplex.SimplexAllocate(numViews, estimatedSize);
+
+			Assert.IsTrue(result[0] >= 0);
+			Assert.IsTrue(result[1] >= 0);
+			Assert.IsTrue(result[2] == 0);
+			Assert.IsTrue(CheckCost(result, numViews));
+		}
+
+		public bool CheckCost(double[] allocations, double numViews)
+		{
+			//rounding in case cost is 15.00000000001 (floating point silliness)
+			return Math.Round((0.25 + 0.3 * numViews) * allocations[0] + (0.025 + 0.1 * numViews) * allocations[1], 2) <= 15;
+		}
 	}
 }

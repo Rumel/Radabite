@@ -9,6 +9,7 @@ using Ninject;
 using Radabite.Backend.Database;
 using System.Net;
 using Microsoft.SolverFoundation.Common;
+using Microsoft.SolverFoundation.Services;
 
 namespace Radabite.Backend.Helpers
 {
@@ -28,10 +29,10 @@ namespace Radabite.Backend.Helpers
 			double averageViews = EstimateAverageViews();
 			double totalStorage = EstimateTotalStorage(events);
 
-			//if we estimate that we can fit all of our media in memory, do so immediately
-			if(totalStorage < 15 / (3.025 + 0.3 * averageViews))
+			//if we estimate that we can fit all of our media in memory, don't waste time doing simplex
+			if(totalStorage < 15 / (0.25 + 0.3 * averageViews))
 			{
-				return new double[] {15 / (3.025 + 0.3 * averageViews), 0, 0};
+				return new double[] {15 / (0.25 + 0.3 * averageViews), 0, 0};
 			}
 			else
 			{
@@ -49,47 +50,30 @@ namespace Radabite.Backend.Helpers
 			 *					+ (disk constant) * (size in disk) 
 			 *					+ (tape constant) * (size in tape)
 			 */
+
+			//Assuming value is proportional to cost
 			double memConstant = 10,
 				diskConstant = 5,
-				tapeConstant = 1;
+				tapeConstant = 0;
 
-			int sizeMem, sizeDisk, sizeTape, storageConstant, cost, storage;
+			SolverContext solver = SolverContext.GetContext();
+			Model model = solver.CreateModel();
 
-			//Decision variables
-			_solver.AddVariable("MemSize", out sizeMem);
-			_solver.SetBounds(sizeMem, 0, totalStorage);
-			_solver.AddVariable("DiskSize", out sizeDisk);
-			_solver.SetBounds(sizeDisk, 0, totalStorage);
-			_solver.AddVariable("TapeSize", out sizeTape);
-			_solver.SetBounds(sizeTape, 0, totalStorage);
+			Decision sizeMem = new Decision(Domain.RealNonnegative, "MemorySize");
+			Decision sizeDisk = new Decision(Domain.RealNonnegative, "DiskSize");
+			Decision sizeTape = new Decision(Domain.RealNonnegative, "TapeSize");
 
-			//Constraints
-				// cost: (3.025 + 0.3*views) * sizeMem + (1.0025 + 0.1*views) * sizeDisk <= 15
-			_solver.AddRow("cost", out cost);
-			_solver.SetCoefficient(cost, sizeMem, 3.025 + 0.3 * averageViews);
-			_solver.SetCoefficient(cost, sizeDisk, 1.0025 * 0.1 * averageViews);
-			_solver.SetBounds(cost, 0, 15);
+			model.AddDecisions(sizeMem, sizeDisk, sizeTape);
 
-				// storage: 
-			_solver.AddRow("storage", out storage);
-			_solver.SetCoefficient(storage, sizeMem, 1);
-			_solver.SetCoefficient(storage, sizeDisk, 1);
-			_solver.SetCoefficient(storage, sizeTape, 1);
-			_solver.SetBounds(storage, totalStorage, Rational.PositiveInfinity);
+			model.AddConstraint("cost", 0 <= (0.25 + 0.3 * averageViews) * sizeMem + (0.025 + 0.1 * averageViews) * sizeDisk <= 15);
+			model.AddConstraint("storage", totalStorage == sizeMem + sizeDisk + sizeTape );
+			model.AddGoal("storageValue", GoalKind.Maximize, memConstant * sizeMem + diskConstant * sizeDisk + tapeConstant * sizeTape);
 
-			//Objective row: maximize storage constant
-			_solver.AddRow("StorageConstant", out storageConstant);
-			_solver.SetCoefficient(storageConstant, sizeMem, memConstant);
-			_solver.SetCoefficient(storageConstant, sizeDisk, diskConstant);
-			_solver.SetCoefficient(storageConstant, sizeTape, tapeConstant);
-			_solver.SetBounds(storageConstant, 0, Rational.PositiveInfinity);
-			_solver.AddGoal(storageConstant, 1, false);
+			Solution sol = solver.Solve(new SimplexDirective());
 
-			_solver.Solve(new SimplexSolverParams());
-
-			allocations[0] = _solver.GetValue(sizeMem).ToDouble();
-			allocations[1] = _solver.GetValue(sizeDisk).ToDouble();
-			allocations[2] = _solver.GetValue(sizeTape).ToDouble();
+			allocations[0] = sizeMem.ToDouble();
+			allocations[1] = sizeDisk.ToDouble();
+			allocations[2] = sizeTape.ToDouble();
 
 			return allocations;
 		}
