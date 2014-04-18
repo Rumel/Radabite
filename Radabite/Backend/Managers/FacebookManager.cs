@@ -121,9 +121,15 @@ namespace Radabite.Backend.Managers
 
                     StringBuilder sb = new StringBuilder("/");
                     sb.Append(user.FacebookUserId);
-                    sb.Append("?fields=photos&");
-                    sb.Append(userAccessToken);
+                    sb.Append("/photos?");
 
+                    sb.Append("since=");
+                    sb.Append(unixStartTime);
+                    sb.Append("&until=");
+                    sb.Append(unixEndTime);
+                    sb.Append("&");
+                    
+                    sb.Append(userAccessToken);                    
                     var finalResponse = client.GetAsync(sb.ToString()).Result;
 
                     var resString = finalResponse.Content.ReadAsStringAsync().Result;
@@ -134,7 +140,7 @@ namespace Radabite.Backend.Managers
                     {
                         if (fdata != null)
                         {
-                            dynamic fphotos = fdata.photos.data;
+                            dynamic fphotos = fdata.data;
                             foreach (dynamic photo in fphotos)
                             {
                                 dynamic from = photo.from;
