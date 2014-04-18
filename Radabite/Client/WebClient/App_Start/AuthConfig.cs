@@ -27,7 +27,7 @@ namespace Radabite
             //https://github.com/mj1856/DotNetOpenAuth.FacebookOAuth2
             var facebookAppId = ConfigurationManager.AppSettings["facebookAppId"];
             var facebookAppSecret = ConfigurationManager.AppSettings["facebookAppSecret"];
-            var client = new FacebookOAuth2Client(facebookAppId, facebookAppSecret, "read_stream", "publish_actions", "publish_stream");
+            var client = new FacebookOAuth2Client(facebookAppId, facebookAppSecret, "read_stream", "publish_actions", "publish_stream", "user_photos", "user_location");
             var extraData = new Dictionary<string, object>();
             //extraData.Add("read_stream", "read_stream");
             //string[] scope = new string[] {"read_stream"};
