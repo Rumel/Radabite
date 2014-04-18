@@ -31,6 +31,7 @@ namespace Radabite.Models
         public string ExternalLoginData { get; set; }
         public string FacebookToken { get; set; }
         public string FacebookUserId { get; set; }
+        public string Location { get; set; }
     }
 
     public class LocalPasswordModel

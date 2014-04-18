@@ -253,6 +253,7 @@ namespace Radabite.Client.WebClient.Controllers
                 {
                     string stAccess = result.ExtraData["accesstoken"];
                     string ltAccess = ServiceManager.Kernel.Get<IFacebookManager>().GetFacebookLongTermAccessCode(stAccess);
+                    string locationJson;
                     loginModel = new RegisterExternalLoginModel
                     {
                         UserName = result.UserName,
@@ -263,8 +264,11 @@ namespace Radabite.Client.WebClient.Controllers
                         FacebookToken = ltAccess,
                         FacebookUserId = result.ProviderUserId 
                     };
-                    
-
+                    result.ExtraData.TryGetValue("location", out locationJson);
+                    if (locationJson != null) { 
+                        dynamic locationName = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(locationJson);
+                        loginModel.Location = locationName.name;
+                    }
                 }
                 else
                 {
@@ -345,7 +349,8 @@ namespace Radabite.Client.WebClient.Controllers
                             FacebookProfile = userProfile,
                             FacebookToken = model.FacebookToken,
                             FacebookUserId = model.FacebookUserId,
-                            UserName = model.UserName
+                            UserName = model.UserName,
+                            Location = model.Location,
                         };
                         string fbProfilePic = ServiceManager.Kernel.Get<IFacebookManager>().GetProfilePictureUrl(userData);
                         userData.PhotoLink = fbProfilePic;
