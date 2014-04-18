@@ -17,11 +17,6 @@
             You've successfully authenticated with <strong>@ViewBag.ProviderDisplayName</strong>.
             Your username will be the user name you use on that site: <strong>@Model.UserName</strong>
         </p>
-        <!--<ol>
-            <li class="name">
-                @Html.LabelFor(m => m.UserName)
-            </li>
-        </ol>-->
         @Html.HiddenFor(m => m.ExternalLoginData)
         @Html.HiddenFor(m => m.Gender)
         @Html.HiddenFor(m => m.PersonName)
