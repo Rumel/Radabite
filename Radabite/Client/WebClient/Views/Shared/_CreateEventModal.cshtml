@@ -115,11 +115,16 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="large-8 columns">
+			<div class="large-12 columns">
                 Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, new { @checked = "checked" })
                 Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
 			</div>
 		</div>
+        <div class="row">
+            <div class="large-12 columns">
+                @Html.CheckBoxFor(m => m.ToFacebook, true) Make a post to Facebook inviting friends to your event?
+            </div>
+        </div>
 		<input type="submit" value="Create" id="CreateSubmitButton">
 		<a class="close-reveal-modal">&#215;</a>
 

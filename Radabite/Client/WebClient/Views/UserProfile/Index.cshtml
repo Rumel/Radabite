@@ -24,8 +24,10 @@
             <p>
                 <span>Name: @Model.User.DisplayName</span>
                 <br />
-                <span>Location: Test Location</span>
-                <br />
+                @if (Model.User.Location != null && Model.User.Location != "") { 
+                    <span>Location: @Model.User.Location</span>
+                    <br />
+                }
                 <span>Gender: @Model.User.Gender</span>
             </p>
         </div>

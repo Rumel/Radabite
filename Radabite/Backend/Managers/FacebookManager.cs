@@ -73,12 +73,16 @@ namespace Radabite.Backend.Managers
                             {
                                 // double unixTime = Convert.ToDouble(status.updated_time);
                                 // DateTime aspTime = ConvertFromUnixTimestamp(unixTime);
-                                FacebookPostModel post = new FacebookPostModel
+                                DateTimeOffset offset = status.updated_time;
+                                if (offset.DateTime >= startTime && offset.DateTime < endTime)
                                 {
-                                    message = status.message,
-                                    created_time = status.updated_time
-                                };
-                                posts.Add(post);
+                                    FacebookPostModel post = new FacebookPostModel
+                                    {
+                                        message = status.message,
+                                        created_time = status.updated_time
+                                    };
+                                    posts.Add(post);
+                                }
                             }
                         }
                     }
@@ -92,6 +96,100 @@ namespace Radabite.Backend.Managers
             }
             return result;
         }
+
+        public FacebookGetPostsResult GetPhotos(User user, DateTime startTime, DateTime endTime)
+        {
+            double unixStartTime = ConvertToUnixTimestamp(startTime);
+            double unixEndTime = ConvertToUnixTimestamp(endTime);
+
+            var result = new FacebookGetPostsResult();
+            if (!hasFacebookToken(user))
+            {
+                result.hasErrors = true;
+                result.errorMessage = badUserToken;
+            }
+            else
+            {
+                var userAccessToken = user.FacebookToken;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://graph.facebook.com");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    //HTTP GET
+
+                    StringBuilder sb = new StringBuilder("/");
+                    sb.Append(user.FacebookUserId);
+                    sb.Append("/photos?");
+
+                    sb.Append("since=");
+                    sb.Append(unixStartTime);
+                    sb.Append("&until=");
+                    sb.Append(unixEndTime);
+                    sb.Append("&");
+                    
+                    sb.Append(userAccessToken);                    
+                    var finalResponse = client.GetAsync(sb.ToString()).Result;
+
+                    var resString = finalResponse.Content.ReadAsStringAsync().Result;
+                    List<FacebookPostModel> posts = new List<FacebookPostModel>();
+
+                    dynamic fdata = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(resString);
+                    try
+                    {
+                        if (fdata != null)
+                        {
+                            dynamic fphotos = fdata.data;
+                            foreach (dynamic photo in fphotos)
+                            {
+                                dynamic from = photo.from;
+                                FacebookPostModel post = new FacebookPostModel
+                                {
+                                    photoUrl = photo.source,
+                                };
+                                if (from != null)
+                                {
+                                    post.fromId = from.id;
+                                    post.fromName = from.name;
+                                }
+                                if (photo.name != null)
+                                {
+                                    post.message = photo.name;
+                                }
+                                if (photo.created_time != null)
+                                {
+                                    post.created_time = photo.updated_time;
+                                }
+                                post.photoBytes = GetPhotoBytes(post.photoUrl);
+                                posts.Add(post);
+                            }
+                        }
+                    }
+                    catch (RuntimeBinderException e)
+                    {
+                        // this exception probably means part of the json response wasn't what we expected.
+                        // just keep going.
+                    }
+                    result.posts = posts;
+
+
+
+                }
+            }
+            return result;
+        }
+        public byte[] GetPhotoBytes(string url)
+        {
+            byte[] image;
+            using (var webClient = new WebClient())
+            {
+                image = webClient.DownloadData(url);
+                return image;
+            }
+        }
+
+
         /*
          * GET /oauth/access_token?  
                 grant_type=fb_exchange_token&           
