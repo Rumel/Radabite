@@ -16,6 +16,7 @@ using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
 using Radabite.Client.WebClient.Models;
 using DotNetOpenAuth.FacebookOAuth2;
+using DotNetOpenAuth.GoogleOAuth2;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -224,6 +225,7 @@ namespace Radabite.Client.WebClient.Controllers
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
             FacebookOAuth2Client.RewriteRequest(); // needs to go before every call to verify authentication
+            GoogleOAuth2Client.RewriteRequest();
             AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
             if (!result.IsSuccessful)
             {
@@ -240,7 +242,38 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 // If the current user is logged in add the new account
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
-                return RedirectToLocal(returnUrl);
+                var providerDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
+                
+                SimpleMembershipProvider provider = (SimpleMembershipProvider) Membership.Provider;
+                int id = provider.GetUserIdFromOAuth(result.Provider, result.ProviderUserId);
+                User user = ServiceManager.Kernel.Get<IUserManager>().GetById(id);
+
+                if (providerDisplayName == "Google")
+                {
+                    user.GoogleToken = result.ExtraData["accesstoken"];
+                }
+                else if (providerDisplayName == "Facebook")
+                {
+                    user.DisplayName = result.ExtraData["name"];
+                    user.FacebookProfileLink = result.ExtraData["link"];
+                    user.Gender = result.ExtraData["gender"];
+                    string stAccess = result.ExtraData["accesstoken"];
+                    string ltAccess = ServiceManager.Kernel.Get<IFacebookManager>().GetFacebookLongTermAccessCode(stAccess);
+                    string locationJson;
+                    user.FacebookToken = ltAccess;
+                    user.FacebookUserId = result.ProviderUserId;
+                    result.ExtraData.TryGetValue("location", out locationJson);
+                    if (locationJson != null)
+                    {
+                        dynamic locationName = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(locationJson);
+                        user.Location = locationName.name;
+                    }
+                    string fbProfilePic = ServiceManager.Kernel.Get<IFacebookManager>().GetProfilePictureUrl(user);
+                    user.PhotoLink = fbProfilePic;
+                }
+
+                ServiceManager.Kernel.Get<IUserManager>().Save(user);
+                return RedirectToLocal("/UserProfile?u=" + user.UserName);
             }
             else
             {
@@ -249,26 +282,36 @@ namespace Radabite.Client.WebClient.Controllers
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
                 RegisterExternalLoginModel loginModel;
-                if (ViewBag.ProviderDisplayName.ToLower() == "facebook")
+                loginModel = new RegisterExternalLoginModel
+                    {
+                        UserName = result.UserName,
+                        ExternalLoginData = loginData,
+                    };
+                if (ViewBag.ProviderDisplayName == "Facebook")
                 {
+                    loginModel.PersonName = result.ExtraData["name"];
+                    loginModel.Link = result.ExtraData["link"];
+                    loginModel.Gender = result.ExtraData["gender"];
                     string stAccess = result.ExtraData["accesstoken"];
                     string ltAccess = ServiceManager.Kernel.Get<IFacebookManager>().GetFacebookLongTermAccessCode(stAccess);
                     string locationJson;
-                    loginModel = new RegisterExternalLoginModel
-                    {
-                        UserName = result.UserName,
-                        PersonName = result.ExtraData["name"],
-                        Link = result.ExtraData["link"],
-                        Gender = result.ExtraData["gender"],
-                        ExternalLoginData = loginData,
-                        FacebookToken = ltAccess,
-                        FacebookUserId = result.ProviderUserId 
-                    };
+                    loginModel.FacebookToken = ltAccess;
+                    loginModel.FacebookUserId = result.ProviderUserId;
                     result.ExtraData.TryGetValue("location", out locationJson);
                     if (locationJson != null) { 
                         dynamic locationName = Radabite.Backend.Helpers.JsonUtils.JsonObject.GetDynamicJsonObject(locationJson);
                         loginModel.Location = locationName.name;
                     }
+                }
+                else if (ViewBag.ProviderDisplayName == "Twitter")
+                {
+                    loginModel.TwitterToken = result.ExtraData["accesstoken"];
+                }
+
+                else if (ViewBag.ProviderDisplayName == "Google")
+                {
+                    loginModel.GoogleToken = result.ExtraData["accesstoken"];
+                    loginModel.GoogleUserId = result.ProviderUserId;
                 }
                 else
                 {
@@ -281,41 +324,7 @@ namespace Radabite.Client.WebClient.Controllers
                 return View("ExternalLoginConfirmation", loginModel);
             }
         }
-        /*
-        [HttpPost]
-        public bool IsAuthorizedWithFacebook()
-        {
-            bool isAuthorized = false;
-            if (User.Identity.IsAuthenticated)
-            {
-                if (Session["facebookUserToken"] != null)
-                {
-                    isAuthorized = true;
-                }
-                else { 
-                    FacebookOAuth2Client.RewriteRequest(); // needs to go before every call to verify authentication
-                    AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback"));
-                    if (!result.IsSuccessful)
-                    {
-                        // if it doesn't work here, just return false so they can reauthorize
-                        isAuthorized = false;
-        }
-
-                    if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
-                    {
-                        // the u becomes a route parameter
-                        Session.Add("facebookUserToken", result.ExtraData["accesstoken"]);
-                        string stAccess = result.ExtraData["accesstoken"];
-                        var ltAccess = ServiceManager.Kernel.Get<IFacebookManager>().GetFacebookLongTermAccessCode(stAccess);
-
-                        isAuthorized = true;
-                    }
-                }
-            }
-            return isAuthorized;
-        }
-        */ 
-
+      
         //
         // POST: /Account/ExternalLoginConfirmation
 
@@ -351,9 +360,13 @@ namespace Radabite.Client.WebClient.Controllers
                             FacebookUserId = model.FacebookUserId,
                             UserName = model.UserName,
                             Location = model.Location,
+                            GoogleUserId = model.GoogleUserId,
+                            GoogleToken = model.GoogleToken
                         };
-                        string fbProfilePic = ServiceManager.Kernel.Get<IFacebookManager>().GetProfilePictureUrl(userData);
-                        userData.PhotoLink = fbProfilePic;
+                        if (userData.FacebookToken != null) { 
+                            string fbProfilePic = ServiceManager.Kernel.Get<IFacebookManager>().GetProfilePictureUrl(userData);
+                            userData.PhotoLink = fbProfilePic;
+                        }                        
                         SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(userData);
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
@@ -362,7 +375,13 @@ namespace Radabite.Client.WebClient.Controllers
                         return RedirectToLocal("/UserProfile?u=" + model.UserName);
                     }
                     else
-                    {
+                    {/*
+                        if (model.GoogleUserId != null && model.GoogleUserId != "")
+                        {
+                            user.GoogleUserId = model.GoogleUserId;
+                            user.GoogleToken = model.GoogleToken;
+                            SaveResult<User> saveResult = ServiceManager.Kernel.Get<IUserManager>().Save(user);
+                        }*/
                         ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
                     }
                 }
