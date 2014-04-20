@@ -55,6 +55,9 @@
       <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Solver.Foundation">
+      <HintPath>..\packages\Microsoft.Solver.Foundation.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
@@ -196,9 +199,11 @@
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
+    <Compile Include="Backend\Database\MediaPost.cs" />
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
+    <Compile Include="Backend\Helpers\FooSimplex.cs" />
     <Compile Include="Client\WebClient\Models\FacebookGetPostsResult.cs" />
     <Compile Include="Client\WebClient\Models\FacebookPublishResult.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
@@ -433,7 +438,9 @@
       <DependentUpon>201404020253074_First.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
