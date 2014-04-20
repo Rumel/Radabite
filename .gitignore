@@ -233,9 +233,12 @@ $RECYCLE.BIN/
 *~
 
 ### Nuget ###
-packages/
+!/packages/
+/packages/*
 NuGet.exe
 
 ### Databases
 *.mdf
 *.ldf
+
+!/packages/Microsoft.Solver.Foundation.dll
