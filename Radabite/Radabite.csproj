@@ -55,7 +55,8 @@
       <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Solver.Foundation">
+    <Reference Include="Microsoft.Solver.Foundation, Version=3.0.1.10599, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Solver.Foundation.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
