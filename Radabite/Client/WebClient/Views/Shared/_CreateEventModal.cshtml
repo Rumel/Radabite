@@ -106,11 +106,11 @@
 		</div>
 		<div class="row">
 			<div class="large-4 columns">
-				@Html.TextBoxFor(m => m.StartTime, new { id = "startTimeInput" })
+				@Html.TextBoxFor(m => m.StartTime, new { @Value = DateTime.Now, id = "startTimeInput" })
 				@Html.ValidationMessageFor(m => m.StartTime)
 			</div>
 			<div class="large-4 columns">
-				@Html.TextBoxFor(m => m.EndTime, new { id = "endTimeInput" })
+				@Html.TextBoxFor(m => m.EndTime, new { @Value = DateTime.Now, id = "endTimeInput" })
 				@Html.ValidationMessageFor(m => m.EndTime)
 			</div>
 

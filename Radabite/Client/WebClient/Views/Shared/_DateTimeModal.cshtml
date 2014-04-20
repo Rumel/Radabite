@@ -4,21 +4,20 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
+		$('#startDatepicker').val($.datepicker.formatDate('mm/dd/yy', new Date()));
+		$('#endDatepicker').val($.datepicker.formatDate('mm/dd/yy', new Date()));
 		$("#startDatepicker").datepicker({
 			minDate: new Date(),		//default is today
 			onClose: function (selectedDate) {
 				$("#endDatepicker").datepicker("option", "minDate", selectedDate);
 			}
 		});
-	});
-	$(document).ready(function () {
 		$("#endDatepicker").datepicker({
 			onClose: function (selectedDate) {
 				$("#startDatepicker").datepicker("option", "maxDate", selectedDate);
 			}
 		});
 	});
-
 
 /*
  * A time picker for jQuery
@@ -360,7 +359,7 @@
 			<h5>Start time:</h5>
 		</div>
 		<div class="small-4 columns">
-			<input id="startDatepicker" style="padding: 8px ; margin:0px ; width: 100%" />
+			<input id="startDatepicker" style="padding: 8px ; margin:0px ; width: 100%"/>
 		</div>
 		<div class="small-4 columns">
 			<div id="startTimepicker"></div>
