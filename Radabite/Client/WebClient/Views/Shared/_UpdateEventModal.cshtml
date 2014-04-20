@@ -1,57 +1,71 @@
 ﻿@model Radabite.Models.EventModel
 
+<style>
+	.has-tip {
+		border-bottom: none;
+	}
+
+		.has-tip:hover, .has-tip:focus {
+			border-bottom: none;
+		}
+</style>
+
 <div id="UpdateEventModal" class="reveal-modal small" data-reveal>
     <h2>Update your Event!</h2>
     @using (Html.BeginForm("Update", "Event", FormMethod.Post))
     {
         <div class="row">
-            <div class="large-8 columns">
+            <div class="large-10 columns">
                 @Html.TextBoxFor(m => m.Title, new { placeholder = Model.Title })
                 @Html.ValidationMessageFor(m => m.Title)
             </div>
         </div>
         <div class="row">
-            <div class="large-8 columns">
+            <div class="large-10 columns">
                 @Html.TextBoxFor(m => m.Description, new { placeholder = Model.Description })
                 @Html.ValidationMessageFor(m => m.Description)
             </div>
         </div>
         <div class="row">
-            <div class="large-8 columns">
+            <div class="large-10 columns">
                 @Html.TextBoxFor(m => m.LocationName, new { placeholder = Model.LocationName, id = "locationInputUpdate" })
                 @Html.ValidationMessageFor(m => m.LocationName)
             </div>
-            <div class="large-4 columns">
-                <a class="radius button" data-reveal-id="CreateEvent-MapModal" href="#">Map</a>
+            <div class="large-2 columns">
+				<span data-tooltip class="has-tip" title="Click to select a location with Google Maps!">
+					<a data-reveal-id="CreateEvent-MapModal" href="#">
+						<img src="~/Client/WebClient/Content/Images/fi-marker.svg" width="37" height="37" />
+					</a>
+				</span>
             </div>
         </div>
         <div class="row">
-            <div class="large-4 columns">
+            <div class="large-10 columns">
                 @Html.TextBoxFor(m => m.StartTime, new { placeholder = Model.StartTime, id = "startTimeUpdate" })
                 @Html.ValidationMessageFor(m => m.StartTime)
             </div>
-            <div class="large-4 columns">
+			<div class="large-2 columns">
+				<span data-tooltip class="has-tip" title="Click to select a start and end time!">
+					<a data-reveal-id="CreateEvent-CalendarModal" href="#">
+						<img src="~/Client/WebClient/Content/Images/fi-calendar.svg" width="37" height="37" />
+					</a>
+				</span>
+			</div>
+		</div>
+		<div class="row">
+            <div class="large-10 columns">
                 @Html.TextBoxFor(m => m.EndTime, new { placeholder = Model.EndTime, id = "endTimeUpdate" })
                 @Html.ValidationMessageFor(m => m.EndTime)
             </div>
-
-            @*Not used yet 
-			<div class="medium-2 columns">
-                <a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
-            </div>*@
-            
-			<div class="medium-4 columns">
-                <a class="radius button" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
-            </div>
         </div>
         <div class="row">
-            <div class="large-8 columns">
+            <div class="large-10 columns">
                 Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, (Model.IsPrivate) ? "" : "new { @checked = \"checked\" }")
                 Private Event: @Html.RadioButtonFor(m => m.IsPrivate,  true, (Model.IsPrivate) ? "new { @checked = \"checked\" }" : "")
             </div>
-            @Html.HiddenFor(m => m.Id);
+            @Html.HiddenFor(m => m.Id)
         </div>
-		<input type="submit" value="Update" id="UpdateSubmitButton">
+		<input type="submit" value="Update" id="UpdateSubmitButton" class="radius button">
         <a class="close-reveal-modal">&#215;</a>
         @Html.HiddenFor(m => m.Latitude, new { placeholder = Model.Latitude, id = "mapLatitudeUpdate" })
 		@Html.HiddenFor(m => m.Longitude, new { placeholder = Model.Longitude, id = "mapLongitudeUpdate" })

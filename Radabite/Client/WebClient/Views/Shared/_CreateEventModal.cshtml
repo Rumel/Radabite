@@ -1,11 +1,12 @@
 ﻿@model Radabite.Models.EventModel
 
 <style>
-	.eventButton {
-		padding-top: 9px;
-		padding-bottom: 9px;
-		padding-left: 15px;
-		padding-right: 15px;
+	.has-tip {
+		border-bottom: none;
+	}
+
+	.has-tip:hover, .has-tip:focus {
+		border-bottom: none;
 	}
 </style>
 
@@ -84,57 +85,61 @@
 	@using (Html.BeginForm("Create", "Event", FormMethod.Post))
 	{
 		<div class="row">
-			<div class="large-8 columns">
+			<div class="large-10 columns">
 				@Html.TextBoxFor(m => m.Title, new { placeholder = "Event Title" })
 				@Html.ValidationMessageFor(m => m.Title)
 			</div>
 		</div>
 		<div class="row">
-			<div class="large-8 columns">
+			<div class="large-10 columns">
 				@Html.TextBoxFor(m => m.Description, new { placeholder = "Event Description" })
 				@Html.ValidationMessageFor(m => m.Description)
 			</div>
 		</div>
 		<div class="row">
-			<div class="large-8 columns">
+			<div class="large-10 columns">
 				@Html.TextBoxFor(m => m.LocationName, new { placeholder = "Event Location", id = "locationInput" })
 				@Html.ValidationMessageFor(m => m.LocationName)
 			</div>
-			<div class="large-4 columns">
-				<a class="radius button eventButton" data-reveal-id="CreateEvent-MapModal" href="#">Map</a>
+			<div class="large-2 columns">
+				<span data-tooltip class="has-tip" title="Click to select a location with Google Maps!">
+					<a data-reveal-id="CreateEvent-MapModal" href="#">
+						<img src="~/Client/WebClient/Content/Images/fi-marker.svg" width="37" height="37" />
+					</a>
+				</span>
 			</div>
 		</div>
 		<div class="row">
-			<div class="large-4 columns">
-				@Html.TextBoxFor(m => m.StartTime, new { @Value = DateTime.Now, id = "startTimeInput" })
+			<div class="large-10 columns">
+				@Html.TextBoxFor(m => m.StartTime, new { @Value = "", id = "startTimeInput", placeholder = "Start Time" })
 				@Html.ValidationMessageFor(m => m.StartTime)
 			</div>
-			<div class="large-4 columns">
-				@Html.TextBoxFor(m => m.EndTime, new { @Value = DateTime.Now, id = "endTimeInput" })
-				@Html.ValidationMessageFor(m => m.EndTime)
+			<div class="large-2 columns">
+				<span data-tooltip class="has-tip" title="Click to select a start and end time!">
+					<a data-reveal-id="CreateEvent-CalendarModal" href="#">
+						<img src="~/Client/WebClient/Content/Images/fi-calendar.svg" width="37" height="37" />
+					</a>
+				</span>
 			</div>
-
-			@*Not used yet
-				<div class="medium-2 columns">
-					<a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
-				</div>*@
-
-			<div class="medium-4 columns">
-				<a class="radius button eventButton" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
+		</div>
+		<div class="row">
+			<div class="large-10 columns">
+				@Html.TextBoxFor(m => m.EndTime, new { @Value = "", id = "endTimeInput", placeholder = "End Time" })
+				@Html.ValidationMessageFor(m => m.EndTime)
 			</div>
 		</div>
 		<div class="row">
 			<div class="large-12 columns">
-                Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, new { @checked = "checked" })
-                Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
+				Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, new { @checked = "checked" })
+				Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
 			</div>
 		</div>
-        <div class="row">
-            <div class="large-12 columns">
-                @Html.CheckBoxFor(m => m.ToFacebook, true) Make a post to Facebook inviting friends to your event?
-            </div>
-        </div>
-		<input type="submit" value="Create" id="CreateSubmitButton">
+		<div class="row">
+			<div class="large-12 columns">
+				@Html.CheckBoxFor(m => m.ToFacebook, true) Make a post to Facebook inviting friends to your event?
+			</div>
+		</div>
+		<input type="submit" value="Create" id="CreateSubmitButton" class="radius button">
 		<a class="close-reveal-modal">&#215;</a>
 
 
