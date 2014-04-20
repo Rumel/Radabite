@@ -1,5 +1,14 @@
 ﻿@model Radabite.Models.EventModel
 
+<style>
+	.eventButton {
+		padding-top: 9px;
+		padding-bottom: 9px;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+</style>
+
 <script>
 	var calledFrom;
 	$(document).on('opened', '[data-reveal]', function () {
@@ -92,7 +101,7 @@
 				@Html.ValidationMessageFor(m => m.LocationName)
 			</div>
 			<div class="large-4 columns">
-				<a class="radius button" data-reveal-id="CreateEvent-MapModal" href="#">Map</a>
+				<a class="radius button eventButton" data-reveal-id="CreateEvent-MapModal" href="#">Map</a>
 			</div>
 		</div>
 		<div class="row">
@@ -111,7 +120,7 @@
 				</div>*@
 
 			<div class="medium-4 columns">
-				<a class="radius button" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
+				<a class="radius button eventButton" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
 			</div>
 		</div>
 		<div class="row">

@@ -13,7 +13,7 @@
 	</div>
 	<div class="row">
 		<div class="small-7 large-10 columns" style="padding-left: 0px">
-			<input id="address" type="text" value="Lincoln, NE" onkeypress="if (event.keyCode == 13) { searchAddress() }" />
+			<input id="address" type="text" value="Kauffman Center Lincoln, NE" onkeypress="if (event.keyCode == 13) { searchAddress() }" />
 		</div>
 		<div class="small-5 large-2 columns">
 			<input type="button" value="Search" onclick="searchAddress()" class="button radius" style="padding: 9px">
@@ -69,7 +69,7 @@
 		}
 		function positionFail(err) {
 			//Defaults to Lincoln, NE
-			var startLocation = new google.maps.LatLng(40.81, -96.68);
+			var startLocation = new google.maps.LatLng(40.8196729, -96.70046049999996);
 			moveMarker(startLocation);
 			map.setCenter(startLocation);
 		}
