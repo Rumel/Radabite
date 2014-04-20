@@ -235,7 +235,10 @@ namespace Radabite.Client.WebClient.Controllers
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
                 // the u becomes a route parameter
-                return RedirectToAction("Index", "UserProfile", new { u = result.UserName });
+                SimpleMembershipProvider provider = (SimpleMembershipProvider) Membership.Provider;
+                int id = provider.GetUserIdFromOAuth(result.Provider, result.ProviderUserId);
+
+                return RedirectToAction("Index", "UserProfile", new { u = id });
             }
 
             if (User.Identity.IsAuthenticated)
@@ -273,7 +276,7 @@ namespace Radabite.Client.WebClient.Controllers
                 }
 
                 ServiceManager.Kernel.Get<IUserManager>().Save(user);
-                return RedirectToLocal("/UserProfile?u=" + user.UserName);
+                return RedirectToLocal("/UserProfile?u=" + user.Id);
             }
             else
             {
@@ -372,7 +375,7 @@ namespace Radabite.Client.WebClient.Controllers
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
 
-                        return RedirectToLocal("/UserProfile?u=" + model.UserName);
+                        return RedirectToLocal("/UserProfile?u=" + saveResult.Result.Id);
                     }
                     else
                     {/*

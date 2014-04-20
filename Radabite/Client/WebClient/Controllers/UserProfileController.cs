@@ -8,15 +8,19 @@ using Ninject;
 using RadabiteServiceManager;
 using Radabite.Backend.Interfaces;
 using Radabite.Client.WebClient.Models;
+using WebMatrix.WebData;
+using Microsoft.Web.WebPages.OAuth;
+using DotNetOpenAuth.AspNet;
+using System.Web.Security;
 
 namespace Radabite.Client.WebClient.Controllers
 {
 	public class UserProfileController : Controller
 	{
 
-		public ActionResult Index(string u)
+		public ActionResult Index(int u)
         {
-            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
+            var user = ServiceManager.Kernel.Get<IUserManager>().GetById(u);
             var userModel = new UserModel { User = user };
 
 			//TODO: Add friends to UserProfile, so there will actually be friends in the db
@@ -28,6 +32,17 @@ namespace Radabite.Client.WebClient.Controllers
             userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetByOwnerId(user.Id);
             userModel.Friends = friends;
             return View(userModel);
+        }
+
+        public ActionResult CurrentUser()
+        {
+            /*AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("CurrentUser"));
+            SimpleMembershipProvider provider = (SimpleMembershipProvider)Membership.Provider;
+            int id = provider.GetUserIdFromOAuth(result.Provider, result.ProviderUserId);
+            */
+            int id = WebSecurity.GetUserId(User.Identity.Name);
+            return RedirectToAction("Index", new { u = id });
+
         }
 	}
 }
