@@ -6,6 +6,7 @@ using Radabite.Backend.Accessors;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using Radabite.Backend.Managers;
 
 namespace Radabite.Tests.Accessors
 {
@@ -36,6 +37,7 @@ namespace Radabite.Tests.Accessors
 		public void Setup()
 		{
 			ServiceManager.Kernel.Rebind<IFooCDNAccessor>().To<FooCDNAccessor>().InSingletonScope();
+			ServiceManager.Kernel.Rebind<IFooCDNManager>().To<FooCDNManager>().InSingletonScope();
 		}
 
 		[TestMethod]
@@ -120,14 +122,12 @@ namespace Radabite.Tests.Accessors
 		public void FooChainTest()
 		{
 			string originalString = "Testing the Foo chain";
+			byte[] testData = Encoding.ASCII.GetBytes(originalString);	
 
 			/* Creates a new blob, and puts text in it */
-			var createdBlob = ServiceManager.Kernel.Get<IFooCDNAccessor>().CreateBlob("text/plain").Value as string;
-			byte[] testData = Encoding.ASCII.GetBytes(originalString);
-			ServiceManager.Kernel.Get<IFooCDNAccessor>().Post(createdBlob, testData);
-
+			var result = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(testData, "text/plain", FooCDNAccessor.StorageType.MemCache);
+			var createdBlob = result.Value as string;
 			var getResult = ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(createdBlob, "text/plain");
-
 			string fooString = Encoding.ASCII.GetString(getResult.Value as byte[]);
 			Assert.AreEqual(fooString, originalString);
 

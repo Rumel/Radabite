@@ -1,4 +1,5 @@
-﻿using Radabite.Backend.Database;
+﻿using Radabite.Backend.Accessors;
+using Radabite.Backend.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace Radabite.Backend.Database
 
         public bool IsActive { get; set; }
 
+		public FooCDNAccessor.StorageType StorageLocation { get; set; }
+
         public virtual User Owner { get; set; }
 
         public virtual ICollection<Invitation> Guests { get; set; }
@@ -43,6 +46,7 @@ namespace Radabite.Backend.Database
                             Location = Location,
                             FinishedGettingPosts = FinishedGettingPosts,
                             IsActive = IsActive,
+							StorageLocation = StorageLocation,
                             OwnerId = Owner.Id,
                         };
 
@@ -77,6 +81,8 @@ namespace Radabite.Backend.Database
         public bool FinishedGettingPosts { get; set; }
 
         public bool IsActive { get; set; }
+
+		public FooCDNAccessor.StorageType StorageLocation { get; set; }
 
         public long OwnerId { get; set; }
 

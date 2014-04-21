@@ -9,6 +9,8 @@ namespace Radabite.Backend.Interfaces
 {
 	public interface IFooCDNManager
 	{
+		FooResponse SaveNewItem(byte[] data, string mimeType, FooCDNAccessor.StorageType storageType);
+
 		FooResponse Get(string blobID, string mediaType);
 
 		FooResponse GetInfo(string blobID);
