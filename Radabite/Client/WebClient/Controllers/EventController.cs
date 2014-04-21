@@ -11,8 +11,10 @@ using Radabite.Models;
 using System.Net.Http;
 using System.Text;
 using Radabite.Client.WebClient.Models;
-using WebMatrix.WebData;
-using System.Web.Security;
+//using WebMatrix.WebData;
+
+using Radabite.Backend.Helpers;
+using System.Configuration;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -156,6 +158,7 @@ namespace Radabite.Client.WebClient.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 IsActive = model.IsActive,
+				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
                 Owner = user
             };
 
@@ -310,6 +313,25 @@ namespace Radabite.Client.WebClient.Controllers
 
             return PartialView("_PostFeed", eventViewModel);
         }
+        
+		public bool FooCDNAlgorithm(string key)
+		{
+			try
+			{
+				if(key.Equals(ConfigurationManager.AppSettings["simplexKey"]))
+				{
+					FooSimplex simplex = new FooSimplex();
+					simplex.RunAlgorithm();
+					return true;
+				}
+			}
+			catch(Exception e)
+			{
+				System.Diagnostics.Debug.Print(e.Message);
+			}
+
+			return false;
+		}
         
         public ActionResult EventNotFound()
         {

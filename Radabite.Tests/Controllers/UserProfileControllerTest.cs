@@ -29,7 +29,7 @@ namespace Radabite.Tests.Controllers
         {
             UserProfileController controller = new UserProfileController();
 
-            ViewResult result = controller.Index("hello") as ViewResult;
+            ViewResult result = controller.Index(1) as ViewResult;
 
             Assert.IsNotNull(result);
         }
