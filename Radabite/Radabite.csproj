@@ -333,7 +333,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
-    <Content Include="Client\WebClient\Views\Shared\_DateTimeModal.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
       <SubType>Code</SubType>
