@@ -49,8 +49,24 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = "/feed/getphotos" });
             }
+        }
 
+        [Authorize]
+        public ActionResult GetTweets()
+        {
+            DateTime startDate = new DateTime(2014, 1, 01);
+            DateTime endDate = new DateTime(2014, 4, 1);
+            User user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+            var getResult = ServiceManager.Kernel.Get<ITwitterManager>().GetTweets(user, startDate, endDate);
 
+            if (getResult.hasErrors == false)
+            {
+                return View("Posts", getResult.posts);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = "/feed/getposts" });
+            }
 
         }
 

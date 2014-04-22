@@ -11,9 +11,9 @@ namespace Radabite.Backend.Managers
     public class TwitterManager : ITwitterManager
     {
 
-        public List<GetPostsResult> GetTweets(Radabite.Backend.Database.User user, DateTime startTime, DateTime endTime)
+        public GetPostsResult GetTweets(Radabite.Backend.Database.User user, DateTime startTime, DateTime endTime)
         {
-            return new List<GetPostsResult>();
+            return new GetPostsResult();
         }
 
     }

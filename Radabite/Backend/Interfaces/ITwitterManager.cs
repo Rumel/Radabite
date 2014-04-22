@@ -9,6 +9,6 @@ namespace Radabite.Backend.Interfaces
 {
     public interface ITwitterManager
     {
-        List<GetPostsResult> GetTweets(User user, DateTime startTime, DateTime endTime);
+        GetPostsResult GetTweets(User user, DateTime startTime, DateTime endTime);
     }
 }
