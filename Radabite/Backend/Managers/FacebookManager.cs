@@ -27,13 +27,13 @@ namespace Radabite.Backend.Managers
         const string badUserToken = "No Facebook access token found for user.";
 
         // http://facebooksdk.net/docs/making-asynchronous-requests/
-        public FacebookGetPostsResult GetPosts(User user, DateTime startTime, DateTime endTime) 
+        public GetPostsResult GetPosts(User user, DateTime startTime, DateTime endTime) 
         {
     
             double unixStartTime = ConvertToUnixTimestamp(startTime);
             double unixEndTime = ConvertToUnixTimestamp(endTime);
 
-            var result = new FacebookGetPostsResult();
+            var result = new GetPostsResult();
             if (!hasFacebookToken(user))
             {
                 result.hasErrors = true;
@@ -97,12 +97,12 @@ namespace Radabite.Backend.Managers
             return result;
         }
 
-        public FacebookGetPostsResult GetPhotos(User user, DateTime startTime, DateTime endTime)
+        public GetPostsResult GetPhotos(User user, DateTime startTime, DateTime endTime)
         {
             double unixStartTime = ConvertToUnixTimestamp(startTime);
             double unixEndTime = ConvertToUnixTimestamp(endTime);
 
-            var result = new FacebookGetPostsResult();
+            var result = new GetPostsResult();
             if (!hasFacebookToken(user))
             {
                 result.hasErrors = true;
