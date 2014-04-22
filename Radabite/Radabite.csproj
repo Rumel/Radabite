@@ -445,8 +445,6 @@
     <Content Include="Client\WebClient\Views\Account\Register.cshtml" />
     <Content Include="Client\WebClient\Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Client\WebClient\Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Client\WebClient\Views\Home\About.cshtml" />
-    <Content Include="Client\WebClient\Views\Home\Contact.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\Error.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_Layout.cshtml" />
