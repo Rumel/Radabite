@@ -20,7 +20,7 @@ namespace Radabite.Backend.Database
         public DbSet<UserProfile> UserProfiles { get; set; }
         
         public Db()
-            : base("DefaultConnection")
+            : base("Db")
         {
 
         }
