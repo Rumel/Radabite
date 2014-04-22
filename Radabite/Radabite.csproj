@@ -368,7 +368,6 @@
     <None Include="AppSettings.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_DateTimeModal.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
