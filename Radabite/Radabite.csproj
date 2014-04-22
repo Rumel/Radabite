@@ -365,9 +365,9 @@
     <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
-    <Content Include="AppSettings.config">
+    <None Include="AppSettings.config">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_DateTimeModal.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
