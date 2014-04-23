@@ -28,29 +28,38 @@
                 </div>
             </div>
         </div>
+        <br />
+        <div class="row">
+            <div class="medium-8 large-8 columns">
+                <input type="text" name="comment-content" placeholder="Comment on this post!" />
+            </div>
+        
+        
+            <div class="medium-4 large-4 columns">
+                <a onclick="ProcessComment(this,'@Url.Action("/CommentFromRadabite")', @post.Id)" href="#posts" class="radius button">Post</a>
+            </div>
+        </div>
     </div>
     
     foreach (var c in post.Comments)
     {
-        <div class="panel">
-            <div class="row">
-                <div class="large-9 medium-9 offset-3 columns">
-                    <div class ="row">
-                        <div class="large-3 medium-3 columns">
-                            <img style="border: 1px black solid" src="@c.From.PhotoLink" alt="" />
-                        </div>
-                        <div class="large-9 medium 9 columns">
-                            <p>
-                                <a href="/UserProfile?u=@c.From.Id">@c.From.DisplayName</a>
-                            </p>
-                            <p>@c.Message</p>
-                            <div class="row">
-                                <div class="large-3 medium-3 columns">
-                                    Likes: @c.Likes
-                                </div>
-                                <div class="large-9 medium-9 columns" style="direction:rtl">
-                                    Sent at: @c.SendTime
-                                </div>
+        <div class="row">
+            <div class="large-10 large-offset-2 medium-10 medium-offset-2 columns panel">
+                <div class ="row">
+                    <div class="large-3 medium-3 columns">
+                        <img style="border: 1px black solid" src="@c.From.PhotoLink" alt="" />
+                    </div>
+                    <div class="large-9 medium 9 columns">
+                        <p>
+                            <a href="/UserProfile?u=@c.From.Id">@c.From.DisplayName</a>
+                        </p>
+                        <p>@c.Message</p>
+                        <div class="row">
+                            <div class="large-3 medium-3 columns">
+                                Likes: @c.Likes
+                            </div>
+                            <div class="large-9 medium-9 columns" style="direction:rtl">
+                                Sent at: @c.SendTime
                             </div>
                         </div>
                     </div>
@@ -58,14 +67,4 @@
             </div>
         </div>
     }
-    <div class="panel">
-        <input type="text" name="comment-content" placeholder="Comment on this post!" />
-        
-        <div class="row">
-            <div class="medium-4 large-4 columns">
-                <a onclick="ProcessComment(this,'@Url.Action("/CommentFromRadabite")', @post.Id)" href="#posts" class="radius button">Post</a>
-            </div>
-        </div>
-    </div>
-
 }

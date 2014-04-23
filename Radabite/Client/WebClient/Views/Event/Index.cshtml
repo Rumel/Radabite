@@ -137,7 +137,7 @@
         var resultDiv = $($(a).attr('href'), container);
 
         console.log(pId);
-        var m = $('input[name="comment-content"]').val();
+        var m = $(a).parent().siblings().children('input[name="comment-content"]').val();
         var e = @Model.Id;
         var p = pId;
         var u = "@User.Identity.Name";
