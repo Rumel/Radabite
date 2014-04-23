@@ -309,7 +309,8 @@ namespace Radabite.Client.WebClient.Controllers
                 else if (ViewBag.ProviderDisplayName == "Twitter")
                 {
                         loginModel.TwitterToken = result.ExtraData["accesstoken"];
-                        loginModel.PersonName = result.ExtraData["name"];
+                        loginModel.PersonName = result.UserName;
+                        loginModel.TwitterUserName = result.UserName;
                    
                 }
 
@@ -366,7 +367,10 @@ namespace Radabite.Client.WebClient.Controllers
                             UserName = model.UserName,
                             Location = model.Location,
                             GoogleUserId = model.GoogleUserId,
-                            GoogleToken = model.GoogleToken
+                            GoogleToken = model.GoogleToken,
+                            TwitterToken = model.TwitterToken,
+                            TwitterUserName = model.TwitterUserName,
+
                         };
                         if (userData.FacebookToken != null) { 
                             string fbProfilePic = ServiceManager.Kernel.Get<IFacebookManager>().GetProfilePictureUrl(userData);

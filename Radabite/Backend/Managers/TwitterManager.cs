@@ -19,8 +19,8 @@ namespace Radabite.Backend.Managers
             {
                 
                 TwitterCredentials.SetCredentials(ConfigurationManager.AppSettings["twitterAccessToken"], ConfigurationManager.AppSettings["twitterAccessTokenSecret"], ConfigurationManager.AppSettings["twitterConsumerKey"], ConfigurationManager.AppSettings["twitterSecretKey"]);
-
-                var searchParameter = Search.GenerateSearchTweetParameter("from:ReesK5150");
+                var searchTerm = String.Format("from:{0}", user.TwitterUserName);
+                var searchParameter = Search.GenerateSearchTweetParameter(searchTerm);
                 var tweets = Search.SearchTweets(searchParameter);
                 IList<TweetModel> tweetList = new List<TweetModel>();
 
@@ -32,7 +32,7 @@ namespace Radabite.Backend.Managers
                     tweetModel.retweetsCount = tweet.RetweetCount;
                     tweetModel.favoritesCount = tweet.FavouriteCount;
                     tweetModel.created_time = tweet.CreatedAt;
-                    tweetList.Add(tweetModel); // w/ properties we want.
+                    tweetList.Add(tweetModel); 
                 }
 
                 var result = new GetPostsResult();

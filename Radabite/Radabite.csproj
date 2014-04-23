@@ -427,6 +427,7 @@
     <Content Include="Client\WebClient\Views\Event\_InvitationPanel.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_PostFeed.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_EventTable.cshtml" />
+    <Content Include="Client\WebClient\Views\Feed\Tweets.cshtml" />
     <None Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </None>
