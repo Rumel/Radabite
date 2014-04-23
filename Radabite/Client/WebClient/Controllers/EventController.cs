@@ -11,6 +11,8 @@ using Radabite.Models;
 using System.Net.Http;
 using System.Text;
 using Radabite.Client.WebClient.Models;
+//using WebMatrix.WebData;
+
 using Radabite.Backend.Helpers;
 using System.Configuration;
 
@@ -35,30 +37,47 @@ namespace Radabite.Client.WebClient.Controllers
                 return Redirect("Event/EventNotFound");                    
             }
                         
-            foreach(var i in eventRequest.Guests)
-            {
-                i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
-            }
-
-            foreach (var p in eventRequest.Posts)
-            {
-                p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
-            }
-            
             foreach(var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
             {
                 var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                 foreach (var p in postModel.posts)
                 {
-                    eventRequest.Posts.Add(new Post
+                    if (!(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
                     {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
+                        eventRequest.Posts.Add(new Post
+                        {
+                            Comments = new List<Post>(),
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime,
+                            ProviderId = p.providerId.ToString()
+                        });
+                    }
+                }
+
+                var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                foreach (var p in photoPostModel.posts)
+                {  
+                    if (p.fromId == Double.Parse(i.Guest.FacebookUserId) && !(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
+                    {
+                        var mime = "image/" + p.photoUrl.Split('.').Last();
+                        var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
+                        eventRequest.Posts.Add(new Post{
+                            Comments = new List<Post>(),
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime,
+                            BlobId = blobId.Value.ToString(),
+                            Mimetype = mime,
+                            ProviderId = p.providerId.ToString()
+                        });
+                    }
                 }
             }
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(eventRequest);
 
             var eventViewModel = new EventModel()
             {
@@ -80,6 +99,12 @@ namespace Radabite.Client.WebClient.Controllers
             eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
             return View(eventViewModel);
+        }
+
+        public FileContentResult GetImg(string blobId, string mimetype)
+        {
+            var response = ServiceManager.Kernel.Get<IFooCDNManager>().Get(blobId, mimetype);
+            return new FileContentResult(response.Value as byte[], mimetype);
         }
 
 		public ActionResult DiscoverEvent(string u)
@@ -157,7 +182,8 @@ namespace Radabite.Client.WebClient.Controllers
                 Description = model.Description,
                 IsActive = model.IsActive,
 				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
-                Owner = user
+                Owner = user,
+                Posts = new List<Post>()
             };
 
             ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
@@ -247,20 +273,33 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
-        public void RespondToInvitation(string userId, string eventId, string response)
+        public PartialViewResult RespondToInvitation(string userId, string eventId, string response)
         {
+            var u = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(userId));
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
             var r = ResponseType.WaitingReply;
+            
             if (response.Equals("Accept"))
+            {
                 r = ResponseType.Accepted;
+            }
             else if (response.Equals("Decline"))
+            {
                 r = ResponseType.Rejected;
+            }
 
             e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
 
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-            return;
+            var userModel = new UserModel
+            {
+                User = u,
+                UserId = u.Id.ToString(),
+                EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(u.Id)
+            };
+
+            return PartialView("_DiscoverInvitationList", userModel);
         }
 
         [HttpPost]
@@ -270,6 +309,7 @@ namespace Radabite.Client.WebClient.Controllers
             var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
             var newPost = new Post 
             {
+                Comments = new List<Post>(),
                 From = u,
                 FromId = u.Id,
                 Message = message,
@@ -285,28 +325,38 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(u, message);
             }
-
-
-            var dbPosts = e.Posts;
-            foreach (var i in e.Guests.Where(x => x.Response == ResponseType.Accepted))
+            
+            var eventViewModel = new EventModel
             {
-                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, e.StartTime, e.EndTime);
-                foreach (var p in postModel.posts)
-                {
-                    dbPosts.Add(new Post
-                    {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
-                }
-            }
+                Id = long.Parse(eventId),
+                Posts = e.Posts.OrderBy(p => p.SendTime).Reverse().ToList()
+            };
+
+            return PartialView("_PostFeed", eventViewModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult CommentFromRadabite(string eventId, string postId, string username, string message)
+        {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
+            var newComment = new Post
+            {
+                From = u,
+                FromId = u.Id,
+                Message = message,
+                SendTime = DateTime.Now,
+                Likes = 0
+            };
+
+            e.Posts.FirstOrDefault(x => x.Id == long.Parse(postId)).Comments.Add(newComment);
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
             var eventViewModel = new EventModel
             {
                 Id = long.Parse(eventId),
-                Posts = dbPosts.OrderBy(p => p.SendTime).Reverse().ToList()
+                Posts = e.Posts.OrderBy(p => p.SendTime).Reverse().ToList()
             };
 
             return PartialView("_PostFeed", eventViewModel);

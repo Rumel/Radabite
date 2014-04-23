@@ -39,5 +39,10 @@ namespace Radabite.Backend.Managers
             return ServiceManager.Kernel.Get<IEventAccessor>().GetByGuestId(guestId);
         }
 
+        public List<Post> GetCommentsById(long eventId, long postId)
+        {
+            return ServiceManager.Kernel.Get<IEventAccessor>().GetCommentsById(eventId, postId);
+        }
+
     }
 }
