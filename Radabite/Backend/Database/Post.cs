@@ -17,7 +17,7 @@ namespace Radabite.Backend.Database
 
         public DateTime SendTime { get; set; }
 
-        public long ProviderId { get; set; }
+        public string ProviderId { get; set; }
 
         public string BlobId { get; set; }
 

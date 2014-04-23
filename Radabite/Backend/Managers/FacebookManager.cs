@@ -78,6 +78,7 @@ namespace Radabite.Backend.Managers
                                 {
                                     FacebookPostModel post = new FacebookPostModel
                                     {
+                                        providerId = status.id,
                                         message = status.message,
                                         created_time = status.updated_time
                                     };

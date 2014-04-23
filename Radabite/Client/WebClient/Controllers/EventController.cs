@@ -52,19 +52,23 @@ namespace Radabite.Client.WebClient.Controllers
                 var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                 foreach (var p in postModel.posts)
                 {
-                    eventRequest.Posts.Add(new Post
+                    if (!(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
                     {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
+                        eventRequest.Posts.Add(new Post
+                        {
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime,
+                            ProviderId = p.providerId.ToString()
+                        });
+                    }
                 }
 
                 var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                 foreach (var p in photoPostModel.posts)
                 {  
-                    if (p.fromName == i.Guest.DisplayName)
+                    if (p.fromId == Double.Parse(i.Guest.FacebookUserId) && !(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
                     {
                         var mime = "image/" + p.photoUrl.Split('.').Last();
                         var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
@@ -74,11 +78,14 @@ namespace Radabite.Client.WebClient.Controllers
                             Message = p.message,
                             SendTime = p.created_time.DateTime,
                             BlobId = blobId.Value.ToString(),
-                            Mimetype = mime
+                            Mimetype = mime,
+                            ProviderId = p.providerId.ToString()
                         });
                     }
                 }
             }
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(eventRequest);
 
             var eventViewModel = new EventModel()
             {
