@@ -13,7 +13,5 @@ namespace Radabite.Backend.Interfaces
         List<Event> GetByOwnerId(long ownerId);
 
         List<Event> GetByGuestId(long guestId);
-
-        List<Post> GetCommentsById(long eventId, long postId);
     }
 }

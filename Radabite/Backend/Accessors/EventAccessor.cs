@@ -98,14 +98,6 @@ namespace Radabite.Backend.Accessors
             }
         }
 
-        public List<Post> GetCommentsById(long eventId, long postId)
-        {
-            using (var db = new Db())
-            {
-                return db.Events.FirstOrDefault(x => x.Id == eventId).Posts.FirstOrDefault(x => x.Id == postId).Comments;
-            }
-        }
-
         public Event GetById(long id)
         {
             using (var db = new Db())
