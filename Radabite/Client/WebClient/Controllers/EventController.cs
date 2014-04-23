@@ -37,16 +37,6 @@ namespace Radabite.Client.WebClient.Controllers
                 return Redirect("Event/EventNotFound");                    
             }
                         
-            foreach(var i in eventRequest.Guests)
-            {
-                i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
-            }
-
-            foreach (var p in eventRequest.Posts)
-            {
-                p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
-            }
-            
             foreach(var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
             {
                 var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
@@ -56,6 +46,7 @@ namespace Radabite.Client.WebClient.Controllers
                     {
                         eventRequest.Posts.Add(new Post
                         {
+                            Comments = new List<Post>(),
                             From = i.Guest,
                             FromId = i.GuestId,
                             Message = p.message,
@@ -73,6 +64,7 @@ namespace Radabite.Client.WebClient.Controllers
                         var mime = "image/" + p.photoUrl.Split('.').Last();
                         var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
                         eventRequest.Posts.Add(new Post{
+                            Comments = new List<Post>(),
                             From = i.Guest,
                             FromId = i.GuestId,
                             Message = p.message,
@@ -317,6 +309,7 @@ namespace Radabite.Client.WebClient.Controllers
             var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
             var newPost = new Post 
             {
+                Comments = new List<Post>(),
                 From = u,
                 FromId = u.Id,
                 Message = message,
@@ -332,33 +325,43 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(u, message);
             }
-
-
-            var dbPosts = e.Posts;
-            foreach (var i in e.Guests.Where(x => x.Response == ResponseType.Accepted))
-            {
-                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, e.StartTime, e.EndTime);
-                foreach (var p in postModel.posts)
-                {
-                    dbPosts.Add(new Post
-                    {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
-                }
-            }
-
+            
             var eventViewModel = new EventModel
             {
                 Id = long.Parse(eventId),
-                Posts = dbPosts.OrderBy(p => p.SendTime).Reverse().ToList()
+                Posts = e.Posts.OrderBy(p => p.SendTime).Reverse().ToList()
             };
 
             return PartialView("_PostFeed", eventViewModel);
         }
-        
+
+        [HttpPost]
+        public PartialViewResult CommentFromRadabite(string eventId, string postId, string username, string message)
+        {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+            var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
+            var newComment = new Post
+            {
+                From = u,
+                FromId = u.Id,
+                Message = message,
+                SendTime = DateTime.Now,
+                Likes = 0
+            };
+
+            e.Posts.FirstOrDefault(x => x.Id == long.Parse(postId)).Comments.Add(newComment);
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+            var eventViewModel = new EventModel
+            {
+                Id = long.Parse(eventId),
+                Posts = e.Posts.OrderBy(p => p.SendTime).Reverse().ToList()
+            };
+
+            return PartialView("_PostFeed", eventViewModel);
+        }
+
 		public bool FooCDNAlgorithm(string key)
 		{
 			try
