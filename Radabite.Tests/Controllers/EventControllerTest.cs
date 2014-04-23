@@ -47,7 +47,12 @@ namespace Radabite.Tests.Controllers
         {
             EventController controller = new EventController();
 
-            ViewResult result = controller.Index(123) as ViewResult;
+			var mock = new Mock<ControllerContext>();
+			mock.SetupGet(x => x.HttpContext.User.Identity.Name).Returns("Bob");
+			mock.SetupGet(x => x.HttpContext.Request.IsAuthenticated).Returns(true);
+			controller.ControllerContext = mock.Object;
+
+			ViewResult result = controller.Index(123) as ViewResult;
 
             Assert.IsNotNull(result);
         }

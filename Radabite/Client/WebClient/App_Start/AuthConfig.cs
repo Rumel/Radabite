@@ -6,6 +6,7 @@ using Microsoft.Web.WebPages.OAuth;
 using Radabite.Backend.Database;
 using System.Configuration;
 using DotNetOpenAuth.FacebookOAuth2;
+using DotNetOpenAuth.GoogleOAuth2;
 
 namespace Radabite
 {
@@ -27,7 +28,7 @@ namespace Radabite
             //https://github.com/mj1856/DotNetOpenAuth.FacebookOAuth2
             var facebookAppId = ConfigurationManager.AppSettings["facebookAppId"];
             var facebookAppSecret = ConfigurationManager.AppSettings["facebookAppSecret"];
-            var client = new FacebookOAuth2Client(facebookAppId, facebookAppSecret, "read_stream", "publish_actions", "publish_stream");
+            var client = new FacebookOAuth2Client(facebookAppId, facebookAppSecret, "read_stream", "publish_actions", "publish_stream", "user_photos", "user_location");
             var extraData = new Dictionary<string, object>();
             //extraData.Add("read_stream", "read_stream");
             //string[] scope = new string[] {"read_stream"};
@@ -38,7 +39,14 @@ namespace Radabite
                 appId: ConfigurationManager.AppSettings["facebookAppId"],
                 appSecret: ConfigurationManager.AppSettings["facebookAppSecret"]);
             */
-            //OAuthWebSecurity.RegisterGoogleClient();
+         //   OAuthWebSecurity.RegisterGoogleClient();
+
+            var googleClientId = ConfigurationManager.AppSettings["googleClientId"];
+            var googleClientSecret = ConfigurationManager.AppSettings["googleClientSecret"];
+            var googleClient = new GoogleOAuth2Client(googleClientId, googleClientSecret);
+            var googleExtraData = new Dictionary<string, object>();
+            OAuthWebSecurity.RegisterClient(googleClient, "Google", extraData);
+
         }
     }
 }

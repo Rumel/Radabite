@@ -17,15 +17,30 @@
 
 <div class="row">
     <div class="large-4 medium-4 columns">
+        @if (Model.User.PhotoLink == null) 
+        { 
+        <div style="width:302px;height:300px;border:1px black solid">
+                <img src="http://baconmockup.com/302/300" alt="" />
+        </div>
+        } else {
         <div>
             <img style="border: 1px black solid" src="@Model.User.PhotoLink" alt="" />
         </div>
+        }
         <div class="panel">
             <p>
+                @if (Model.User.DisplayName != null)
+                { 
                 <span>Name: @Model.User.DisplayName</span>
+                }
+                else { 
+                <span>Name: @Model.User.UserName</span>
+                }
                 <br />
-                <span>Location: Test Location</span>
-                <br />
+                @if (Model.User.Location != null && Model.User.Location != "") { 
+                    <span>Location: @Model.User.Location</span>
+                    <br />
+                }
                 <span>Gender: @Model.User.Gender</span>
             </p>
         </div>

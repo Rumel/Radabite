@@ -7,12 +7,16 @@
 <div class="panel">
     <div class ="row">
         <div class="large-3 medium-3 columns">
-            <img src="@post.From.PhotoLink" alt="" />
+            <img style="border: 1px black solid" src="@post.From.PhotoLink" alt="" />
         </div>
         <div class="large-9 medium 9 columns">
             <p>
-                <a href="/UserProfile?u=@post.From.UserName">@post.From.DisplayName</a>
+                <a href="/UserProfile?u=@post.From.Id">@post.From.DisplayName</a>
             </p>
+            @if (post.BlobId != null)
+            {
+                <img style="border: 1px black solid" src="@Url.Action("getImg", "Event", new { blobId = post.BlobId, mimetype = post.Mimetype })" alt="Post Image" />
+            }
             <p>@post.Message</p>
             <div class="row">
                 <div class="large-3 medium-3 columns">

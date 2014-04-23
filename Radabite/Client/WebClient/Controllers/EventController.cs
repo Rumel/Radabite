@@ -11,6 +11,10 @@ using Radabite.Models;
 using System.Net.Http;
 using System.Text;
 using Radabite.Client.WebClient.Models;
+//using WebMatrix.WebData;
+
+using Radabite.Backend.Helpers;
+using System.Configuration;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -48,15 +52,40 @@ namespace Radabite.Client.WebClient.Controllers
                 var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                 foreach (var p in postModel.posts)
                 {
-                    eventRequest.Posts.Add(new Post
+                    if (!(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
                     {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
+                        eventRequest.Posts.Add(new Post
+                        {
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime,
+                            ProviderId = p.providerId.ToString()
+                        });
+                    }
+                }
+
+                var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                foreach (var p in photoPostModel.posts)
+                {  
+                    if (p.fromId == Double.Parse(i.Guest.FacebookUserId) && !(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
+                    {
+                        var mime = "image/" + p.photoUrl.Split('.').Last();
+                        var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
+                        eventRequest.Posts.Add(new Post{
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime,
+                            BlobId = blobId.Value.ToString(),
+                            Mimetype = mime,
+                            ProviderId = p.providerId.ToString()
+                        });
+                    }
                 }
             }
+
+            ServiceManager.Kernel.Get<IEventManager>().Save(eventRequest);
 
             var eventViewModel = new EventModel()
             {
@@ -78,6 +107,12 @@ namespace Radabite.Client.WebClient.Controllers
             eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
             return View(eventViewModel);
+        }
+
+        public FileContentResult GetImg(string blobId, string mimetype)
+        {
+            var response = ServiceManager.Kernel.Get<IFooCDNManager>().Get(blobId, mimetype);
+            return new FileContentResult(response.Value as byte[], mimetype);
         }
 
 		public ActionResult DiscoverEvent(string u)
@@ -154,7 +189,9 @@ namespace Radabite.Client.WebClient.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 IsActive = model.IsActive,
-                Owner = user
+				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
+                Owner = user,
+                Posts = new List<Post>()
             };
 
             ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
@@ -321,6 +358,25 @@ namespace Radabite.Client.WebClient.Controllers
 
             return PartialView("_PostFeed", eventViewModel);
         }
+        
+		public bool FooCDNAlgorithm(string key)
+		{
+			try
+			{
+				if(key.Equals(ConfigurationManager.AppSettings["simplexKey"]))
+				{
+					FooSimplex simplex = new FooSimplex();
+					simplex.RunAlgorithm();
+					return true;
+				}
+			}
+			catch(Exception e)
+			{
+				System.Diagnostics.Debug.Print(e.Message);
+			}
+
+			return false;
+		}
         
         public ActionResult EventNotFound()
         {

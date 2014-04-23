@@ -9,11 +9,45 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using RadabiteServiceManager;
 using Ninject;
+using System.Net;
 
 namespace Radabite.Backend.Managers
 {
 	public class FooCDNManager : IFooCDNManager
 	{
+		public FooResponse SaveNewItem(byte[] data, string mimeType, FooCDNAccessor.StorageType storageType)
+		{
+			FooResponse created = CreateBlob(mimeType);
+
+			if(created.StatusCode == HttpStatusCode.OK)
+			{
+				string blobId = created.Value as string;
+
+				FooResponse postResult = Post(created.Value as string, data);
+				if(postResult.StatusCode == HttpStatusCode.Created)
+				{
+					FooResponse putResult = Put(blobId, storageType);
+					if(putResult.StatusCode == HttpStatusCode.NoContent)
+					{
+						//create result has the blobId
+						return created;
+					}
+					else
+					{
+						return putResult;
+					}
+				}
+				else
+				{
+					return postResult;
+				}
+			}
+			else
+			{
+				return created;
+			}
+		}
+
 		public FooResponse Get(string blobID, string mediaType)
 		{
 			return ServiceManager.Kernel.Get<IFooCDNAccessor>().Get(blobID, mediaType);

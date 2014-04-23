@@ -18,11 +18,13 @@ else
 
         @foreach (AuthenticationClientData p in Model)
         {
+            if (p.AuthenticationClient.ProviderName != "google") {
             <div class="large-6 columns">
                 <div class="panel" style="text-align:center;">
                     <button class="zocial @p.AuthenticationClient.ProviderName.ToLower()" type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="Log in using your @p.DisplayName account">@p.DisplayName</button>
                 </div> 
             </div>
+            }
         }
 
     </div>
