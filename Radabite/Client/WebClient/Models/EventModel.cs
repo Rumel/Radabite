@@ -36,7 +36,7 @@ namespace Radabite.Models
 
         public User CurrentUser { get; set; }
         
-        public List<MediaPost> Posts { get; set; }
+        public List<Post> Posts { get; set; }
 
         public List<Invitation> Guests { get; set; }
 

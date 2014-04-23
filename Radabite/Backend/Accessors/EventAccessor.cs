@@ -58,20 +58,6 @@ namespace Radabite.Backend.Accessors
                         }
                     }
 
-                    if (e.MediaPosts != null)
-                    {
-                        foreach (var p in e.MediaPosts)
-                        {
-                            if (p.Id == 0)
-                            {
-                                p.From = db.Users.FirstOrDefault(x => x.Id == p.From.Id);
-                                ev.MediaPosts.Add(p);
-                                db.Entry<MediaPost>(p).State = EntityState.Added;
-                                db.Entry<User>(p.From).State = EntityState.Modified;
-                            }
-                        }
-                    }
-
                     db.Entry<Event>(ev).State = EntityState.Modified;
                     db.Entry<User>(ev.Owner).State = EntityState.Unchanged;
                 } 
@@ -94,7 +80,6 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
                                 .Include(e => e.Posts)
-                                .Include(e => e.MediaPosts)
                                 .ToList();
             }
         }
@@ -108,7 +93,6 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
                                 .Include(e => e.Posts)
-                                .Include(e => e.MediaPosts)
                                 .FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
         }
@@ -121,7 +105,6 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
                                 .Include(e => e.Posts)
-                                .Include(e => e.MediaPosts)
                                 .Where(x => x.Owner.Id == OwnerId && x.IsActive == true)
                                 .ToList();
             }
@@ -135,7 +118,6 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Owner)
                                 .Include(e => e.Guests)
                                 .Include(e => e.Posts)
-                                .Include(e => e.MediaPosts)
                                 .Where(x => x.Guests.Where(y => y.Guest.Id == GuestId).Count() > 0 && x.IsActive == true)
                                 .ToList();
             }

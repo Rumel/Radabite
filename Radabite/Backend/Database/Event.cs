@@ -33,8 +33,6 @@ namespace Radabite.Backend.Database
 
         public virtual ICollection<Post> Posts { get; set; }
 
-        public virtual ICollection<MediaPost> MediaPosts { get; set; }
-
         public EventJson ToJson()
         {
             var ej = new EventJson

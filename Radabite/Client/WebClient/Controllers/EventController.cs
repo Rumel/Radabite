@@ -63,14 +63,18 @@ namespace Radabite.Client.WebClient.Controllers
 
                 var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                 foreach (var p in photoPostModel.posts)
-                {
+                {  
                     if (p.fromName == i.Guest.DisplayName)
-                    {  
+                    {
+                        var mime = "image/" + p.photoUrl.Split('.').Last();
+                        var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
                         eventRequest.Posts.Add(new Post{
                             From = i.Guest,
                             FromId = i.GuestId,
                             Message = p.message,
-                            SendTime = p.created_time.DateTime
+                            SendTime = p.created_time.DateTime,
+                            BlobId = blobId.Value.ToString(),
+                            Mimetype = mime
                         });
                     }
                 }
@@ -96,6 +100,12 @@ namespace Radabite.Client.WebClient.Controllers
             eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
             return View(eventViewModel);
+        }
+
+        public FileContentResult GetImg(string blobId, string mimetype)
+        {
+            var response = ServiceManager.Kernel.Get<IFooCDNManager>().Get(blobId, mimetype);
+            return new FileContentResult(response.Value as byte[], mimetype);
         }
 
 		public ActionResult DiscoverEvent(string u)
