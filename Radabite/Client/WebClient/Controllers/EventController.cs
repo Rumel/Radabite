@@ -60,6 +60,20 @@ namespace Radabite.Client.WebClient.Controllers
                         SendTime = p.created_time.DateTime
                     });
                 }
+
+                var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                foreach (var p in photoPostModel.posts)
+                {
+                    if (p.fromName == i.Guest.DisplayName)
+                    {  
+                        eventRequest.Posts.Add(new Post{
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime
+                        });
+                    }
+                }
             }
 
             var eventViewModel = new EventModel()
@@ -159,7 +173,8 @@ namespace Radabite.Client.WebClient.Controllers
                 Description = model.Description,
                 IsActive = model.IsActive,
 				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
-                Owner = user
+                Owner = user,
+                Posts = new List<Post>()
             };
 
             ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);

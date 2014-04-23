@@ -16,5 +16,9 @@ namespace Radabite.Backend.Database
         public int Likes { get; set; }
 
         public DateTime SendTime { get; set; }
+
+        public long ProviderId { get; set; }
+
+        public string BlobId { get; set; }
     }
 }
