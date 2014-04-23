@@ -29,6 +29,10 @@ namespace Radabite.Backend.Database
 
         public virtual User Owner { get; set; }
 
+		public bool PollIsActive { get; set; }
+
+		public virtual ICollection<Vote> Votes { get; set; }
+
         public virtual ICollection<Invitation> Guests { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }

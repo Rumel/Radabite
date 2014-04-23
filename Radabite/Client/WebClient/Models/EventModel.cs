@@ -40,6 +40,10 @@ namespace Radabite.Models
 
         public List<Invitation> Guests { get; set; }
 
+		public List<Vote> Votes { get; set; }
+
+		public bool PollIsActive { get; set; }
+
         public EventModel()
         {
             IsActive = true;

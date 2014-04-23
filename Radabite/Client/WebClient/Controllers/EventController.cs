@@ -18,71 +18,73 @@ using System.Configuration;
 
 namespace Radabite.Client.WebClient.Controllers
 {
-    public class EventController : Controller
-    {
+	public class EventController : Controller
+	{
 
-        //
-        // GET: /Event/
-        public ActionResult Index(long eventId)
-        {
-            ViewBag.Message = "Event " + eventId.ToString();
-            ViewBag.eventId = eventId;
+		//
+		// GET: /Event/
+		public ActionResult Index(long eventId)
+		{
+			ViewBag.Message = "Event " + eventId.ToString();
+			ViewBag.eventId = eventId;
 
-            var currentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+			var currentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
 
-            var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+			var eventRequest = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
 
-            if (eventRequest == null)
-            {
-                return Redirect("Event/EventNotFound");                    
-            }
-                        
-            foreach(var i in eventRequest.Guests)
-            {
-                i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
-            }
+			if (eventRequest == null)
+			{
+				return Redirect("Event/EventNotFound");
+			}
 
-            foreach (var p in eventRequest.Posts)
-            {
-                p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
-            }
-            
-            foreach(var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
-            {
-                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
-                foreach (var p in postModel.posts)
-                {
-                    eventRequest.Posts.Add(new Post
-                    {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
-                }
-            }
+			foreach (var i in eventRequest.Guests)
+			{
+				i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
+			}
 
-            var eventViewModel = new EventModel()
-            {
-                Id = eventRequest.Id,
-                Title = eventRequest.Title,
-                StartTime = eventRequest.StartTime,
-                EndTime = eventRequest.EndTime,
-                IsPrivate = eventRequest.IsPrivate,
-                Description = eventRequest.Description,
-                LocationName = eventRequest.Location.LocationName,
-                Latitude = eventRequest.Location.Latitude,
-                Longitude = eventRequest.Location.Longitude,
-                Posts = eventRequest.Posts.OrderBy(p => p.SendTime).Reverse().ToList(),
-                Owner = eventRequest.Owner,
-                CurrentUser = currentUser,
-                Guests = eventRequest.Guests.ToList()
-            };
+			foreach (var p in eventRequest.Posts)
+			{
+				p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
+			}
 
-            eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
+			foreach (var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
+			{
+				var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+				foreach (var p in postModel.posts)
+				{
+					eventRequest.Posts.Add(new Post
+					{
+						From = i.Guest,
+						FromId = i.GuestId,
+						Message = p.message,
+						SendTime = p.created_time.DateTime
+					});
+				}
+			}
 
-            return View(eventViewModel);
-        }
+			var eventViewModel = new EventModel()
+			{
+				Id = eventRequest.Id,
+				Title = eventRequest.Title,
+				StartTime = eventRequest.StartTime,
+				EndTime = eventRequest.EndTime,
+				IsPrivate = eventRequest.IsPrivate,
+				Description = eventRequest.Description,
+				LocationName = eventRequest.Location.LocationName,
+				Latitude = eventRequest.Location.Latitude,
+				Longitude = eventRequest.Location.Longitude,
+				Posts = eventRequest.Posts.OrderBy(p => p.SendTime).Reverse().ToList(),
+				Owner = eventRequest.Owner,
+				CurrentUser = currentUser,
+				Guests = eventRequest.Guests.ToList(),
+				PollIsActive = eventRequest.PollIsActive,
+				Votes = eventRequest.Votes.ToList()
+			};
+
+			eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
+
+			return View(eventViewModel);
+		}
 
 		public ActionResult DiscoverEvent(string u)
 		{
@@ -90,81 +92,82 @@ namespace Radabite.Client.WebClient.Controllers
 
 			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(u);
 
-            var userModel = new UserModel
-            {
-                User = user
-            };
+			var userModel = new UserModel
+			{
+				User = user
+			};
 
-            userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
+			userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
+			userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
 
-            userModel.EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(user.Id);
-            
+			userModel.EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(user.Id);
+
 			return View(userModel);
 		}
 
-        [HttpPost]
-        public RedirectToRouteResult Delete(EventModel model)
-        {
-            var newEvent = new Event()
-            {
-                Id = model.Id,
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
-                Location = new Location()
-                {
-                    LocationName = model.LocationName,
-                    Latitude = model.Latitude,
-                    Longitude = model.Longitude
-                },
-                IsPrivate = model.IsPrivate,
-                Title = model.Title,
-                Description = model.Description,
-                // Soft delete entry
-                IsActive = false,
-                Owner = model.Owner
-            };
+		[HttpPost]
+		public RedirectToRouteResult Delete(EventModel model)
+		{
+			var newEvent = new Event()
+			{
+				Id = model.Id,
+				StartTime = new DateTime(model.StartTime.Ticks),
+				EndTime = new DateTime(model.EndTime.Ticks),
+				Location = new Location()
+				{
+					LocationName = model.LocationName,
+					Latitude = model.Latitude,
+					Longitude = model.Longitude
+				},
+				IsPrivate = model.IsPrivate,
+				Title = model.Title,
+				Description = model.Description,
+				// Soft delete entry
+				IsActive = false,
+				Owner = model.Owner
+			};
 
-            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+			var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-            if (result.Success)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
+			if (result.Success)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+				throw new Exception();
+			}
+		}
 
-        [HttpPost]
-        [Authorize]
-        public RedirectToRouteResult Create(EventModel model)
-        {
-            var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
+		[HttpPost]
+		[Authorize]
+		public RedirectToRouteResult Create(EventModel model)
+		{
+			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name);
 
-            var newEvent = new Event()
-            {
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
-                Location = new Location()
-                {
-                    LocationName = model.LocationName,
-                    Latitude = model.Latitude,
-                    Longitude = model.Longitude
-                },
-                IsPrivate = model.IsPrivate,
-                Title = model.Title,
-                Description = model.Description,
-                IsActive = model.IsActive,
+			var newEvent = new Event()
+			{
+				StartTime = new DateTime(model.StartTime.Ticks),
+				EndTime = new DateTime(model.EndTime.Ticks),
+				Location = new Location()
+				{
+					LocationName = model.LocationName,
+					Latitude = model.Latitude,
+					Longitude = model.Longitude
+				},
+				IsPrivate = model.IsPrivate,
+				Title = model.Title,
+				Description = model.Description,
+				IsActive = model.IsActive,
 				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
-                Owner = user
-            };
+				PollIsActive = model.PollIsActive,
+				Owner = user
+			};
 
-            ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+			ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-            newEvent.Guests = new List<Invitation>()
+			newEvent.Guests = new List<Invitation>()
             {
                 new Invitation
                 {
@@ -174,168 +177,195 @@ namespace Radabite.Client.WebClient.Controllers
                 }
             };
 
-            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+			ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-            if (model.ToFacebook)
-            {
-                ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, "Hey guys, I just created an event on Radabite at http://localhost:3000/Event?eventId=" + result.Result.Id + ", make sure to check it out!");
-            }
+			newEvent.Votes = new List<Vote>()
+			{
+				new Vote
+				{
+					Time = new DateTime(model.StartTime.Ticks),
+					UserName = user.DisplayName
+				}
+			};
 
-            if (result.Success)
-            {
-                return RedirectToAction("Index", new { eventId = result.Result.Id });
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
+			var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-        [HttpPost]
-        public RedirectToRouteResult Update(EventModel model)
-        {
-            var newEvent = new Event()
-            {
-                Id = model.Id,
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
-                Location = new Location()
-                {
-                    LocationName = model.LocationName,
-                    Latitude = model.Latitude,
-                    Longitude = model.Longitude
-                },
-                IsPrivate = model.IsPrivate,
-                Title = model.Title,
-                Description = model.Description,
-                IsActive = model.IsActive,
-                Owner = model.Owner
-            };
+			if (model.ToFacebook)
+			{
+				ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, "Hey guys, I just created an event on Radabite at http://localhost:3000/Event?eventId=" + result.Result.Id + ", make sure to check it out!");
+			}
 
-            var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+			if (result.Success)
+			{
+				return RedirectToAction("Index", new { eventId = result.Result.Id });
+			}
+			else
+			{
+				throw new Exception();
+			}
+		}
 
-            if (result.Success)
-            {
-                return RedirectToAction("Index", new { eventId = result.Result.Id });
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
+		[HttpPost]
+		public RedirectToRouteResult Update(EventModel model)
+		{
+			var newEvent = new Event()
+			{
+				Id = model.Id,
+				StartTime = new DateTime(model.StartTime.Ticks),
+				EndTime = new DateTime(model.EndTime.Ticks),
+				Location = new Location()
+				{
+					LocationName = model.LocationName,
+					Latitude = model.Latitude,
+					Longitude = model.Longitude
+				},
+				IsPrivate = model.IsPrivate,
+				Title = model.Title,
+				Description = model.Description,
+				IsActive = model.IsActive,
+				PollIsActive = model.PollIsActive,
+				Owner = model.Owner
+			};
 
-        [HttpPost]
-        public PartialViewResult Invite(List<String> friends, long eventId)
-        {
-            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
-            foreach (var f in friends)
-            {
-                e.Guests.Add(new Invitation 
-                {
-                    Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
-                    GuestId = long.Parse(f),
-                    Response = ResponseType.WaitingReply
-                });
-            }
-            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+			var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
-            var eventModel = new EventModel
-            {
-                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
-                Guests = e.Guests.ToList()
-            };
+			if (result.Success)
+			{
+				return RedirectToAction("Index", new { eventId = result.Result.Id });
+			}
+			else
+			{
+				throw new Exception();
+			}
+		}
 
-            return PartialView("_InvitationPanel", eventModel);
-        }
+		[HttpPost]
+		public PartialViewResult Invite(List<String> friends, long eventId)
+		{
+			var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+			foreach (var f in friends)
+			{
+				e.Guests.Add(new Invitation
+				{
+					Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
+					GuestId = long.Parse(f),
+					Response = ResponseType.WaitingReply
+				});
+			}
+			ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-        [HttpPost]
-        public void RespondToInvitation(string userId, string eventId, string response)
-        {
-            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
-            var r = ResponseType.WaitingReply;
-            if (response.Equals("Accept"))
-                r = ResponseType.Accepted;
-            else if (response.Equals("Decline"))
-                r = ResponseType.Rejected;
+			var eventModel = new EventModel
+			{
+				CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
+				Guests = e.Guests.ToList()
+			};
 
-            e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
+			return PartialView("_InvitationPanel", eventModel);
+		}
 
-            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+		[HttpPost]
+		public void RespondToInvitation(string userId, string eventId, string response)
+		{
+			var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+			var r = ResponseType.WaitingReply;
+			if (response.Equals("Accept"))
+				r = ResponseType.Accepted;
+			else if (response.Equals("Decline"))
+				r = ResponseType.Rejected;
 
-            return;
-        }
+			e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
 
-        [HttpPost]
-        public PartialViewResult PostFromRadabite(string eventId, string username, string message, bool toFacebook)
-        {
-            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
-            var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
-            var newPost = new Post 
-            {
-                From = u,
-                FromId = u.Id,
-                Message = message,
-                SendTime = DateTime.Now,
-                Likes = 0
-            };
-            
-            e.Posts.Add(newPost);
-            
-            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+			ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-            if (toFacebook)
-            {
-                ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(u, message);
-            }
+			return;
+		}
+
+		[HttpPost]
+		public PartialViewResult PostFromRadabite(string eventId, string username, string message, bool toFacebook)
+		{
+			var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+			var u = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
+			var newPost = new Post
+			{
+				From = u,
+				FromId = u.Id,
+				Message = message,
+				SendTime = DateTime.Now,
+				Likes = 0
+			};
+
+			e.Posts.Add(newPost);
+
+			ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+			if (toFacebook)
+			{
+				ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(u, message);
+			}
 
 
-            var dbPosts = e.Posts;
-            foreach (var i in e.Guests.Where(x => x.Response == ResponseType.Accepted))
-            {
-                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, e.StartTime, e.EndTime);
-                foreach (var p in postModel.posts)
-                {
-                    dbPosts.Add(new Post
-                    {
-                        From = i.Guest,
-                        FromId = i.GuestId,
-                        Message = p.message,
-                        SendTime = p.created_time.DateTime
-                    });
-                }
-            }
+			var dbPosts = e.Posts;
+			foreach (var i in e.Guests.Where(x => x.Response == ResponseType.Accepted))
+			{
+				var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, e.StartTime, e.EndTime);
+				foreach (var p in postModel.posts)
+				{
+					dbPosts.Add(new Post
+					{
+						From = i.Guest,
+						FromId = i.GuestId,
+						Message = p.message,
+						SendTime = p.created_time.DateTime
+					});
+				}
+			}
 
-            var eventViewModel = new EventModel
-            {
-                Id = long.Parse(eventId),
-                Posts = dbPosts.OrderBy(p => p.SendTime).Reverse().ToList()
-            };
+			var eventViewModel = new EventModel
+			{
+				Id = long.Parse(eventId),
+				Posts = dbPosts.OrderBy(p => p.SendTime).Reverse().ToList()
+			};
 
-            return PartialView("_PostFeed", eventViewModel);
-        }
-        
+			return PartialView("_PostFeed", eventViewModel);
+		}
+
+		[HttpPost]
+		public PartialViewResult Vote(string eventId, string username, string vote)
+		{
+			var mEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
+			DateTime dt = Convert.ToDateTime(vote);
+
+
+			mEvent.Votes.Add(new Vote() { Time = dt, UserName = user.DisplayName });
+
+			ServiceManager.Kernel.Get<IEventManager>().Save(mEvent);
+
+			return PartialView("_PollPartial", mEvent);
+		}
+
 		public bool FooCDNAlgorithm(string key)
 		{
 			try
 			{
-				if(key.Equals(ConfigurationManager.AppSettings["simplexKey"]))
+				if (key.Equals(ConfigurationManager.AppSettings["simplexKey"]))
 				{
 					FooSimplex simplex = new FooSimplex();
 					simplex.RunAlgorithm();
 					return true;
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				System.Diagnostics.Debug.Print(e.Message);
 			}
 
 			return false;
 		}
-        
-        public ActionResult EventNotFound()
-        {
-            return View();
-        }
-    }
+
+		public ActionResult EventNotFound()
+		{
+			return View();
+		}
+	}
 }

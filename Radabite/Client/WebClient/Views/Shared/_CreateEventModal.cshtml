@@ -104,27 +104,29 @@
 				@Html.TextBoxFor(m => m.EndTime, new { id = "endTimeInput" })
 				@Html.ValidationMessageFor(m => m.EndTime)
 			</div>
-
-			@*Not used yet
-				<div class="medium-2 columns">
-					<a class="radius button" data-reveal-id="CreateEvent-PollModal" href="#">Poll</a>
-				</div>*@
-
 			<div class="medium-4 columns">
 				<a class="radius button" data-reveal-id="CreateEvent-CalendarModal" href="#">Cal</a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="large-12 columns">
-                Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, new { @checked = "checked" })
-                Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
+				Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, new { @checked = "checked" })
+				Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true)
 			</div>
 		</div>
-        <div class="row">
-            <div class="large-12 columns">
-                @Html.CheckBoxFor(m => m.ToFacebook, true) Make a post to Facebook inviting friends to your event?
-            </div>
-        </div>
+		<div class="row">
+			<div class="large-12 columns">
+				Use a poll to pick times
+				@{Model.PollIsActive = true;}
+				Yes: @Html.RadioButtonFor(m => m.PollIsActive, true)
+				No: @Html.RadioButtonFor(m => m.PollIsActive, false)
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				@Html.CheckBoxFor(m => m.ToFacebook, true) Make a post to Facebook inviting friends to your event?
+			</div>
+		</div>
 		<input type="submit" value="Create" id="CreateSubmitButton">
 		<a class="close-reveal-modal">&#215;</a>
 
