@@ -240,7 +240,6 @@
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
-    <Compile Include="Backend\Database\MediaPost.cs" />
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
@@ -471,6 +470,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Client\WebClient\App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
