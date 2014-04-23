@@ -34,7 +34,8 @@ namespace Radabite.Tests.Mocks.Accessors
 				},
 				IsActive = true,
 				Guests = new List<Invitation>(),
-				Posts = new List<Post>()
+				Posts = new List<Post>(),
+				Votes = new List<Vote>()
 			};
 		}
 
