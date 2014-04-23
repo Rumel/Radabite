@@ -9,6 +9,6 @@ namespace Radabite.Client.WebClient.Models
     {
         public bool hasErrors { get; set; }
         public string errorMessage { get; set; }
-        public IEnumerable<PostModel> posts { get; set; }        
+        public IEnumerable<PostModel> posts { get; set; }
     }
 }

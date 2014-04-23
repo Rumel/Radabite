@@ -5,7 +5,9 @@ using System.Web;
 
 namespace Radabite.Client.WebClient.Models
 {
-    public class TweetModel
+    public class TweetModel : PostModel
     {
+        public int retweetsCount { get; set; }
+        public int favoritesCount { get; set; }
     }
 }

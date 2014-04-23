@@ -284,7 +284,7 @@
     <Compile Include="Backend\Helpers\FooSimplex.cs" />
     <Compile Include="Backend\Interfaces\ITwitterManager.cs" />
     <Compile Include="Backend\Managers\TwitterManager.cs" />
-    <Compile Include="Client\WebClient\Models\FacebookGetPostsResult.cs" />
+    <Compile Include="Client\WebClient\Models\GetPostsResult.cs" />
     <Compile Include="Client\WebClient\Models\FacebookPublishResult.cs" />
     <Compile Include="Backend\Database\SaveResult.cs" />
     <Compile Include="Backend\Accessors\UserAccessor.cs" />

@@ -308,7 +308,9 @@ namespace Radabite.Client.WebClient.Controllers
                 }
                 else if (ViewBag.ProviderDisplayName == "Twitter")
                 {
-                    loginModel.TwitterToken = result.ExtraData["accesstoken"];
+                        loginModel.TwitterToken = result.ExtraData["accesstoken"];
+                        loginModel.PersonName = result.ExtraData["name"];
+                   
                 }
 
                 else if (ViewBag.ProviderDisplayName == "Google")
