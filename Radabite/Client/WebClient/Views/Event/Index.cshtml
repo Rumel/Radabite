@@ -130,6 +130,37 @@
     }
 </script>
 
+<script type="text/javascript">
+    function ProcessComment(a, action, pId) {
+
+        var container = $(a).parents('div#post-container');
+        var resultDiv = $($(a).attr('href'), container);
+
+        console.log(pId);
+        var m = $('input[name="comment-content"]').val();
+        var e = @Model.Id;
+        var p = pId;
+        var u = "@User.Identity.Name";
+
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: {
+                eventId: e,
+                postId: p,
+                userName: u,
+                message: m
+            },
+            dataType: "html",
+            success: function(response) {
+                resultDiv.html('');
+                resultDiv.html(response);
+                $('input[name="comment-content"]').val("")
+            }
+        });
+    }
+</script>
+
 <script>
     var invitationList = [];
     var modelId = @Model.Id
