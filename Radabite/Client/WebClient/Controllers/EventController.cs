@@ -281,20 +281,33 @@ namespace Radabite.Client.WebClient.Controllers
         }
 
         [HttpPost]
-        public void RespondToInvitation(string userId, string eventId, string response)
+        public PartialViewResult RespondToInvitation(string userId, string eventId, string response)
         {
+            var u = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(userId));
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
             var r = ResponseType.WaitingReply;
+            
             if (response.Equals("Accept"))
+            {
                 r = ResponseType.Accepted;
+            }
             else if (response.Equals("Decline"))
+            {
                 r = ResponseType.Rejected;
+            }
 
             e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
 
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
-            return;
+            var userModel = new UserModel
+            {
+                User = u,
+                UserId = u.Id.ToString(),
+                EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(u.Id)
+            };
+
+            return PartialView("_DiscoverInvitationList", userModel);
         }
 
         [HttpPost]
