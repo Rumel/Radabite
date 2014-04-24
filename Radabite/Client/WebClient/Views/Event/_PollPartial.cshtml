@@ -2,9 +2,9 @@
 
 @if (Model.Owner.Id == Model.CurrentUser.Id)
 {
-	<div style="overflow: auto; height: 250px">
-		<h3>Poll Results</h3>
-		<table>
+	<h3>Poll Results</h3>
+	<div style="overflow-y: auto; height: 250px; width: 300px; overflow-x: hidden">
+		<table style="width: inherit">
 			<thead>
 				<tr>
 					<th>Time</th>
@@ -15,7 +15,7 @@
 				@foreach (var votedTime in Model.GetVoteDictionary())
 				{
 					<tr>
-						<td>@votedTime.Key</td>
+						<td><a onclick="UpdateTime(this)">@votedTime.Key</a></td>
 						<td><span data-tooltip class="has-tip" title="@Html.Partial("_VotersPartial", votedTime)">@votedTime.Value.Count</span></td>
 					</tr>
 				}
@@ -64,5 +64,17 @@ else
 				$('input[name="time-vote"]').val("");
 			}
 		});
+	}
+
+	function UpdateTime(a) {
+		var time = new Date($(a).html());
+
+		var startDate = document.getElementById('startDatepicker');
+		var endDate = document.getElementById('endDatepicker');
+
+		startDate.value = time.toLocaleDateString();
+		endDate.value = time.toLocaleDateString();
+
+		$('#UpdateEventModal').foundation('reveal', 'open');
 	}
 </script>
