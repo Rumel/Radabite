@@ -50,6 +50,8 @@
 			startTimePick.selectedIndex = startDT.getHours() * 2 + (startDT.getMinutes() / 30);
 			endTimePick.selectedIndex = endDT.getHours() * 2 + (endDT.getMinutes() / 30);
 
+			@{Math.Round((Model.EndTime - Model.StartTime).TotalMinutes / 30);}
+
 			$('#startDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', startDT));
 			$('#endDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', endDT));
 		}

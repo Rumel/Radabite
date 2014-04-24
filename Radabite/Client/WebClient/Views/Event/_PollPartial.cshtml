@@ -73,7 +73,15 @@ else
 		$('#startDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', time));
 		$('#endDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', time));
 
+
+
 		startTimePick.selectedIndex = time.getHours() * 2 + (time.getMinutes() / 30);
-		endTimePick.selectedIndex = time.getHours() * 2 + (time.getMinutes() / 30);
+		var eventLength = parseInt("@Math.Round((Model.EndTime - Model.StartTime).TotalMinutes / 30)");
+		console.log(eventLength);
+		var originalEnd = parseInt(time.getHours() * 2 + (time.getMinutes() / 30));
+		console.log(originalEnd);
+		console.log(originalEnd + eventLength);
+		endTimePick.selectedIndex = Math.min(originalEnd + eventLength, 47);
+
 	}
 </script>
