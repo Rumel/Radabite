@@ -43,7 +43,7 @@ namespace Radabite.Models
 
 		public List<Vote> Votes { get; set; }
 
-		public ConcurrentDictionary<DateTime, List<string>> GetVoteDictionary()
+		public IOrderedEnumerable<KeyValuePair<DateTime, List<string>>> GetVoteDictionary()
 		{
 			ConcurrentDictionary<DateTime, List<string>> d = new ConcurrentDictionary<DateTime,List<string>>();
 
@@ -52,7 +52,9 @@ namespace Radabite.Models
 				d.AddOrUpdate(vote.Time, new List<string> { vote.UserName }, (k, v) => AddToList(v, vote.UserName));
 			}
 
-			return d;
+			var kvPairs = d.ToList().OrderByDescending(x => x.Value.Count);
+
+			return kvPairs;
 		}
 
 		private List<string> AddToList(List<string> v, string p)

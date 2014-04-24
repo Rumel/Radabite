@@ -1,9 +1,9 @@
 ﻿@model Radabite.Models.EventModel
 
-<div class="panel" id="vote-panel">
-	@if (Model.Owner.Id == Model.CurrentUser.Id)
-	{
-	 <h3>Poll Results</h3>
+@if (Model.Owner.Id == Model.CurrentUser.Id)
+{
+	<div style="overflow: auto; height: 250px">
+		<h3>Poll Results</h3>
 		<table>
 			<thead>
 				<tr>
@@ -16,14 +16,16 @@
 				{
 					<tr>
 						<td>@votedTime.Key</td>
-						<td><span data-tooltip class="has-tip" title="@foreach(var voter in votedTime.Value) {<p>@voter</p>}">@votedTime.Value.Count</span></td>
+						<td><span data-tooltip class="has-tip" title="@Html.Partial("_VotersPartial", votedTime)">@votedTime.Value.Count</span></td>
 					</tr>
 				}
 			</tbody>
 		</table>
-	}
-	else
-	{
+	</div>
+}
+else
+{
+	<div class="panel" id="vote-panel">
 		<h3>Suggest an alternative time:</h3>
 		<div class="row">
 			<div class="small-12 columns">
@@ -35,9 +37,8 @@
 				<a class="radius button" onclick="ProcessVote(this, '@Url.Action("/Vote")')" href="#vote">Submit</a>
 			</div>
 		</div>
-	}
-</div>
-
+	</div>
+}
 
 <script type="text/javascript">
 	function ProcessVote(a, action) {
