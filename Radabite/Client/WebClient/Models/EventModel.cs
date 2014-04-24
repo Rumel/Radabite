@@ -1,5 +1,6 @@
 ﻿using Radabite.Backend.Database;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -41,6 +42,24 @@ namespace Radabite.Models
         public List<Invitation> Guests { get; set; }
 
 		public List<Vote> Votes { get; set; }
+
+		public ConcurrentDictionary<DateTime, List<string>> GetVoteDictionary()
+		{
+			ConcurrentDictionary<DateTime, List<string>> d = new ConcurrentDictionary<DateTime,List<string>>();
+
+			foreach(var vote in Votes)
+			{
+				d.AddOrUpdate(vote.Time, new List<string> { vote.UserName }, (k, v) => AddToList(v, vote.UserName));
+			}
+
+			return d;
+		}
+
+		private List<string> AddToList(List<string> v, string p)
+		{
+			v.Add(p);
+			return v;
+		}
 
 		public bool PollIsActive { get; set; }
 

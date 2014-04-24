@@ -456,6 +456,7 @@
     <Content Include="Client\WebClient\Views\Shared\_UserTable.cshtml" />
     <Content Include="Client\WebClient\Views\Event\EventNotFound.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_PollPartial.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_VotedPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

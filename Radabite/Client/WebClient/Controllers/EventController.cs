@@ -341,7 +341,14 @@ namespace Radabite.Client.WebClient.Controllers
 
 			ServiceManager.Kernel.Get<IEventManager>().Save(mEvent);
 
-			return PartialView("_PollPartial", mEvent);
+			EventModel viewModel = new EventModel()
+			{
+				Id = long.Parse(eventId),
+				PollIsActive = mEvent.PollIsActive,
+				Votes = mEvent.Votes.ToList<Vote>()
+			};
+
+			return PartialView("_VotedPartial", viewModel);
 		}
 
 		public bool FooCDNAlgorithm(string key)
