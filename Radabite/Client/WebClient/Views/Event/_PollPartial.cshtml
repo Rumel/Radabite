@@ -59,7 +59,6 @@ else
 			},
 			dataType: "html",
 			success: function (response) {
-				//make this      vvv   response once you figure it out
 				resultDiv.html(response);
 				$('input[name="time-vote"]').val("");
 			}
@@ -69,12 +68,14 @@ else
 	function UpdateTime(a) {
 		var time = new Date($(a).html());
 
-		var startDate = document.getElementById('startDatepicker');
-		var endDate = document.getElementById('endDatepicker');
-
-		startDate.value = time.toLocaleDateString();
-		endDate.value = time.toLocaleDateString();
+		var startTimePick = document.getElementById('startTimepickerUpdateSelect');
+		var endTimePick = document.getElementById('endTimepickerUpdateSelect');
 
 		$('#UpdateEventModal').foundation('reveal', 'open');
+		$('#startDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', time));
+		$('#endDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', time));
+
+		startTimePick.selectedIndex = time.getHours() * 2 + (time.getMinutes() / 30);
+		endTimePick.selectedIndex = time.getHours() * 2 + (time.getMinutes() / 30);
 	}
 </script>
