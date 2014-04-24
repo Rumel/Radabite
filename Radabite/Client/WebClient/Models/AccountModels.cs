@@ -33,6 +33,7 @@ namespace Radabite.Models
         public string FacebookUserId { get; set; }
         public string GoogleToken { get; set; }
         public string GoogleUserId { get; set; }
+        public string TwitterUserName { get; set; }
         public string TwitterToken { get; set; }
         public string Location { get; set; }
     }

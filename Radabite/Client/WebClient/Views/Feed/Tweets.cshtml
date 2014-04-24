@@ -1,0 +1,15 @@
+﻿
+@model List<Radabite.Client.WebClient.Models.TweetModel>
+
+<!DOCTYPE html>
+    
+    <div class="large-8 medium-8 columns">
+        <h3>Tweets!</h3>
+        @foreach (var item in Model){
+            <div class="panel" style="width:600px;height:150px;border:1px solid #000;">
+                <p>Message: @item.message</p>
+                <p>Created time: @item.created_time</p>
+                <br />
+            </div>
+        }
+    </div>

@@ -23,6 +23,8 @@ namespace Radabite.Backend.Database
 
         public string TwitterToken { get; set; }
 
+        public string TwitterUserName { get; set; }
+
         public string GoogleToken { get; set; }
 
         public string GoogleUserId { get; set; }
