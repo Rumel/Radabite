@@ -73,14 +73,19 @@ namespace Radabite.Backend.Managers
                             {
                                 // double unixTime = Convert.ToDouble(status.updated_time);
                                 // DateTime aspTime = ConvertFromUnixTimestamp(unixTime);
-                                DateTimeOffset offset = status.updated_time;
-                                if (offset.DateTime >= startTime && offset.DateTime < endTime)
+                                DateTimeOffset time = status.updated_time;
+                                if (time >= startTime && time < endTime)
                                 {
                                     FacebookPostModel post = new FacebookPostModel
                                     {
+                                       // providerId = status.id,
                                         message = status.message,
                                         created_time = status.updated_time
                                     };
+                                    if (status.id != null)
+                                    {
+                                        post.providerId = status.id;
+                                    }
                                     posts.Add(post);
                                 }
                             }
@@ -127,6 +132,9 @@ namespace Radabite.Backend.Managers
                     sb.Append(unixStartTime);
                     sb.Append("&until=");
                     sb.Append(unixEndTime);
+                    sb.Append("&from=");
+                    sb.Append(user.FacebookUserId);
+
                     sb.Append("&");
                     
                     sb.Append(userAccessToken);                    
@@ -146,8 +154,10 @@ namespace Radabite.Backend.Managers
                                 dynamic from = photo.from;
                                 FacebookPostModel post = new FacebookPostModel
                                 {
+                                    providerId = photo.id,
                                     photoUrl = photo.source,
                                 };
+
                                 if (from != null)
                                 {
                                     post.fromId = from.id;
@@ -161,8 +171,10 @@ namespace Radabite.Backend.Managers
                                 {
                                     post.created_time = photo.updated_time;
                                 }
-                                post.photoBytes = GetPhotoBytes(post.photoUrl);
-                                posts.Add(post);
+                                if (post.fromId == Convert.ToDouble(user.FacebookUserId)) { 
+                                    post.photoBytes = GetPhotoBytes(post.photoUrl);
+                                    posts.Add(post);
+                                }
                             }
                         }
                     }
