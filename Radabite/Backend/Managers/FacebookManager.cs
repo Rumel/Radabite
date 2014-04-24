@@ -125,11 +125,13 @@ namespace Radabite.Backend.Managers
                     sb.Append("/photos?");
 
                     sb.Append("since=");
-                    sb.Append(unixStartTime);
+                    //sb.Append(unixStartTime);
+                    sb.Append(startTime.ToString());
                     sb.Append("&until=");
-                    sb.Append(unixEndTime);
-                    sb.Append("&from=");
-                    sb.Append(user.FacebookUserId);
+                    //sb.Append(unixEndTime);
+                    sb.Append(endTime.ToString());
+                   // sb.Append("&from=");
+                   // sb.Append(user.FacebookUserId);
 
                     sb.Append("&");
                     

@@ -69,7 +69,7 @@
 		$('#startDatepicker').val($.datepicker.formatDate('mm/dd/yy', new Date()));
 		$('#endDatepicker').val($.datepicker.formatDate('mm/dd/yy', new Date()));
 		$("#startDatepicker").datepicker({
-			minDate: new Date(),		//default is today
+			minDate: new Date(2014, 0),		//default is today
 			onClose: function (selectedDate) {
 				$("#endDatepicker").datepicker("option", "minDate", selectedDate);
 			}

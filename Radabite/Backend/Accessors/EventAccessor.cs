@@ -61,7 +61,7 @@ namespace Radabite.Backend.Accessors
                                 {
                                     if (c.Id == 0)
                                     {
-                                        c.From = db.Users.FirstOrDefault(x => x.Id == p.From.Id);
+                                        c.From = db.Users.FirstOrDefault(x => x.Id == c.From.Id);
                                         ev.Posts.FirstOrDefault(x => x.Id == p.Id).Comments.Add(c);
                                         db.Entry<Post>(c).State = EntityState.Added;
                                         db.Entry<User>(c.From).State = EntityState.Modified;
