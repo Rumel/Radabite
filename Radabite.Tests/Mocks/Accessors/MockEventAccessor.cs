@@ -46,35 +46,35 @@ namespace Radabite.Tests.Mocks.Accessors
                 new Event()
 				{ 
 					Guests = new List<Invitation>(){ new Invitation() },
-					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } },
+					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(-2),
 					EndTime = DateTime.Now.AddDays(-2)
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(){ new Invitation() },
-					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } },
+					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddHours(1),
 					EndTime = DateTime.Now.AddHours(3)
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(),
-					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } },
+					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(2),
 					EndTime = DateTime.Now.AddDays(2)
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(),
-					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } },
+					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(2),
 					EndTime = DateTime.Now.AddDays(2)
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(),
-					Posts = new List<Post>{ new MediaPost(){ BlobId = "blob" } },
+					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(2),
 					EndTime = DateTime.Now.AddDays(2)
 				}
