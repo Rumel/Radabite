@@ -278,6 +278,7 @@
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
+    <Compile Include="Backend\Database\Vote.cs" />
     <Compile Include="Backend\Helpers\FacebookOAuth2.cs" />
     <Compile Include="Backend\Helpers\GoogleOAuth2Client.cs" />
     <Compile Include="Backend\Helpers\FooSimplex.cs" />
@@ -499,6 +500,9 @@
     <Content Include="Client\WebClient\Views\Event\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_UserTable.cshtml" />
     <Content Include="Client\WebClient\Views\Event\EventNotFound.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_PollPartial.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_VotedPartial.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_VotersPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -37,8 +37,18 @@ namespace Radabite.Client.WebClient.Controllers
                 return Redirect("Event/EventNotFound");                    
             }
                         
-            foreach(var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
+			foreach (var i in eventRequest.Guests)
             {
+				i.Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(i.GuestId);
+			}
+
+			foreach (var p in eventRequest.Posts)
+			{
+				p.From = ServiceManager.Kernel.Get<IUserManager>().GetById(p.FromId);
+			}
+
+			foreach (var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
+			{
                 var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                 foreach (var p in postModel.posts)
                 {
@@ -63,7 +73,8 @@ namespace Radabite.Client.WebClient.Controllers
                     {
                         var mime = "image/" + p.photoUrl.Split('.').Last();
                         var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
-                        eventRequest.Posts.Add(new Post{
+						eventRequest.Posts.Add(new Post
+						{
                             Comments = new List<Post>(),
                             From = i.Guest,
                             FromId = i.GuestId,
@@ -93,7 +104,9 @@ namespace Radabite.Client.WebClient.Controllers
                 Posts = eventRequest.Posts.OrderBy(p => p.SendTime).Reverse().ToList(),
                 Owner = eventRequest.Owner,
                 CurrentUser = currentUser,
-                Guests = eventRequest.Guests.ToList()
+				Guests = eventRequest.Guests.ToList(),
+				PollIsActive = eventRequest.PollIsActive,
+				Votes = eventRequest.Votes.ToList()
             };
 
             eventViewModel.CurrentUser.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
@@ -183,7 +196,8 @@ namespace Radabite.Client.WebClient.Controllers
                 IsActive = model.IsActive,
 				StorageLocation = Backend.Accessors.FooCDNAccessor.StorageType.Tape,
                 Owner = user,
-                Posts = new List<Post>()
+				Posts = new List<Post>(),
+				PollIsActive = model.PollIsActive
             };
 
             ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
@@ -197,6 +211,17 @@ namespace Radabite.Client.WebClient.Controllers
                     Response = ResponseType.Accepted
                 }
             };
+
+			ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
+
+			newEvent.Votes = new List<Vote>()
+			{
+				new Vote
+				{
+					Time = new DateTime(model.StartTime.Ticks),
+					UserName = user.DisplayName
+				}
+			};
 
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 
@@ -233,6 +258,7 @@ namespace Radabite.Client.WebClient.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 IsActive = model.IsActive,
+				PollIsActive = model.PollIsActive,
                 Owner = model.Owner
             };
 
@@ -362,18 +388,47 @@ namespace Radabite.Client.WebClient.Controllers
             return PartialView("_PostFeed", eventViewModel);
         }
 
+		[HttpPost]
+		public PartialViewResult Vote(string eventId, string username, string vote)
+		{
+			var mEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
+			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
+			DateTime dt = Convert.ToDateTime(vote);
+			
+			//If the user has already voted, change the vote
+			if (mEvent.Votes.Select(x => x.UserName).Contains(user.DisplayName))
+			{
+				mEvent.Votes.Where(x => x.UserName.Equals(user.DisplayName)).FirstOrDefault().Time = dt;
+			}
+			else
+			{
+				mEvent.Votes.Add(new Vote() { Time = dt, UserName = user.DisplayName });
+			}
+
+			ServiceManager.Kernel.Get<IEventManager>().Save(mEvent);
+
+			EventModel viewModel = new EventModel()
+			{
+				Id = long.Parse(eventId),
+				PollIsActive = mEvent.PollIsActive,
+				Votes = mEvent.Votes.ToList<Vote>()
+			};
+
+			return PartialView("_VotedPartial", viewModel);
+		}
+
 		public bool FooCDNAlgorithm(string key)
 		{
 			try
 			{
-				if(key.Equals(ConfigurationManager.AppSettings["simplexKey"]))
+				if (key.Equals(ConfigurationManager.AppSettings["simplexKey"]))
 				{
 					FooSimplex simplex = new FooSimplex();
 					simplex.RunAlgorithm();
 					return true;
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				System.Diagnostics.Debug.Print(e.Message);
 			}
