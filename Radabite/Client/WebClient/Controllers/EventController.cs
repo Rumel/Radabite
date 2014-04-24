@@ -57,7 +57,7 @@ namespace Radabite.Client.WebClient.Controllers
                 }
 
                 var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
-                foreach (var p in photoPostModel.posts)
+                foreach (var p in (IEnumerable<FacebookPostModel>)photoPostModel.posts)
                 {  
                     if (p.fromId == Double.Parse(i.Guest.FacebookUserId) && !(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
                     {

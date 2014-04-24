@@ -13,8 +13,8 @@ namespace Radabite.Backend.Interfaces
     interface IFacebookManager
     {
         //IList<FacebookPostModel> GetPosts(string userId, string accessToken, DateTime startTime, DateTime endTime);
-        FacebookGetPostsResult GetPosts(User user, DateTime startTime, DateTime endTime);
-        FacebookGetPostsResult GetPhotos(User user, DateTime startTime, DateTime endTime);
+        GetPostsResult GetPosts(User user, DateTime startTime, DateTime endTime);
+        GetPostsResult GetPhotos(User user, DateTime startTime, DateTime endTime);
         string GetAccessToken(FacebookClient fb);
         FacebookPublishResult PublishStatus(User user, string message);
         string GetFacebookLongTermAccessCode(string shortTermAccessToken);

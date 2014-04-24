@@ -17,6 +17,7 @@ namespace Radabite
             Bind<IEventManager>().To<EventManager>();
             Bind<IUserManager>().To<UserManager>();
             Bind<IFacebookManager>().To<FacebookManager>();
+            Bind<ITwitterManager>().To<TwitterManager>();
 
 			Bind<IFooCDNAccessor>().To<FooCDNAccessor>();
             Bind<IEventAccessor>().To<EventAccessor>();
