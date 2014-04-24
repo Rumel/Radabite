@@ -28,12 +28,10 @@ else
 	<div class="panel" id="vote-panel">
 		<h3>Suggest an alternative time:</h3>
 		<div class="row">
-			<div class="small-12 columns">
-				<input type="datetime-local" name="time-vote" step="1800">
+			<div class="small-8 columns">
+				<input type="datetime-local" name="time-vote" step="1800" style="width: initial">
 			</div>
-		</div>
-		<div class="row">
-			<div class="small-11 columns" style="direction:rtl">
+			<div class="small-4 columns">				 
 				<a class="radius button" onclick="ProcessVote(this, '@Url.Action("/Vote")')" href="#vote">Submit</a>
 			</div>
 		</div>
