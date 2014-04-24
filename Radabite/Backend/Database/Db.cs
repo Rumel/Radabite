@@ -20,7 +20,7 @@ namespace Radabite.Backend.Database
         public DbSet<UserProfile> UserProfiles { get; set; }
         
         public Db()
-            : base("DefaultConnection")
+            : base("Db")
         {
 
         }
@@ -28,6 +28,8 @@ namespace Radabite.Backend.Database
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Radabite.Migrations.Configuration>());
 
             //modelBuilder.Entity<Event>().HasRequired<Location>(e => e.Location);
             //modelBuilder.Entity<Event>().HasRequired<User>(e => e.Owner).WithMany(u => u.Events);

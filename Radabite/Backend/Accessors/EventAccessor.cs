@@ -56,8 +56,21 @@ namespace Radabite.Backend.Accessors
                                 db.Entry<Post>(p).State = EntityState.Added;
                                 db.Entry<User>(p.From).State = EntityState.Modified;
                             }
+                            if (p.Comments != null)
+                            {
+                                foreach (var c in p.Comments)
+                                {
+                                    if (c.Id == 0)
+                                    {
+                                        c.From = db.Users.FirstOrDefault(x => x.Id == p.From.Id);
+                                        ev.Posts.FirstOrDefault(x => x.Id == p.Id).Comments.Add(c);
+                                        db.Entry<Post>(c).State = EntityState.Added;
+                                        db.Entry<User>(c.From).State = EntityState.Modified;
                         }
-					}
+                    }
+                            }
+                        }
+                    }
 
 					if(e.Votes != null)
 					{
@@ -94,23 +107,24 @@ namespace Radabite.Backend.Accessors
             using (var db = new Db())
             {
                 return db.Events.Include(e => e.Location)
-                                .Include(e => e.Owner)
-                                .Include(e => e.Guests)
-                                .Include(e => e.Posts)
+                                .Include(e => e.Owner.Events)
+                                .Include(e => e.Guests.Select(i => i.Guest))
+                                .Include(e => e.Posts.Select(p => p.Comments))
+                                .Include(e => e.Posts.Select(p => p.From))
 								.Include(e => e.Votes)
                                 .ToList();
             }
         }
-
 
         public Event GetById(long id)
         {
             using (var db = new Db())
             {
                 return db.Events.Include(e => e.Location)
-                                .Include(e => e.Owner)
-                                .Include(e => e.Guests)
-                                .Include(e => e.Posts)
+                                .Include(e => e.Owner.Events)
+                                .Include(e => e.Guests.Select(i => i.Guest))
+                                .Include(e => e.Posts.Select(p => p.Comments))
+                                .Include(e => e.Posts.Select(p => p.From))
 								.Include(e => e.Votes)
                                 .FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
@@ -121,9 +135,10 @@ namespace Radabite.Backend.Accessors
             using (var db = new Db())
             {
                 return db.Events.Include(e => e.Location)
-                                .Include(e => e.Owner)
-                                .Include(e => e.Guests)
-                                .Include(e => e.Posts)
+                                .Include(e => e.Owner.Events)
+                                .Include(e => e.Guests.Select(i => i.Guest))
+                                .Include(e => e.Posts.Select(p => p.Comments))
+                                .Include(e => e.Posts.Select(p => p.From))
 								.Include(e => e.Votes)
                                 .Where(x => x.Owner.Id == OwnerId && x.IsActive == true)
                                 .ToList();
@@ -135,9 +150,10 @@ namespace Radabite.Backend.Accessors
             using (var db = new Db())
             {
                 return db.Events.Include(e => e.Location)
-                                .Include(e => e.Owner)
-                                .Include(e => e.Guests)
-                                .Include(e => e.Posts)
+                                .Include(e => e.Owner.Events)
+                                .Include(e => e.Guests.Select(i => i.Guest))
+                                .Include(e => e.Posts.Select(p => p.Comments))
+                                .Include(e => e.Posts.Select(p => p.From))
 								.Include(e => e.Votes)
                                 .Where(x => x.Guests.Where(y => y.Guest.Id == GuestId).Count() > 0 && x.IsActive == true)
                                 .ToList();

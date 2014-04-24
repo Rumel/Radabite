@@ -89,9 +89,9 @@ namespace Radabite.Backend.Helpers
 			{
 				foreach (Post p in e.Posts)
 				{
-					if (p is MediaPost)
+					if (p.BlobId != null)
 					{
-						ServiceManager.Kernel.Get<IFooCDNManager>().Put(((MediaPost)p).BlobId, e.StorageLocation);
+						ServiceManager.Kernel.Get<IFooCDNManager>().Put(((Post)p).BlobId, e.StorageLocation);
 					}
 				}
 			}
@@ -216,11 +216,11 @@ namespace Radabite.Backend.Helpers
 		private double GetEventStorageSize(Event e)
 		{
 			//For each MediaPost
-			var storageUsed = e.Posts.Where<Post>(p => p is MediaPost)
+			var storageUsed = e.Posts.Where<Post>(p => p.BlobId != null)
 									.Select<Post, double>(p =>
 			{
 				//Gets the storage used for that blob from FooCDN
-				var blobId = ((MediaPost)p).BlobId;
+				var blobId = ((Post)p).BlobId;
 				var fooResult = ServiceManager.Kernel.Get<IFooCDNManager>().GetInfo(blobId);
 
 				if (fooResult.StatusCode == HttpStatusCode.OK)

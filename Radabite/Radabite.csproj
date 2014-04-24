@@ -240,7 +240,6 @@
   <ItemGroup>
     <Compile Include="Backend\Accessors\EventAccessor.cs" />
     <Compile Include="Backend\Accessors\FooCDNAccessor.cs" />
-    <Compile Include="Backend\Database\MediaPost.cs" />
     <Compile Include="Backend\Database\Post.cs" />
     <Compile Include="Backend\Database\Invitation.cs" />
     <Compile Include="Backend\Database\Vote.cs" />
@@ -366,9 +365,10 @@
     <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
-    <None Include="AppSettings.config">
+		<Content Include="AppSettings.config">
       <SubType>Designer</SubType>
-    </None>
+    </Content>
+    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_DateTimeModal.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
@@ -382,6 +382,10 @@
     <Content Include="Client\WebClient\Views\Event\_InvitationPanel.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_PostFeed.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_EventTable.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_DiscoverInvitationList.cshtml" />
+    <None Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.accordion.js" />
@@ -475,6 +479,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Client\WebClient\App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

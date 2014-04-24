@@ -1,0 +1,53 @@
+﻿@using Radabite.Client.WebClient.Models
+@using Radabite.Backend.Database
+
+@model UserModel
+
+<table style="width: 100%" id="invitations">
+    <thead><tr><th>Invitations</th></tr></thead>
+    <tbody>
+		@{
+			if (Model.EventInvitations.Count == 0)
+			{
+				<tr><td>You haven't been invited to any events.</td></tr>
+			}
+			else
+			{
+				foreach (Event e in Model.EventInvitations)
+				{
+					<tr>
+                        <td>
+                            <div id="eventId" style="display: none">@e.Id</div>
+                            <div class="large-8 medium-8 columns">
+                                @Html.ActionLink(e.Title, "../Event", new { eventId = e.Id })
+                            </div>
+                            @switch(e.Guests.FirstOrDefault(x => x.GuestId == Model.User.Id).Response)
+                            {
+                                case ResponseType.Accepted: 
+                                    <div class="large-4 medium-4 columns">
+                                        Attending
+                                    </div>
+                                    break;
+                                case ResponseType.Rejected: 
+                                    <div class="large-4 medium-4 columns">
+                                        Declined
+                                    </div>
+                                    break;
+                                case ResponseType.WaitingReply: 
+                                        <div class="large-2 medium-2 columns">
+                                            <a onclick="processInvitationResponse(this,'@Url.Action("/RespondToInvitation")')" href="#invitationList" class="button tiny" style="margin-bottom: 0px">Accept</a>
+                                        </div>
+                                        <div class="large-2 medium-2 columns">
+                                            <a onclick="processInvitationResponse(this,'@Url.Action("/RespondToInvitation")')" href="#invitationList" class="button tiny" style="margin-bottom: 0px; background: rgb(199, 15, 15)" >Decline</a>
+                                        </div>
+                                    break;
+
+                            }
+                                    
+                        </td>
+					</tr>
+                }
+            }
+		}
+	</tbody>
+</table>

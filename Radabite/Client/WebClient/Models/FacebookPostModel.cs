@@ -8,6 +8,7 @@ namespace Radabite.Client.WebClient.Models
 {
     public class FacebookPostModel
     {
+        public double providerId { get; set; }
         public string message { get; set; }
         public string fromName { get; set; } 
         public double fromId {get; set;}
