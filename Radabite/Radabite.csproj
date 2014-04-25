@@ -405,10 +405,9 @@
     <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
-		<Content Include="AppSettings.config">
+    <None Include="AppSettings.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Client\WebClient\Views\Events\Index.cshtml" />
+    </None>
     <Content Include="Client\WebClient\Views\Shared\_DateTimeModal.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_LocationPicker.cshtml" />
     <Content Include="Client\WebClient\Views\Shared\_CreateEventModal.cshtml">
@@ -424,9 +423,6 @@
     <Content Include="Client\WebClient\Views\Shared\_EventTable.cshtml" />
     <Content Include="Client\WebClient\Views\Feed\Tweets.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_DiscoverInvitationList.cshtml" />
-    <None Include="ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Client\WebClient\Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.abide.js" />
     <Content Include="Client\WebClient\Scripts\foundation\foundation.accordion.js" />
@@ -503,6 +499,7 @@
     <Content Include="Client\WebClient\Views\Event\_PollPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_VotedPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_VotersPartial.cshtml" />
+    <None Include="Properties\PublishProfiles\radabite.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -524,6 +521,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Client\WebClient\App_Data\" />
+    <Folder Include="Client\WebClient\Views\Events\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
