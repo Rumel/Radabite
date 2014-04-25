@@ -39,10 +39,51 @@ namespace Radabite.Client.WebClient.Controllers
                         
             foreach(var i in eventRequest.Guests.Where(x => x.Response == ResponseType.Accepted))
             {
-                var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
-                foreach (var p in postModel.posts)
+                if (i.Guest.FacebookUserId != null)
                 {
-                    if (!(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
+                    var postModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPosts(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                    foreach (var p in postModel.posts)
+                    {
+                        if (!(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
+                        {
+                            eventRequest.Posts.Add(new Post
+                            {
+                                Comments = new List<Post>(),
+                                From = i.Guest,
+                                FromId = i.GuestId,
+                                Message = p.message,
+                                SendTime = p.created_time.DateTime,
+                                ProviderId = p.providerId.ToString()
+                            });
+                        }
+                    }
+
+                    var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                    foreach (var p in (IEnumerable<FacebookPostModel>)photoPostModel.posts)
+                    {
+                        if (p.fromId == Double.Parse(i.Guest.FacebookUserId) && !(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
+                        {
+                            var mime = "image/" + p.photoUrl.Split('.').Last();
+                            var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
+                            eventRequest.Posts.Add(new Post
+                            {
+                                Comments = new List<Post>(),
+                                From = i.Guest,
+                                FromId = i.GuestId,
+                                Message = p.message,
+                                SendTime = p.created_time.DateTime,
+                                BlobId = blobId.Value.ToString(),
+                                Mimetype = mime,
+                                ProviderId = p.providerId.ToString()
+                            });
+                        }
+                    }
+                }
+
+                if (i.Guest.TwitterToken != null)
+                {
+                    var tweets = ServiceManager.Kernel.Get<ITwitterManager>().GetTweets(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                    foreach (var p in tweets.posts)
                     {
                         eventRequest.Posts.Add(new Post
                         {
@@ -51,26 +92,6 @@ namespace Radabite.Client.WebClient.Controllers
                             FromId = i.GuestId,
                             Message = p.message,
                             SendTime = p.created_time.DateTime,
-                            ProviderId = p.providerId.ToString()
-                        });
-                    }
-                }
-
-                var photoPostModel = ServiceManager.Kernel.Get<IFacebookManager>().GetPhotos(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
-                foreach (var p in (IEnumerable<FacebookPostModel>)photoPostModel.posts)
-                {  
-                    if (p.fromId == Double.Parse(i.Guest.FacebookUserId) && !(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
-                    {
-                        var mime = "image/" + p.photoUrl.Split('.').Last();
-                        var blobId = ServiceManager.Kernel.Get<IFooCDNManager>().SaveNewItem(p.photoBytes, mime, eventRequest.StorageLocation);
-                        eventRequest.Posts.Add(new Post{
-                            Comments = new List<Post>(),
-                            From = i.Guest,
-                            FromId = i.GuestId,
-                            Message = p.message,
-                            SendTime = p.created_time.DateTime,
-                            BlobId = blobId.Value.ToString(),
-                            Mimetype = mime,
                             ProviderId = p.providerId.ToString()
                         });
                     }
