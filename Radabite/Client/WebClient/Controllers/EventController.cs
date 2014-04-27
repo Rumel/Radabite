@@ -141,7 +141,9 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				Distance = Double.NaN
+				Distance = Double.NaN,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
 			}).ToList();
 
 
@@ -437,7 +439,9 @@ namespace Radabite.Client.WebClient.Controllers
 				Id = x.Id,
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
-				Longitude = x.Location.Longitude
+				Longitude = x.Location.Longitude,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
 			}).ToList();
 
 			foreach(var v in viewModels)
@@ -459,7 +463,9 @@ namespace Radabite.Client.WebClient.Controllers
 				Id = x.Id,
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
-				Longitude = x.Location.Longitude
+				Longitude = x.Location.Longitude,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
 			}).ToList();
 
 			foreach (var v in viewModels)
@@ -475,9 +481,26 @@ namespace Radabite.Client.WebClient.Controllers
 		[HttpPost]
 		public PartialViewResult SortEventsTime(double userLat, double userLong)
 		{
-			List<Event> viewModel = new List<Event>();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 
-			return PartialView("_EventList", viewModel);
+			List<EventModel> viewModels = events.Select(x => new EventModel()
+			{
+				Id = x.Id,
+				Title = x.Title,
+				Latitude = x.Location.Latitude,
+				Longitude = x.Location.Longitude,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
+			}).ToList();
+
+			foreach (var v in viewModels)
+			{
+				v.Distance = v.CalcDistance(userLat, userLong);
+			}
+
+			viewModels = viewModels.Where(x => x.EndTime > DateTime.Now).OrderBy(x => (x.StartTime - DateTime.Now)).ToList();
+
+			return PartialView("_EventList", viewModels);
 		}
 
 		public bool FooCDNAlgorithm(string key)
