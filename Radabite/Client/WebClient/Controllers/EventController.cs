@@ -255,6 +255,8 @@ namespace Radabite.Client.WebClient.Controllers
         [HttpPost]
         public RedirectToRouteResult Update(EventModel model)
         {
+			var oldEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(model.Id);
+
             var newEvent = new Event()
             {
                 Id = model.Id,
@@ -271,8 +273,11 @@ namespace Radabite.Client.WebClient.Controllers
                 Description = model.Description,
                 IsActive = model.IsActive,
 				PollIsActive = model.PollIsActive,
-                Owner = model.Owner
+                Owner = oldEvent.Owner,
+				Votes = oldEvent.Votes
             };
+
+			newEvent.Votes.Where(x => x.UserName.Equals(newEvent.Owner.DisplayName)).FirstOrDefault().Time = newEvent.StartTime;
 
             var result = ServiceManager.Kernel.Get<IEventManager>().Save(newEvent);
 

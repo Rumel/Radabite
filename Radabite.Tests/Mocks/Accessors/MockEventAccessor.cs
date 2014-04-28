@@ -35,7 +35,8 @@ namespace Radabite.Tests.Mocks.Accessors
 				IsActive = true,
 				Guests = new List<Invitation>(),
 				Posts = new List<Post>(),
-				Votes = new List<Vote>()
+				Owner = new User() { DisplayName = "test" },
+				Votes = new List<Vote>() { new Vote(){ Time = DateTime.Now, UserName = "test"}}
 			};
 		}
 

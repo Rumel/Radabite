@@ -91,7 +91,7 @@ namespace Radabite.Tests.Helpers
 			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
 
 			var estimate = _simplex.EstimateAverageViews(events);
-			Assert.AreEqual(0.9, estimate);
+			Assert.AreEqual(1.3, estimate);
 		}
 
 		[TestMethod]

@@ -6,8 +6,6 @@
 	m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
 })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-//When this is on a public url:
-//ga('create', 'UA-49653336-1', 'actual url');
 ga('create', 'UA-49653336-1', { 'cookieDomain': 'none' });
 ga('send', 'pageview');
 
