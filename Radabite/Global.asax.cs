@@ -49,7 +49,15 @@ namespace Radabite
             {
                 if(db.Database.Exists())
                 {
-                    System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Configuration>());
+                    try
+                    {
+                        System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Configuration>());
+                    }
+                    catch(Exception e)
+                    {
+                        // Do nothing, let stuff break
+                    }
+                    
                 }
             }
 
