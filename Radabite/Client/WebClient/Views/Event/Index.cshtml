@@ -6,6 +6,14 @@
 
 @model EventModel
 
+<style>
+	#event-map img {
+		max-width: inherit;
+	}
+</style>
+
+
+
 <br />
 <div class="row">
 
@@ -34,7 +42,60 @@
 	<div class="small-6 columns">
 		<h4>Description: @Model.Description</h4>
 		<h4>Time: @Model.StartTime - @Model.EndTime</h4>
+
 		<h4>Location: @Model.LocationName</h4>
+		@if (Model.Longitude != -1000)
+		{
+			<div id="event-map" style="width: 100%; height: 300px"></div>
+			<div style="text-align: center">
+				<a href="javascript:GetDirections()" class="button radius">Get Directions</a>
+			</div>
+
+			<script>
+				var marker;
+
+				$(document).ready(function() {
+					var mapOptions = {
+						zoom: 12,
+						draggableCursor: 'default'
+					};
+					map = new google.maps.Map(document.getElementById("event-map"),
+						mapOptions);
+
+					marker = new google.maps.Marker({
+						map: map
+					});
+
+					google.maps.event.trigger(map, 'resize');
+
+					var latLng = new google.maps.LatLng('@Model.Latitude', '@Model.Longitude');
+
+					map.setCenter(latLng);
+					marker.setPosition(latLng);
+				});
+
+				function GetDirections() {
+					if (navigator.geolocation) {
+						navigator.geolocation.getCurrentPosition(positionSuccessM, positionFailM);
+					} else {
+						positionFail(-1);
+					}
+				}
+				function positionSuccessM(position) {
+					var coords = position.coords || position.coordinate || position;
+					var userLL = new google.maps.LatLng(coords.latitude, coords.longitude);
+					window.open('http://maps.google.com/maps?q=from+' + userLL.toUrlValue() + '+to+' + marker.position.toUrlValue());
+				}
+
+				function positionFailM(err) {
+					if(err == -1) {
+						alert('Must enable geolocation to get directions');
+					} else {
+						alert('Error getting directions');
+					}
+				}
+			</script>
+		}
 		@{if (Model.IsPrivate)
 		{ <h4>Privacy: Private</h4> }
 		else
@@ -145,34 +206,34 @@
 </script>
 
 <script type="text/javascript">
-    function ProcessComment(a, action, pId) {
+	function ProcessComment(a, action, pId) {
 
-        var container = $(a).parents('div#post-container');
-        var resultDiv = $($(a).attr('href'), container);
+		var container = $(a).parents('div#post-container');
+		var resultDiv = $($(a).attr('href'), container);
 
-        console.log(pId);
-        var m = $(a).parent().siblings().children('input[name="comment-content"]').val();
-        var e = @Model.Id;
-        var p = pId;
-        var u = "@User.Identity.Name";
+		console.log(pId);
+		var m = $(a).parent().siblings().children('input[name="comment-content"]').val();
+		var e = @Model.Id;
+		var p = pId;
+		var u = "@User.Identity.Name";
 
-        $.ajax({
-            type: "POST",
-            url: action,
-            data: {
-                eventId: e,
-                postId: p,
-                userName: u,
-                message: m
-            },
-            dataType: "html",
-            success: function(response) {
-                resultDiv.html('');
-                resultDiv.html(response);
-                $('input[name="comment-content"]').val("")
-            }
-        });
-    }
+		$.ajax({
+			type: "POST",
+			url: action,
+			data: {
+				eventId: e,
+				postId: p,
+				userName: u,
+				message: m
+			},
+			dataType: "html",
+			success: function(response) {
+				resultDiv.html('');
+				resultDiv.html(response);
+				$('input[name="comment-content"]').val("")
+			}
+		});
+	}
 </script>
 
 <script>
@@ -216,5 +277,6 @@
 		$('a.close-reveal-modal').trigger('click');
 	}
 </script>
+
 
 @Scripts.Render("~/Client/WebClient/Scripts/google-analytics-eventindex.js")
