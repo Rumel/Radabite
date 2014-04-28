@@ -12,6 +12,7 @@ using WebMatrix.WebData;
 using Microsoft.Web.WebPages.OAuth;
 using DotNetOpenAuth.AspNet;
 using System.Web.Security;
+using Radabite.Models;
 
 namespace Radabite.Client.WebClient.Controllers
 {
@@ -32,7 +33,15 @@ namespace Radabite.Client.WebClient.Controllers
                 var friends = new List<User>();
 
                 //Get list of events that user is involved in
-                userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetByOwnerId(user.Id);
+				var events = ServiceManager.Kernel.Get<IEventManager>().GetByOwnerId(user.Id);
+				userModel.DiscoverEvents = events.Select(x => new EventModel()
+				{
+					Id = x.Id,
+					Title = x.Title,
+					Latitude = x.Location.Latitude,
+					Longitude = x.Location.Longitude,
+					Distance = Double.NaN
+				}).ToList();
                 userModel.Friends = friends;
                 return View(userModel);
             }

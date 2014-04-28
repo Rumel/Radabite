@@ -133,7 +133,19 @@ namespace Radabite.Client.WebClient.Controllers
 
             userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            userModel.DiscoverEvents = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
+            var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
+
+			userModel.DiscoverEvents = events.Select(x => new EventModel()
+			{
+				Id = x.Id,
+				Title = x.Title,
+				Latitude = x.Location.Latitude,
+				Longitude = x.Location.Longitude,
+				Distance = Double.NaN,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
+			}).ToList();
+
 
             userModel.EventInvitations = ServiceManager.Kernel.Get<IEventManager>().GetByGuestId(user.Id);
             
@@ -415,6 +427,80 @@ namespace Radabite.Client.WebClient.Controllers
 			};
 
 			return PartialView("_VotedPartial", viewModel);
+		}
+
+		[HttpPost]
+		public PartialViewResult AllEvents(double userLat, double userLong)
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			List<EventModel> viewModels = events.Select(x => new EventModel() 
+			{ 
+				Id = x.Id,
+				Title = x.Title,
+				Latitude = x.Location.Latitude,
+				Longitude = x.Location.Longitude,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
+			}).ToList();
+
+			foreach(var v in viewModels)
+			{
+				v.Distance = v.CalcDistance(userLat, userLong);
+			}
+
+
+			return PartialView("_EventList", viewModels);
+		}
+
+		[HttpPost]
+		public PartialViewResult SortEventsLocation(double userLat, double userLong)
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			List<EventModel> viewModels = events.Select(x => new EventModel()
+			{
+				Id = x.Id,
+				Title = x.Title,
+				Latitude = x.Location.Latitude,
+				Longitude = x.Location.Longitude,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
+			}).ToList();
+
+			foreach (var v in viewModels)
+			{
+				v.Distance = v.CalcDistance(userLat, userLong);
+			}
+
+			viewModels = viewModels.Where(x => !x.Distance.Equals(Double.NaN)).OrderBy(x => x.Distance).ToList();
+
+			return PartialView("_EventList", viewModels);
+		}
+
+		[HttpPost]
+		public PartialViewResult SortEventsTime(double userLat, double userLong)
+		{
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+
+			List<EventModel> viewModels = events.Select(x => new EventModel()
+			{
+				Id = x.Id,
+				Title = x.Title,
+				Latitude = x.Location.Latitude,
+				Longitude = x.Location.Longitude,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
+			}).ToList();
+
+			foreach (var v in viewModels)
+			{
+				v.Distance = v.CalcDistance(userLat, userLong);
+			}
+
+			viewModels = viewModels.Where(x => x.EndTime > DateTime.Now).OrderBy(x => (x.StartTime - DateTime.Now)).ToList();
+
+			return PartialView("_EventList", viewModels);
 		}
 
 		public bool FooCDNAlgorithm(string key)
