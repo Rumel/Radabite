@@ -12,7 +12,6 @@ using System.Web.Routing;
 using RadabiteServiceManager;
 using System.Data.Entity;
 using Radabite.Backend.Database;
-using Radabite.Migrations;
 
 namespace Radabite
 {
@@ -49,15 +48,7 @@ namespace Radabite
             {
                 if(db.Database.Exists())
                 {
-                    try
-                    {
-                        System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Configuration>());
-                    }
-                    catch(Exception e)
-                    {
-                        // Do nothing, let stuff break
-                    }
-                    
+                    System.Data.Entity.Database.SetInitializer<Db>(new DropCreateDatabaseIfModelChanges<Db>());
                 }
             }
 

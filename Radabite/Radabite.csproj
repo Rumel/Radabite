@@ -331,11 +331,6 @@
     <Compile Include="Backend\Interfaces\IEventManager.cs" />
     <Compile Include="Backend\Managers\EventManager.cs" />
     <Compile Include="Client\WebClient\Models\AccountModels.cs" />
-    <Compile Include="Migrations\201404282053266_myMigration.cs" />
-    <Compile Include="Migrations\201404282053266_myMigration.Designer.cs">
-      <DependentUpon>201404282053266_myMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -516,11 +511,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Client\WebClient\App_Data\" />
     <Folder Include="Client\WebClient\Views\Events\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201404282053266_myMigration.resx">
-      <DependentUpon>201404282053266_myMigration.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
