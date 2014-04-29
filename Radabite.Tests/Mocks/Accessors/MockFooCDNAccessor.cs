@@ -12,7 +12,11 @@ namespace Radabite.Tests.Mocks.Accessors
 	{
 		public FooResponse Get(string blobID, string mediaType)
 		{
-			return new FooResponse();
+            return new FooResponse()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Value = new byte[1]
+            };
 		}
 
 		public FooResponse GetInfo(string blobID)
@@ -29,17 +33,28 @@ namespace Radabite.Tests.Mocks.Accessors
 
 		public FooResponse Post(string blobID, byte[] data)
 		{
-			return new FooResponse();
+            return new FooResponse()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Value = new byte[1]
+            };
 		}
 
 		public FooResponse Put(string blobID, FooCDNAccessor.StorageType type)
 		{
-			return new FooResponse();
+            return new FooResponse()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK
+            };
 		}
 
 		public FooResponse CreateBlob(string mimeType)
 		{
-			return new FooResponse();
+            return new FooResponse()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Value = "blob string"
+            };
 		}
 
 		public FooResponse Delete(string blobID)
