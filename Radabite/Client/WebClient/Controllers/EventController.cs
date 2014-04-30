@@ -95,15 +95,18 @@ namespace Radabite.Client.WebClient.Controllers
                     var tweets = ServiceManager.Kernel.Get<ITwitterManager>().GetTweets(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
                     foreach (var p in tweets.posts)
                     {
-                        eventRequest.Posts.Add(new Post
+                        if (!(eventRequest.Posts.Where(x => x.ProviderId == p.providerId.ToString()).Count() > 0))
                         {
-                            Comments = new List<Post>(),
-                            From = i.Guest,
-                            FromId = i.GuestId,
-                            Message = p.message,
-                            SendTime = p.created_time.DateTime,
-                            ProviderId = p.providerId.ToString()
-                        });
+                            eventRequest.Posts.Add(new Post
+                            {
+                                Comments = new List<Post>(),
+                                From = i.Guest,
+                                FromId = i.GuestId,
+                                Message = p.message,
+                                SendTime = p.created_time.DateTime,
+                                ProviderId = p.providerId.ToString()
+                            });
+                        }
                     }
                 }
 
