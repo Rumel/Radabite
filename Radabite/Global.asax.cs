@@ -48,7 +48,7 @@ namespace Radabite
             {
                 if(db.Database.Exists())
                 {
-                    System.Data.Entity.Database.SetInitializer<Db>(new DropCreateDatabaseIfModelChanges<Db>());
+                    System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Radabite.Migrations.Configuration>());
                 }
             }
 
