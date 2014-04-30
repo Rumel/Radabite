@@ -15,7 +15,7 @@
 				@foreach (var votedTime in Model.GetVoteDictionary())
 				{
 					<tr>
-						<td><a onclick="UpdateTime(this)">@votedTime.Key</a></td>
+						<td><a onclick="UpdateTime(this)">@TimeZone.CurrentTimeZone.ToLocalTime(votedTime.Key)</a></td>
 						<td><span data-tooltip class="has-tip" title="@Html.Partial("_VotersPartial", votedTime)">@votedTime.Value.Count</span></td>
 					</tr>
 				}
@@ -33,7 +33,7 @@ else
 					if (vote != DateTime.MinValue)
 					{
 						<h3>Current suggested time:</h3>
-						<p>@vote</p>
+						<p>@TimeZone.CurrentTimeZone.ToLocalTime(vote)</p>
 					}
 					else
 					{

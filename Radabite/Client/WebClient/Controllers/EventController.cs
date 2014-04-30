@@ -182,8 +182,8 @@ namespace Radabite.Client.WebClient.Controllers
             var newEvent = new Event()
             {
                 Id = model.Id,
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
+                StartTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
+                EndTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.EndTime.Ticks)),
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
@@ -218,8 +218,8 @@ namespace Radabite.Client.WebClient.Controllers
 
             var newEvent = new Event()
             {
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
+                StartTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
+                EndTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.EndTime.Ticks)),
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
@@ -254,7 +254,7 @@ namespace Radabite.Client.WebClient.Controllers
 			{
 				new Vote
 				{
-					Time = new DateTime(model.StartTime.Ticks),
+					Time = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
 					UserName = user.DisplayName
 				}
 			};
@@ -284,8 +284,8 @@ namespace Radabite.Client.WebClient.Controllers
             var newEvent = new Event()
             {
                 Id = model.Id,
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
+                StartTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
+                EndTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.EndTime.Ticks)),
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
@@ -442,7 +442,7 @@ namespace Radabite.Client.WebClient.Controllers
                 From = u,
                 FromId = u.Id,
                 Message = message,
-                SendTime = DateTime.Now,
+                SendTime = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now),
                 Likes = 0
             };
 
@@ -467,7 +467,17 @@ namespace Radabite.Client.WebClient.Controllers
 		{
 			var mEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
 			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
-			DateTime dt = Convert.ToDateTime(vote);
+
+			DateTime dt;
+			try
+			{
+				dt = TimeZone.CurrentTimeZone.ToUniversalTime(Convert.ToDateTime(vote));
+			}
+			catch(Exception e)
+			{
+				System.Diagnostics.Debug.WriteLine(e);
+				return PartialView("_VotedError");
+			}
 			
 			//If the user has already voted, change the vote
 			if (mEvent.Votes.Select(x => x.UserName).Contains(user.DisplayName))
