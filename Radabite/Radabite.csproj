@@ -345,7 +345,7 @@
     <Content Include="Client\WebClient\Content\Images\Cassey.jpg" />
     <Content Include="Client\WebClient\Content\Images\Dalton.jpg" />
     <Content Include="Client\WebClient\Content\Images\FacebookLogin.jpg" />
-    <Content Include="Client\WebClient\Content\Images\fi-marker.svg" />
+    <Content Include="Client\WebClient\Content\Images\fi-marker.png" />
     <Content Include="Client\WebClient\Content\Images\Nathan.jpg" />
     <Content Include="Client\WebClient\Content\Images\RadabiteSharp.png" />
     <Content Include="Client\WebClient\Content\Images\Sawyer.png" />
