@@ -69,7 +69,7 @@
 		$('#startDatepicker').val($.datepicker.formatDate('mm/dd/yy', new Date()));
 		$('#endDatepicker').val($.datepicker.formatDate('mm/dd/yy', new Date()));
 		$("#startDatepicker").datepicker({
-			minDate: new Date(),		//default is today
+			minDate: new Date(2014, 0),		//default is today
 			onClose: function (selectedDate) {
 				$("#endDatepicker").datepicker("option", "minDate", selectedDate);
 			}
@@ -403,7 +403,7 @@
 			<div class="large-1 columns" style="padding:0px">
 				<span data-tooltip class="has-tip" title="Click to select a location with Google Maps!">
 					<a data-reveal-id="CreateEvent-MapModal" href="#">
-						<img src="~/Client/WebClient/Content/Images/fi-marker.svg" width="37" height="37" />
+						<img src="~/Client/WebClient/Content/Images/fi-marker.png" width="37" height="37" />
 					</a>
 				</span>
 			</div>

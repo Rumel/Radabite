@@ -1,28 +1,18 @@
-﻿using System;
+﻿using Microsoft.SolverFoundation.Services;
+using Ninject;
+using Radabite.Backend.Accessors;
+using Radabite.Backend.Database;
+using Radabite.Backend.Interfaces;
+using RadabiteServiceManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Microsoft.SolverFoundation.Solvers;
-using RadabiteServiceManager;
-using Radabite.Backend.Interfaces;
-using Ninject;
-using Radabite.Backend.Database;
 using System.Net;
-using Microsoft.SolverFoundation.Common;
-using Microsoft.SolverFoundation.Services;
-using Radabite.Backend.Accessors;
 
 namespace Radabite.Backend.Helpers
 {
 	public class FooSimplex
 	{
-		private SimplexSolver _solver;
-
-		public FooSimplex()
-		{
-			_solver = new SimplexSolver();
-		}
-
 		public void RunAlgorithm()
 		{
 			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
@@ -129,8 +119,8 @@ namespace Radabite.Backend.Helpers
 			 */
 
 			//Assuming value is proportional to cost
-			double memConstant = 10,
-				diskConstant = 5,
+			double memConstant = 30,
+				diskConstant = 10,
 				tapeConstant = 0;
 
 			SolverContext solver = SolverContext.GetContext();
@@ -174,7 +164,7 @@ namespace Radabite.Backend.Helpers
 			}
 			else if (e.StartTime > DateTime.Now && e.StartTime < DateTime.Now.AddDays(1))
 			{
-				return 2 * (e.EndTime - e.StartTime).Hours * e.Guests.Count;
+				return 2 * ((e.EndTime - e.StartTime).Hours + 1) * e.Guests.Count;
 			}
 			else
 			{

@@ -20,18 +20,20 @@ namespace Radabite.Tests.Controllers
     {
         EventModel getNewEventModel()
         {
-            return new EventModel
-            {
-                Id = 3,
-                Title = "My awesome event",
-                StartTime = new DateTime(2012, 12, 12),
-                EndTime = new DateTime(2012, 12, 12),
-                IsPrivate = true,
-                Description = "My awesome description",
-                LocationName = "My house",
-                Latitude = 1.01,
-                Longitude = 1.01,
-            };
+			return new EventModel
+			{
+				Id = 3,
+				Title = "My awesome event",
+				StartTime = new DateTime(2012, 12, 12),
+				EndTime = new DateTime(2012, 12, 12),
+				IsPrivate = true,
+				Description = "My awesome description",
+				LocationName = "My house",
+				Latitude = 1.01,
+				Longitude = 1.01,
+				Owner = new User() { DisplayName = "test" },
+				Votes = new List<Vote>() { new Vote(){ Time = DateTime.Now, UserName = "test"}}
+			};
         }
 
         [TestInitialize]

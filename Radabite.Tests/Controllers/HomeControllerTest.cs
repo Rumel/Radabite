@@ -33,5 +33,15 @@ namespace Radabite.Tests.Controllers
 
             Assert.IsNotNull(result);
         }
+
+		[TestMethod]
+		public void AboutTest()
+		{
+			HomeController controller = new HomeController();
+
+			ViewResult result = controller.About() as ViewResult;
+
+			Assert.IsNotNull(result);
+		}
     }
 }
