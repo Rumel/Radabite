@@ -125,7 +125,7 @@
 				No: @Html.RadioButtonFor(m => m.PollIsActive, false)
 			</div>
 		</div>
-		<input type="submit" value="Update" id="UpdateSubmitButton">
+		<input type="submit" value="Update" id="UpdateSubmitButton" class="radius button">
         <a class="close-reveal-modal">&#215;</a>
         @Html.HiddenFor(m => m.Latitude, new { placeholder = Model.Latitude, id = "mapLatitudeUpdate" })
 		@Html.HiddenFor(m => m.Longitude, new { placeholder = Model.Longitude, id = "mapLongitudeUpdate" })

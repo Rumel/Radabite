@@ -29,7 +29,7 @@ namespace Radabite.Backend.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Radabite.Migrations.Configuration>());
+            //System.Data.Entity.Database.SetInitializer<Db>(new MigrateDatabaseToLatestVersion<Db, Radabite.Migrations.Configuration>());
 
             //modelBuilder.Entity<Event>().HasRequired<Location>(e => e.Location);
             //modelBuilder.Entity<Event>().HasRequired<User>(e => e.Owner).WithMany(u => u.Events);

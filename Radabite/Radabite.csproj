@@ -331,9 +331,9 @@
     <Compile Include="Backend\Interfaces\IEventManager.cs" />
     <Compile Include="Backend\Managers\EventManager.cs" />
     <Compile Include="Client\WebClient\Models\AccountModels.cs" />
-    <Compile Include="Migrations\201404020253074_First.cs" />
-    <Compile Include="Migrations\201404020253074_First.Designer.cs">
-      <DependentUpon>201404020253074_First.cs</DependentUpon>
+    <Compile Include="Migrations\201404300047326_First.cs" />
+    <Compile Include="Migrations\201404300047326_First.Designer.cs">
+      <DependentUpon>201404300047326_First.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -508,6 +508,8 @@
     <Content Include="Client\WebClient\Views\Event\_EventList.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <None Include="Properties\PublishProfiles\radabite %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\radabite %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\radabite.pubxml" />
   </ItemGroup>
   <ItemGroup>
@@ -520,17 +522,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201404020253074_First.resx">
-      <DependentUpon>201404020253074_First.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Client\WebClient\App_Data\" />
     <Folder Include="Client\WebClient\Views\Events\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201404300047326_First.resx">
+      <DependentUpon>201404300047326_First.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
