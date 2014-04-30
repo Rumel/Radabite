@@ -510,6 +510,7 @@
     <Content Include="Client\WebClient\Views\Event\_EventList.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Client\WebClient\Views\Event\_VotedError.cshtml" />
     <None Include="Properties\PublishProfiles\radabite %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\radabite %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\radabite.pubxml" />

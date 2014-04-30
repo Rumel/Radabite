@@ -50,12 +50,11 @@
 		<table style="width: 100%; border: none">
 			<tr>
 				<th style="text-align: right">Start:</th>
-				<td>@Model.StartTime</td>
+				<td>@TimeZone.CurrentTimeZone.ToLocalTime(Model.StartTime)</td>
 			</tr>
 			<tr style="background: none">
 				<th style="text-align: right">End:</th>
-				<td>
-				@Model.EndTime</td>
+				<td>@TimeZone.CurrentTimeZone.ToLocalTime(Model.EndTime)</td>
 			</tr>
 			<tr>
 				<th style="text-align: right">Location:</th>
