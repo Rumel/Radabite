@@ -1,0 +1,97 @@
+﻿@model Radabite.Models.EventModel
+
+@if (Model.Owner.Id == Model.CurrentUser.Id)
+{
+	<h3>Poll Results</h3>
+	<div style="overflow-y: auto; height: 250px; width: 300px; overflow-x: hidden">
+		<table style="width: inherit">
+			<thead>
+				<tr>
+					<th>Time</th>
+					<th>Votes</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var votedTime in Model.GetVoteDictionary())
+				{
+					<tr>
+						<td><a onclick="UpdateTime(this)">@votedTime.Key</a></td>
+						<td><span data-tooltip class="has-tip" title="@Html.Partial("_VotersPartial", votedTime)">@votedTime.Value.Count</span></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+else
+{
+	<div class="panel" id="vote-panel">
+		<div class="row">
+			<div class="small-12 columns">
+				@{
+					var vote = Model.HasVoted(User.Identity.Name);
+					if (vote != DateTime.MinValue)
+					{
+						<h3>Current suggested time:</h3>
+						<p>@vote</p>
+					}
+					else
+					{
+						<h3>Suggest an alternative time:</h3>
+					}
+				}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="small-8 columns">
+				<input type="datetime-local" name="time-vote" step="1800" style="width: initial">
+			</div>
+			<div class="small-4 columns">
+				<a class="radius button" onclick="ProcessVote(this, '@Url.Action("/Vote")')" href="#vote">Submit</a>
+			</div>
+		</div>
+	</div>
+}
+
+<script type="text/javascript">
+	function ProcessVote(a, action) {
+
+		var resultDiv = $('#vote-panel');
+
+		var v = $('input[name="time-vote"]').val();
+		var e = "@Model.Id";
+		var u = "@User.Identity.Name";
+
+		$.ajax({
+			type: "POST",
+			url: action,
+			data: {
+				eventId: e,
+				userName: u,
+				vote: v
+			},
+			dataType: "html",
+			success: function (response) {
+				resultDiv.html(response);
+				$('input[name="time-vote"]').val("");
+			}
+		});
+	}
+
+	function UpdateTime(a) {
+		var time = new Date($(a).html());
+
+		var startTimePick = document.getElementById('startTimepickerUpdateSelect');
+		var endTimePick = document.getElementById('endTimepickerUpdateSelect');
+
+		$('#UpdateEventModal').foundation('reveal', 'open');
+		$('#startDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', time));
+		$('#endDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', time));
+
+		startTimePick.selectedIndex = time.getHours() * 2 + (time.getMinutes() / 30);
+		var eventLength = parseInt("@Math.Round((Model.EndTime - Model.StartTime).TotalMinutes / 30)");
+		var originalEnd = parseInt(time.getHours() * 2 + (time.getMinutes() / 30));
+		endTimePick.selectedIndex = Math.min(originalEnd + eventLength, 47);
+	}
+</script>

@@ -34,7 +34,9 @@ namespace Radabite.Tests.Mocks.Accessors
 				},
 				IsActive = true,
 				Guests = new List<Invitation>(),
-				Posts = new List<Post>()
+				Posts = new List<Post>(),
+				Owner = new User() { DisplayName = "test" },
+				Votes = new List<Vote>() { new Vote(){ Time = DateTime.Now, UserName = "test"}}
 			};
 		}
 
@@ -48,35 +50,42 @@ namespace Radabite.Tests.Mocks.Accessors
 					Guests = new List<Invitation>(){ new Invitation() },
 					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(-2),
-					EndTime = DateTime.Now.AddDays(-2)
+					EndTime = DateTime.Now.AddDays(-2),
+					Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(){ new Invitation() },
 					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddHours(1),
-					EndTime = DateTime.Now.AddHours(3)
+					EndTime = DateTime.Now.AddHours(3),
+					Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(),
 					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(2),
-					EndTime = DateTime.Now.AddDays(2)
+					EndTime = DateTime.Now.AddDays(2),
+					Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(),
 					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(2),
-					EndTime = DateTime.Now.AddDays(2)
+					EndTime = DateTime.Now.AddDays(2),
+					Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}
+
 				},
 				new Event()
 				{ 
 					Guests = new List<Invitation>(),
 					Posts = new List<Post>{ new Post(){ BlobId = "blob" } },
 					StartTime = DateTime.Now.AddDays(2),
-					EndTime = DateTime.Now.AddDays(2)
+					EndTime = DateTime.Now.AddDays(2),
+					Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}
+
 				}
             };
 		}
@@ -85,11 +94,11 @@ namespace Radabite.Tests.Mocks.Accessors
 		{
 			return new List<Event>
             {
-                new Event(),
-                new Event(),
-                new Event(),
-                new Event(),
-                new Event()
+                new Event(){Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}},
+                new Event(){Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}},
+                new Event(){Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}},
+                new Event(){Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}},
+                new Event(){Location = new Location(){Latitude=0,Longitude=0,LocationName="testLocation"}}
             };
 		}
 

@@ -35,7 +35,7 @@
 		});
 	});
 
-	$(document).on('opened', '[data-reveal]', function () {
+	$(document).on('open', '[data-reveal]', function () {
 		var modal = $(this);
 
 		if (modal.attr('id') == 'UpdateEventModal') {
@@ -50,6 +50,8 @@
 			startTimePick.selectedIndex = startDT.getHours() * 2 + (startDT.getMinutes() / 30);
 			endTimePick.selectedIndex = endDT.getHours() * 2 + (endDT.getMinutes() / 30);
 
+			@{Math.Round((Model.EndTime - Model.StartTime).TotalMinutes / 30);}
+
 			$('#startDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', startDT));
 			$('#endDatepickerUpdate').val($.datepicker.formatDate('mm/dd/yy', endDT));
 		}
@@ -57,41 +59,41 @@
 </script>
 
 <div id="UpdateEventModal" class="reveal-modal small" data-reveal>
-	<h2>Update your Event!</h2>
+    <h2>Update your Event!</h2>
 	@using (Html.BeginForm("Update", "Event", FormMethod.Post, new { onSubmit = "FillUpdateTimes()" }))
-	{
-		<div class="row">
+    {
+        <div class="row">
 			<div class="large-11 columns">
-				@Html.TextBoxFor(m => m.Title, new { placeholder = Model.Title })
-				@Html.ValidationMessageFor(m => m.Title)
-			</div>
-		</div>
-		<div class="row">
+                @Html.TextBoxFor(m => m.Title, new { placeholder = Model.Title })
+                @Html.ValidationMessageFor(m => m.Title)
+            </div>
+        </div>
+        <div class="row">
 			<div class="large-11 columns">
-				@Html.TextBoxFor(m => m.Description, new { placeholder = Model.Description })
-				@Html.ValidationMessageFor(m => m.Description)
-			</div>
-		</div>
-		<div class="row">
+                @Html.TextBoxFor(m => m.Description, new { placeholder = Model.Description })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+        </div>
+        <div class="row">
 			<div class="large-11 columns">
-				@Html.TextBoxFor(m => m.LocationName, new { placeholder = Model.LocationName, id = "locationInputUpdate" })
-				@Html.ValidationMessageFor(m => m.LocationName)
-			</div>
+                @Html.TextBoxFor(m => m.LocationName, new { placeholder = Model.LocationName, id = "locationInputUpdate" })
+                @Html.ValidationMessageFor(m => m.LocationName)
+            </div>
 			<div class="large-1 columns" style="padding: 0px">
 				<span data-tooltip class="has-tip" title="Click to select a location with Google Maps!">
 					<a data-reveal-id="CreateEvent-MapModal" href="#">
 						<img src="~/Client/WebClient/Content/Images/fi-marker.svg" width="37" height="37" />
 					</a>
 				</span>
-			</div>
-		</div>
-		<div class="row">
+            </div>
+        </div>
+        <div class="row">
 			<div class="small-3 columns">
 				<h5>Start time:</h5>
-			</div>
+            </div>
 			<div class="small-4 columns">
 				<input id="startDatepickerUpdate" style="padding: 8px ; margin:0px ; width: 100%" type="text" readonly/>
-			</div>
+            </div>
 			<div class="small-4 columns">
 				<div id="startTimepickerUpdate"></div>
 			</div>
@@ -106,19 +108,26 @@
 			</div>
 			<div class="small-4 columns">
 				<div id="endTimepickerUpdate"></div>
-			</div>
+            </div>
 			<div class="small-1 columns"></div>
-		</div>
-		<div class="row">
+        </div>
+        <div class="row">
 			<div class="large-10 columns">
-				Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, (Model.IsPrivate) ? "" : "new { @checked = \"checked\" }")
+                Public Event: @Html.RadioButtonFor(m => m.IsPrivate, false, (Model.IsPrivate) ? "" : "new { @checked = \"checked\" }")
 				Private Event: @Html.RadioButtonFor(m => m.IsPrivate, true, (Model.IsPrivate) ? "new { @checked = \"checked\" }" : "")
-			</div>
+            </div>
 			@Html.HiddenFor(m => m.Id)
+        </div>
+		<div class="row">
+			<div class="large-12 columns">
+				Use a poll to pick times
+				Yes: @Html.RadioButtonFor(m => m.PollIsActive, true)
+				No: @Html.RadioButtonFor(m => m.PollIsActive, false)
+			</div>
 		</div>
 		<input type="submit" value="Update" id="UpdateSubmitButton" class="radius button">
-		<a class="close-reveal-modal">&#215;</a>
-		@Html.HiddenFor(m => m.Latitude, new { placeholder = Model.Latitude, id = "mapLatitudeUpdate" })
+        <a class="close-reveal-modal">&#215;</a>
+        @Html.HiddenFor(m => m.Latitude, new { placeholder = Model.Latitude, id = "mapLatitudeUpdate" })
 		@Html.HiddenFor(m => m.Longitude, new { placeholder = Model.Longitude, id = "mapLongitudeUpdate" })
 		@Html.HiddenFor(m => m.StartTime, new { id = "startTimeUpdate" })
 		@Html.HiddenFor(m => m.EndTime, new { id = "endTimeUpdate" })

@@ -4,37 +4,38 @@
 }
 <div class="row">
 	<div class="large-12 medium-12 columns">
-        <hgroup class="title">
-            <h2>Associate your @ViewBag.ProviderDisplayName account.</h2>
-        </hgroup>
+<hgroup class="title">
+    <h2>Associate your @ViewBag.ProviderDisplayName account.</h2>
+</hgroup>
 
-        @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl })) {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
 
-            <fieldset>
-                <legend>Association Form</legend>
-                <p>
-                    You've successfully authenticated with <strong>@ViewBag.ProviderDisplayName</strong>.
-                    Your username will be the user name you use on that site: <strong>@Model.UserName</strong>
-                </p>
-                @Html.HiddenFor(m => m.ExternalLoginData)
-                @Html.HiddenFor(m => m.Gender)
-                @Html.HiddenFor(m => m.PersonName)
-                @Html.HiddenFor(m => m.Link)
-                @Html.HiddenFor(m => m.Location)
-                @Html.HiddenFor(m => m.FacebookToken)
-                @Html.HiddenFor(m => m.FacebookUserId)
-                @Html.HiddenFor(m => m.UserName)
-                @Html.HiddenFor(m => m.GoogleToken)
-                @Html.HiddenFor(m => m.GoogleUserId)
-                @Html.HiddenFor(m => m.TwitterToken)
-                <input type="submit" value="Register" />
-            </fieldset>
-        }
+    <fieldset>
+        <legend>Association Form</legend>
+        <p>
+            You've successfully authenticated with <strong>@ViewBag.ProviderDisplayName</strong>.
+            Your username will be the user name you use on that site: <strong>@Model.UserName</strong>
+        </p>
+        @Html.HiddenFor(m => m.ExternalLoginData)
+        @Html.HiddenFor(m => m.Gender)
+        @Html.HiddenFor(m => m.PersonName)
+        @Html.HiddenFor(m => m.Link)
+        @Html.HiddenFor(m => m.Location)
+        @Html.HiddenFor(m => m.FacebookToken)
+        @Html.HiddenFor(m => m.FacebookUserId)
+        @Html.HiddenFor(m => m.UserName)
+        @Html.HiddenFor(m => m.GoogleToken)
+        @Html.HiddenFor(m => m.GoogleUserId)
+        @Html.HiddenFor(m => m.TwitterToken)
+        @Html.HiddenFor(m => m.TwitterUserName)
+        <input type="submit" value="Register" />
+    </fieldset>
+}
 
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-        }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
     </div>
 </div>
