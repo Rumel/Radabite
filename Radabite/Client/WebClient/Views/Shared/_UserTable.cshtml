@@ -12,7 +12,7 @@
 			foreach (User friend in Model)
 			{
 							<!--These links currently link to the friend's personal profile - should be a different page?-->
-				<tr><td>@friend.DisplayName</td></tr>
+				<tr><td>@Html.ActionLink(friend.DisplayName, "../UserProfile", new { u = friend.Id })</td></tr>
 			}
 		}
 	}
