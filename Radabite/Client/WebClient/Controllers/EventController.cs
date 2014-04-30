@@ -89,8 +89,26 @@ namespace Radabite.Client.WebClient.Controllers
                         }
                     }
                 }
-            }
 
+                if (i.Guest.TwitterToken != null)
+                {
+                    var tweets = ServiceManager.Kernel.Get<ITwitterManager>().GetTweets(i.Guest, eventRequest.StartTime, eventRequest.EndTime);
+                    foreach (var p in tweets.posts)
+                    {
+                        eventRequest.Posts.Add(new Post
+                        {
+                            Comments = new List<Post>(),
+                            From = i.Guest,
+                            FromId = i.GuestId,
+                            Message = p.message,
+                            SendTime = p.created_time.DateTime,
+                            ProviderId = p.providerId.ToString()
+                        });
+                    }
+                }
+
+            }
+            
             ServiceManager.Kernel.Get<IEventManager>().Save(eventRequest);
 
             var eventViewModel = new EventModel()
