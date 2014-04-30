@@ -342,7 +342,13 @@
     <Content Include="Client\WebClient\Content\foundation\foundation.css" />
     <Content Include="Client\WebClient\Content\foundation\foundation.mvc.css" />
     <Content Include="Client\WebClient\Content\foundation\normalize.css" />
+    <Content Include="Client\WebClient\Content\Images\Cassey.jpg" />
+    <Content Include="Client\WebClient\Content\Images\Dalton.jpg" />
     <Content Include="Client\WebClient\Content\Images\FacebookLogin.jpg" />
+    <Content Include="Client\WebClient\Content\Images\fi-marker.svg" />
+    <Content Include="Client\WebClient\Content\Images\Nathan.jpg" />
+    <Content Include="Client\WebClient\Content\Images\RadabiteSharp.png" />
+    <Content Include="Client\WebClient\Content\Images\Sawyer.png" />
     <Content Include="Client\WebClient\Content\Images\TwitterLogin.jpg" />
     <Content Include="Client\WebClient\Content\Radabite.css" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -498,6 +504,10 @@
     <Content Include="Client\WebClient\Views\Event\_PollPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_VotedPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_VotersPartial.cshtml" />
+    <Content Include="Client\WebClient\Views\Home\About.cshtml" />
+    <Content Include="Client\WebClient\Views\Event\_EventList.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\radabite %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\radabite %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\radabite.pubxml" />
