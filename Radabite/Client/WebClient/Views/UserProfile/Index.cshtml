@@ -20,7 +20,7 @@
         @if (Model.User.PhotoLink == null) 
         { 
         <div style="width:302px;height:300px;border:1px black solid">
-                <img src="http://baconmockup.com/302/300" alt="" />
+                <img src="~/Client/WebClient/Content/Images/RadabiteSharp.png" alt="" />
         </div>
         } else {
         <div>
@@ -41,7 +41,10 @@
                     <span>Location: @Model.User.Location</span>
                     <br />
                 }
-                <span>Gender: @Model.User.Gender</span>
+                @if (Model.User.Gender != null)
+                {
+                    <span>Gender: @Char.ToUpper(Model.User.Gender[0])@Model.User.Gender.Substring(1)</span>
+                }
             </p>
         </div>
         <table style="width: 100%">
