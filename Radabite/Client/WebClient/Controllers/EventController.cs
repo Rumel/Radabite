@@ -331,7 +331,10 @@ namespace Radabite.Client.WebClient.Controllers
                 r = ResponseType.Rejected;
             }
 
-            e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
+            if (e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)) != null)
+            {
+                e.Guests.FirstOrDefault(g => g.GuestId == long.Parse(userId)).Response = r;
+            }
 
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
@@ -392,7 +395,10 @@ namespace Radabite.Client.WebClient.Controllers
                 Likes = 0
             };
 
-            e.Posts.FirstOrDefault(x => x.Id == long.Parse(postId)).Comments.Add(newComment);
+            if (e.Posts.FirstOrDefault(x => x.Id == long.Parse(postId)) != null)
+            {
+                e.Posts.FirstOrDefault(x => x.Id == long.Parse(postId)).Comments.Add(newComment);
+            }
 
             ServiceManager.Kernel.Get<IEventManager>().Save(e);
 
