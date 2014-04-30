@@ -61,9 +61,10 @@
 		{
 			<dl class="accordion" data-accordion="myAccordionGroup">
 				<dd>
-					<a href="#Map" onclick="setTimeout(function(){google.maps.event.trigger(lMap, 'resize');}, 100);">Map</a>
+					<a href="#Map" onclick="setTimeout('refreshMap()', 100)">Map</a>
 					<div id="Map" class="content">
 						<div id="event-map" style="width: 100%; height: 300px"></div>
+						<br />
 						<div style="text-align: center">
 							<a href="javascript:GetDirections()" class="button radius">Get Directions</a>
 						</div>
@@ -93,6 +94,15 @@
 					lMap.setCenter(latLng);
 					marker.setPosition(latLng);
 				});
+
+				function refreshMap() {
+					google.maps.event.trigger(lMap, 'resize');
+					
+					var latLng = new google.maps.LatLng('@Model.Latitude', '@Model.Longitude');
+
+					lMap.setCenter(latLng);
+					marker.setPosition(latLng);
+				}
 
 				function GetDirections() {
 					if (navigator.geolocation) {
