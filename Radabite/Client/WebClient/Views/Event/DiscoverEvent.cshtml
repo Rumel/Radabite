@@ -41,29 +41,20 @@
 <script type="text/javascript">
 	var userLat;
 	var userLong;
+	var act;
 	function positionFailD(err) {
 		userLat = -1000;
 		userLong = -1000;
 	}
 	function positionSuccessD(position) {
-		// Centre the map on the new location
+		var resultDiv = $('#discoverList');
+
 		var coords = position.coords || position.coordinate || position;
 		userLat = coords.latitude;
 		userLong = coords.longitude;
-	}
-
-	function Sort(a, action) {
-		var resultDiv = $('#discoverList');
-
-		//Sets location to current location if possible, else starts at a default location
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(positionSuccessD, positionFailD);
-		} else {
-			positionFail(-1);
-		}
 
 		$.ajax({
-			url: action,
+			url: act,
 			type: 'POST',
 			dataType: "json",
 			data: {
@@ -71,11 +62,21 @@
 				userLong: userLong
 			},
 			dataType: "html",
-			success: function(response) {
+			success: function (response) {
 				resultDiv.html('');
 				resultDiv.html(response);
 			}
 		});
+	}
+
+	function Sort(a, action) {
+		//Sets location to current location if possible, else starts at a default location
+		if (navigator.geolocation) {
+			act = action;
+			navigator.geolocation.getCurrentPosition(positionSuccessD, positionFailD);
+		} else {
+			positionFail(-1);
+		}
 	}
 
     function processInvitationResponse(a, action) {
