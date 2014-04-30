@@ -499,6 +499,7 @@
     <Content Include="Client\WebClient\Views\Event\_VotedPartial.cshtml" />
     <Content Include="Client\WebClient\Views\Event\_VotersPartial.cshtml" />
     <None Include="Properties\PublishProfiles\radabite %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\radabite %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\radabite.pubxml" />
   </ItemGroup>
   <ItemGroup>

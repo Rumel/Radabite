@@ -10,6 +10,7 @@ namespace Radabite.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(Radabite.Backend.Database.Db context)
