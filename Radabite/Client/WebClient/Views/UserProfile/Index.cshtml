@@ -41,7 +41,10 @@
                     <span>Location: @Model.User.Location</span>
                     <br />
                 }
-                <span>Gender: @Model.User.Gender</span>
+                @if (Model.User.Gender != null)
+                {
+                    <span>Gender: @Char.ToUpper(Model.User.Gender[0])@Model.User.Gender.Substring(1)</span>
+                }
             </p>
         </div>
         <table style="width: 100%">
