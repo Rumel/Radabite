@@ -7,7 +7,12 @@
     <div class="panel">
         <div class ="row">
             <div class="large-3 medium-3 columns">
-                <img style="border: 1px black solid" src="@post.From.PhotoLink" alt="" />
+                @if(post.From.PhotoLink != null)
+                {
+                    <img style="border: 1px black solid" src="@post.From.PhotoLink" alt="" />
+                } else {
+                    <img style="border: 1px black solid" src="~/Client/WebClient/Content/Images/RadabiteSharp.png" alt="" />
+                }
             </div>
             <div class="large-9 medium 9 columns">
                 <p>
@@ -47,7 +52,12 @@
             <div class="large-10 large-offset-2 medium-10 medium-offset-2 columns panel">
                 <div class ="row">
                     <div class="large-3 medium-3 columns">
-                        <img style="border: 1px black solid" src="@c.From.PhotoLink" alt="" />
+                        @if(c.From.PhotoLink != null)
+                        {
+                            <img style="border: 1px black solid" src="@c.From.PhotoLink" alt="" />
+                        } else {
+                            <img style="border: 1px black solid" src="~/Client/WebClient/Content/Images/RadabiteSharp.png" alt="" />
+                        }
                     </div>
                     <div class="large-9 medium 9 columns">
                         <p>
