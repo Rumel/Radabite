@@ -16,7 +16,7 @@ namespace Radabite.Backend.Accessors
         {
             using (var db = new Db())
             {
-                if(e.Id != 0)
+                if (e.Id != 0)
                 {
                     var ev = db.Events.FirstOrDefault(x => x.Id == e.Id);
                     ev.Title = e.Title;
@@ -27,7 +27,7 @@ namespace Radabite.Backend.Accessors
                     ev.Location = e.Location;
                     ev.FinishedGettingPosts = e.FinishedGettingPosts;
                     ev.IsActive = e.IsActive;
-					ev.PollIsActive = e.PollIsActive;
+                    ev.PollIsActive = e.PollIsActive;
                     if (e.Guests != null)
                     {
                         foreach (var i in e.Guests)
@@ -62,36 +62,36 @@ namespace Radabite.Backend.Accessors
                                 {
                                     if (c.Id == 0)
                                     {
-                                        c.From = db.Users.FirstOrDefault(x => x.Id == p.From.Id);
+                                        c.From = db.Users.FirstOrDefault(x => x.Id == c.From.Id);
                                         ev.Posts.FirstOrDefault(x => x.Id == p.Id).Comments.Add(c);
                                         db.Entry<Post>(c).State = EntityState.Added;
                                         db.Entry<User>(c.From).State = EntityState.Modified;
-                        }
-                    }
+                                    }
+                                }
                             }
                         }
                     }
 
-					if(e.Votes != null)
-					{
-						foreach(var v in e.Votes)
-						{
-							if(v.Id != 0)
-							{
-								db.Entry<Vote>(v).State = EntityState.Modified;
-							}
-							else
-							{
-								ev.Votes.Add(v);
-								db.Entry<Vote>(v).State = EntityState.Added;
-							}
-						}
-					}
+                    if (e.Votes != null)
+                    {
+                        foreach (var v in e.Votes)
+                        {
+                            if (v.Id != 0)
+                            {
+                                db.Entry<Vote>(v).State = EntityState.Modified;
+                            }
+                            else
+                            {
+                                ev.Votes.Add(v);
+                                db.Entry<Vote>(v).State = EntityState.Added;
+                            }
+                        }
+                    }
 
                     db.Entry<Event>(ev).State = EntityState.Modified;
                     db.Entry<User>(ev.Owner).State = EntityState.Unchanged;
-                } 
-                else 
+                }
+                else
                 {
                     e.Owner = db.Users.FirstOrDefault(x => x.Id == e.Owner.Id);
                     db.Events.Add(e);
@@ -111,7 +111,7 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Guests.Select(i => i.Guest))
                                 .Include(e => e.Posts.Select(p => p.Comments))
                                 .Include(e => e.Posts.Select(p => p.From))
-								.Include(e => e.Votes)
+                                .Include(e => e.Votes)
                                 .ToList();
             }
         }
@@ -125,7 +125,7 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Guests.Select(i => i.Guest))
                                 .Include(e => e.Posts.Select(p => p.Comments))
                                 .Include(e => e.Posts.Select(p => p.From))
-								.Include(e => e.Votes)
+                                .Include(e => e.Votes)
                                 .FirstOrDefault(x => x.Id == id && x.IsActive == true);
             }
         }
@@ -139,7 +139,7 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Guests.Select(i => i.Guest))
                                 .Include(e => e.Posts.Select(p => p.Comments))
                                 .Include(e => e.Posts.Select(p => p.From))
-								.Include(e => e.Votes)
+                                .Include(e => e.Votes)
                                 .Where(x => x.Owner.Id == OwnerId && x.IsActive == true)
                                 .ToList();
             }
@@ -154,7 +154,7 @@ namespace Radabite.Backend.Accessors
                                 .Include(e => e.Guests.Select(i => i.Guest))
                                 .Include(e => e.Posts.Select(p => p.Comments))
                                 .Include(e => e.Posts.Select(p => p.From))
-								.Include(e => e.Votes)
+                                .Include(e => e.Votes)
                                 .Where(x => x.Guests.Where(y => y.Guest.Id == GuestId).Count() > 0 && x.IsActive == true)
                                 .ToList();
             }

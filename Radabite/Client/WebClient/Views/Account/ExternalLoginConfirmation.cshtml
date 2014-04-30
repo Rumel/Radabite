@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "Register";
 }
-
+<div class="row">
+	<div class="large-12 medium-12 columns">
 <hgroup class="title">
     <h2>Associate your @ViewBag.ProviderDisplayName account.</h2>
 </hgroup>
@@ -29,10 +30,12 @@
         @Html.HiddenFor(m => m.GoogleUserId)
         @Html.HiddenFor(m => m.TwitterToken)
         @Html.HiddenFor(m => m.TwitterUserName)
-        <input type="submit" value="Register" />
+        <input type="submit" value="Register" class="radius button"/>
     </fieldset>
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+    </div>
+</div>
