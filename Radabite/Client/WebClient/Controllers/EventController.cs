@@ -133,7 +133,7 @@ namespace Radabite.Client.WebClient.Controllers
 
             userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().ToList();
+            var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().Where(x => x.IsPrivate == false).ToList();
 
 			userModel.DiscoverEvents = events.Select(x => new EventModel()
 			{
@@ -295,16 +295,43 @@ namespace Radabite.Client.WebClient.Controllers
         public PartialViewResult Invite(List<String> friends, long eventId)
         {
             var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
-            foreach (var f in friends)
+            if (friends != null)
             {
-                e.Guests.Add(new Invitation 
+                foreach (var f in friends)
                 {
-                    Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
-                    GuestId = long.Parse(f),
-                    Response = ResponseType.WaitingReply
-                });
+                    e.Guests.Add(new Invitation
+                    {
+                        Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(f)),
+                        GuestId = long.Parse(f),
+                        Response = ResponseType.WaitingReply
+                    });
+                }
+                ServiceManager.Kernel.Get<IEventManager>().Save(e);
             }
-            ServiceManager.Kernel.Get<IEventManager>().Save(e);
+
+            var eventModel = new EventModel
+            {
+                CurrentUser = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(User.Identity.Name),
+                Guests = e.Guests.ToList()
+            };
+
+            return PartialView("_InvitationPanel", eventModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult JoinEvent(string user, long eventId)
+        {
+            var e = ServiceManager.Kernel.Get<IEventManager>().GetById(eventId);
+            if (user != null)
+            {
+                e.Guests.Add(new Invitation
+                {
+                    Guest = ServiceManager.Kernel.Get<IUserManager>().GetById(long.Parse(user)),
+                    GuestId = long.Parse(user),
+                    Response = ResponseType.Accepted
+                });
+                ServiceManager.Kernel.Get<IEventManager>().Save(e);
+            }
 
             var eventModel = new EventModel
             {

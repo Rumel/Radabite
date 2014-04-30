@@ -30,10 +30,16 @@
 			<a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
 		</div>
 	}
-	else
+	else if (Model.Guests.Where(x => x.GuestId == Model.CurrentUser.Id).Count() == 0)
 	{
-		<div class="small-4 columns"></div>
+        <div class="offset-2 small-2 columns">
+            <a class="radius button" onclick="InviteCurrentUser(this, '@Url.Action("/JoinEvent")')" href="#invitations" >Join This Event</a>
+		</div>
 	}
+    else
+    {
+        <div class="small-4 columns"></div>
+    }
 </div>
 
 
@@ -64,7 +70,8 @@
 					<a href="#Map" onclick="setTimeout(function(){google.maps.event.trigger(lMap, 'resize');}, 100);">Map</a>
 					<div id="Map" class="content">
 						<div id="event-map" style="width: 100%; height: 300px"></div>
-						<div style="text-align: center">
+						<br/>
+                        <div style="text-align: center">
 							<a href="javascript:GetDirections()" class="button radius">Get Directions</a>
 						</div>
 					</div>
@@ -116,6 +123,7 @@
 				}
 			</script>
 		}
+        <br/>
 		@{if (Model.IsPrivate)
 		{ 
 			<a class="button round secondary" disabled>Private</a>	
@@ -277,7 +285,6 @@
     });
 
 	function ProcessInvitations(a, action) {
-
 		var container = $('div#invitation-container');
 		var resultDiv = $($(a).attr('href'), container);
 		console.log(container);
@@ -299,6 +306,26 @@
 		});
 
 		$('a.close-reveal-modal').trigger('click');
+	}
+
+	function InviteCurrentUser(a, action) {
+        var container = $('div#invitation-container');
+	    var resultDiv = $($(a).attr('href'), container);
+	    $.ajax({
+	        type: "POST",
+	        url: action,
+	        data: {
+	            user: "@Model.CurrentUser.Id",
+	            eventId: modelId
+	        },
+	        traditional: true,
+	        dataType: "html",
+	        success: function (response) {
+	            resultDiv.html('');
+	            resultDiv.html(response);
+	            $(a).attr("style", "visibility: hidden")
+	        }
+	    });
 	}
 </script>
 
