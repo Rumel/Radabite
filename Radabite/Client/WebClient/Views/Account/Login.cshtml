@@ -3,16 +3,19 @@
 @{
     ViewBag.Title = "Log in";
 }
+<div class="row">
+	<div class="large-12 medium-12 columns">
+        <hgroup class="title">
+            <h1>Login with your favorite social network!</h1>
+            <h3>If your favorite social network is Google+, just go away.</h3>
+        </hgroup>
 
-<hgroup class="title">
-    <h1>Login with your favorite social network!</h1>
-    <h3>If your favorite social network is Google+, just go away.</h3>
-</hgroup>
+        <section class="social" id="socialLoginForm">
+            @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+        </section>
 
-<section class="social" id="socialLoginForm">
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</section>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+    </div>
+</div>

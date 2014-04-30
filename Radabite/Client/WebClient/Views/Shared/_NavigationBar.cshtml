@@ -11,10 +11,13 @@
 
         <section class="top-bar-section">
             <ul class="left">
-                <li>@Html.ActionLink("Profile", "../UserProfile/CurrentUser")</li>
-                <li><a data-reveal-id="CreateEventModal" href="#" id="CreateEventButton">Create</a></li>
-                <li>@Html.ActionLink("Discover", "../Event/DiscoverEvent", new { u = User.Identity.Name })</li>
-				<li>@Html.ActionLink("About", "../Home/About")</li>
+                @if(User.Identity.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Profile", "../UserProfile/CurrentUser")</li>
+                    <li><a data-reveal-id="CreateEventModal" href="#" id="CreateEventButton">Create</a></li>
+                    <li>@Html.ActionLink("Discover", "../Event/DiscoverEvent", new { u = User.Identity.Name })</li>
+				}
+                <li>@Html.ActionLink("About", "../Home/About")</li>
             </ul>
             <div class="right">
                 @Html.Partial("~/Client/WebClient/Views/Shared/_LoginPartial.cshtml")
