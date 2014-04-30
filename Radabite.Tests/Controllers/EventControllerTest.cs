@@ -143,6 +143,20 @@ namespace Radabite.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
+        public void JoinEvent()
+        {
+            EventController controller = new EventController();
+
+            var mock = new Mock<ControllerContext>();
+            mock.SetupGet(x => x.HttpContext.User.Identity.Name).Returns("Bob");
+            mock.SetupGet(x => x.HttpContext.Request.IsAuthenticated).Returns(true);
+            controller.ControllerContext = mock.Object;
+
+            PartialViewResult result = controller.JoinEvent("1", 1) as PartialViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
         [TestMethod]
         public void RespondToInvitation()
         {
