@@ -350,6 +350,8 @@
     <Content Include="Client\WebClient\Content\Images\RadabiteSharp.png" />
     <Content Include="Client\WebClient\Content\Images\Sawyer.png" />
     <Content Include="Client\WebClient\Content\Images\TwitterLogin.jpg" />
+    <Content Include="Client\WebClient\Content\Images\Twitter_logo_blue_alpha.png" />
+    <Content Include="Client\WebClient\Content\Images\Twitter_logo_blue_small.png" />
     <Content Include="Client\WebClient\Content\Radabite.css" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
