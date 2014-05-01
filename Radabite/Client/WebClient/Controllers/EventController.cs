@@ -166,8 +166,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
 				Distance = Double.NaN,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 
@@ -512,8 +512,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 			foreach(var v in viewModels)
@@ -536,8 +536,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 			foreach (var v in viewModels)
@@ -561,8 +561,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 			foreach (var v in viewModels)
