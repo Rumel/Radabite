@@ -118,8 +118,8 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 Id = eventRequest.Id,
                 Title = eventRequest.Title,
-                StartTime = eventRequest.StartTime,
-                EndTime = eventRequest.EndTime,
+                StartTime = TimeZone.CurrentTimeZone.ToLocalTime(eventRequest.StartTime),
+                EndTime = TimeZone.CurrentTimeZone.ToLocalTime(eventRequest.EndTime),
                 IsPrivate = eventRequest.IsPrivate,
                 Description = eventRequest.Description,
                 LocationName = eventRequest.Location.LocationName,
@@ -410,7 +410,7 @@ namespace Radabite.Client.WebClient.Controllers
                 From = u,
                 FromId = u.Id,
                 Message = message,
-                SendTime = DateTime.Now,
+                SendTime = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now),
                 Likes = 0
             };
             

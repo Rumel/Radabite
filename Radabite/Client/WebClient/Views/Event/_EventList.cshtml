@@ -35,12 +35,12 @@
 						<td>
 							@{
 							var timezone = TimeZone.CurrentTimeZone;
-							var diff = (e.StartTime) - timezone.ToUniversalTime(DateTime.Now);
+							var diff = (e.StartTime) - timezone.ToUniversalTime(DateTime.UtcNow);
 							if(e.EndTime < timezone.ToUniversalTime(DateTime.Now))
 							{
 								<text>Ended</text>
 							}
-							else if (e.StartTime < timezone.ToUniversalTime(DateTime.Now))
+							else if (e.StartTime < timezone.ToUniversalTime(DateTime.UtcNow))
 							{
 								<text>Now</text>
 							}
