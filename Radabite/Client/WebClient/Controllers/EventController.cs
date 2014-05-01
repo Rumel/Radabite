@@ -263,7 +263,7 @@ namespace Radabite.Client.WebClient.Controllers
 
             if (model.ToFacebook)
             {
-                ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, "Hey guys, I just created an event on Radabite at http://localhost:3000/Event?eventId=" + result.Result.Id + ", make sure to check it out!");
+                ServiceManager.Kernel.Get<IFacebookManager>().PublishStatus(user, "Hey guys, I just created an event on Radabite at http://radabite.azurewebsites.net/Event?eventId=" + result.Result.Id + ", make sure to check it out!");
             }
 
             if (result.Success)
