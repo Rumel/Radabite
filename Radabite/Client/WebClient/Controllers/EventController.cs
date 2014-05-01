@@ -118,8 +118,8 @@ namespace Radabite.Client.WebClient.Controllers
             {
                 Id = eventRequest.Id,
                 Title = eventRequest.Title,
-                StartTime = eventRequest.StartTime,
-                EndTime = eventRequest.EndTime,
+                StartTime = TimeZone.CurrentTimeZone.ToLocalTime(eventRequest.StartTime),
+                EndTime = TimeZone.CurrentTimeZone.ToLocalTime(eventRequest.EndTime),
                 IsPrivate = eventRequest.IsPrivate,
                 Description = eventRequest.Description,
                 LocationName = eventRequest.Location.LocationName,
@@ -166,8 +166,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
 				Distance = Double.NaN,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 
@@ -182,8 +182,8 @@ namespace Radabite.Client.WebClient.Controllers
             var newEvent = new Event()
             {
                 Id = model.Id,
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
+                StartTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
+                EndTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.EndTime.Ticks)),
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
@@ -218,8 +218,8 @@ namespace Radabite.Client.WebClient.Controllers
 
             var newEvent = new Event()
             {
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
+                StartTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
+                EndTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.EndTime.Ticks)),
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
@@ -254,7 +254,7 @@ namespace Radabite.Client.WebClient.Controllers
 			{
 				new Vote
 				{
-					Time = new DateTime(model.StartTime.Ticks),
+					Time = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
 					UserName = user.DisplayName
 				}
 			};
@@ -284,8 +284,8 @@ namespace Radabite.Client.WebClient.Controllers
             var newEvent = new Event()
             {
                 Id = model.Id,
-                StartTime = new DateTime(model.StartTime.Ticks),
-                EndTime = new DateTime(model.EndTime.Ticks),
+                StartTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.StartTime.Ticks)),
+                EndTime = TimeZone.CurrentTimeZone.ToUniversalTime(new DateTime(model.EndTime.Ticks)),
                 Location = new Location()
                 {
                     LocationName = model.LocationName,
@@ -410,7 +410,7 @@ namespace Radabite.Client.WebClient.Controllers
                 From = u,
                 FromId = u.Id,
                 Message = message,
-                SendTime = DateTime.Now,
+                SendTime = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now),
                 Likes = 0
             };
             
@@ -442,7 +442,7 @@ namespace Radabite.Client.WebClient.Controllers
                 From = u,
                 FromId = u.Id,
                 Message = message,
-                SendTime = DateTime.Now,
+                SendTime = TimeZone.CurrentTimeZone.ToUniversalTime(DateTime.Now),
                 Likes = 0
             };
 
@@ -467,7 +467,17 @@ namespace Radabite.Client.WebClient.Controllers
 		{
 			var mEvent = ServiceManager.Kernel.Get<IEventManager>().GetById(long.Parse(eventId));
 			var user = ServiceManager.Kernel.Get<IUserManager>().GetByUserName(username);
-			DateTime dt = Convert.ToDateTime(vote);
+
+			DateTime dt;
+			try
+			{
+				dt = TimeZone.CurrentTimeZone.ToUniversalTime(Convert.ToDateTime(vote));
+			}
+			catch(Exception e)
+			{
+				System.Diagnostics.Debug.WriteLine(e);
+				return PartialView("_VotedError");
+			}
 			
 			//If the user has already voted, change the vote
 			if (mEvent.Votes.Select(x => x.UserName).Contains(user.DisplayName))
@@ -502,8 +512,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 			foreach(var v in viewModels)
@@ -526,8 +536,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 			foreach (var v in viewModels)
@@ -551,8 +561,8 @@ namespace Radabite.Client.WebClient.Controllers
 				Title = x.Title,
 				Latitude = x.Location.Latitude,
 				Longitude = x.Location.Longitude,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
+				StartTime = TimeZone.CurrentTimeZone.ToLocalTime(x.StartTime),
+				EndTime = TimeZone.CurrentTimeZone.ToLocalTime(x.EndTime)
 			}).ToList();
 
 			foreach (var v in viewModels)
@@ -560,7 +570,8 @@ namespace Radabite.Client.WebClient.Controllers
 				v.Distance = v.CalcDistance(userLat, userLong);
 			}
 
-			viewModels = viewModels.Where(x => x.EndTime > DateTime.Now).OrderBy(x => (x.StartTime - DateTime.Now)).ToList();
+			viewModels = viewModels.Where(x => x.EndTime > TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time"))
+				.OrderBy(x => (x.StartTime - TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time"))).ToList();
 
 			return PartialView("_EventList", viewModels);
 		}
