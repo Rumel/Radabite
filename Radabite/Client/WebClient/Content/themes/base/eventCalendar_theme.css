@@ -11,7 +11,7 @@
  }
 .eventCalendar-wrap {
 	border:solid 1px #d3d3d3;
-	box-shadow:0 0 15px #999;
+	/*box-shadow:0 0 15px #999;*/
 	border-radius:5px;
 	margin-bottom:20px;
 	background-color:#fff;
@@ -79,12 +79,13 @@
 				border-bottom-width:0;
 				border-radius:0;
 				background-color:#CCCCCC;
-				background-image: linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
+				/*
+                background-image: linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
 				background-image: -o-linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
 				background-image: -moz-linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
 				background-image: -webkit-linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
 				background-image: -ms-linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
-
+                    
 				background-image: -webkit-gradient(
 					linear,
 					left top,
@@ -92,7 +93,7 @@
 					color-stop(0.42, #EEEEEE),
 					color-stop(0.71, #CCCCCC)
 				);
-
+*/
 			}
 			.eventsCalendar-daysList.showDayNames.showAsWeek {
 
@@ -135,41 +136,41 @@
 			}
 				.eventsCalendar-day a:hover {
 					background-color:#E4E4E4;
-					box-shadow:inset 5px 5px 10px #C1C1C1;
-					text-shadow: 2px 2px 2px #C1C1C1;
+					/*box-shadow:inset 5px 5px 10px #C1C1C1; 
+					text-shadow: 2px 2px 2px #C1C1C1; */
 				}
 			.eventsCalendar-daysList li.dayWithEvents a {
 				background:#89B814;
-				box-shadow:inset 5px 5px 10px #698B10;
-				text-shadow: 2px 2px 2px #698B10;
+				/*box-shadow:inset 5px 5px 10px #698B10;
+				text-shadow: 2px 2px 2px #698B10;*/
 				color:#fff;
 			}
 				li.eventsCalendar-day.dayWithEvents a:hover {
 					background-color:#C2D374;
-					box-shadow:inset 5px 5px 10px #89B814;
-					text-shadow: 2px 2px 2px #89B814;
+					/*box-shadow:inset 5px 5px 10px #89B814;
+					text-shadow: 2px 2px 2px #89B814;*/
 				}
 			.eventsCalendar-daysList li.today a {
 				color:#fff;
 				background:#449FB2;
-				box-shadow:inset 5px 5px 10px #216B7A;
-				text-shadow: 2px 2px 2px #216B7A;
+				/*box-shadow:inset 5px 5px 10px #216B7A;
+				text-shadow: 2px 2px 2px #216B7A;*/
 			}
 				li.eventsCalendar-day.today a:hover {
 					background-color:#79BDCC;
-					box-shadow:inset 5px 5px 10px #449FB2;
-					text-shadow: 2px 2px 2px #449FB2;
+					/*box-shadow:inset 5px 5px 10px #449FB2;
+					text-shadow: 2px 2px 2px #449FB2;*/
 				}
 			.eventsCalendar-daysList li.current a {
 				color:#fff;
 				background:#449FB2;
-				box-shadow:inset 5px 5px 10px #216B7A;
-				text-shadow: 2px 2px 2px #216B7A;
+				/*box-shadow:inset 5px 5px 10px #216B7A;
+				text-shadow: 2px 2px 2px #216B7A;*/
 			}
 				li.eventsCalendar-day.current a:hover {
 					background-color:#79BDCC;
-					box-shadow:inset 5px 5px 10px #449FB2;
-					text-shadow: 2px 2px 2px #449FB2;
+					/*box-shadow:inset 5px 5px 10px #449FB2;
+					text-shadow: 2px 2px 2px #449FB2;*/
 				}
 		.eventsCalendar-loading {
 			border-radius:4px;
@@ -179,8 +180,8 @@
 			color:#fff;
 			text-align:center;
 			font-weight:bold;
-			box-shadow:0 0 10px #ccc;
-			text-shadow:0 0 3px #aaa;
+			/*box-shadow:0 0 10px #ccc;
+			text-shadow:0 0 3px #aaa;*/
 			position:absolute;
 			z-index:4;
 			top:25px;
@@ -248,8 +249,8 @@
 			color:#fff;
 			text-align:center;
 			font-weight:bold;
-			box-shadow:0 0 10px #ccc;
-			text-shadow:0 0 3px #aaa;
+			/*box-shadow:0 0 10px #ccc;
+			text-shadow:0 0 3px #aaa;*/
 		}
 
 .bt {
@@ -274,9 +275,9 @@
 	background-image: -webkit-linear-gradient(top, #89B814, #698B10);
 	background-image: -o-linear-gradient(top, #89B814, #698B10);
 	background-image: linear-gradient(top, #89B814, #698B10);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#89B814', endColorstr='#698B10', GradientType=0);
+	/*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#89B814', endColorstr='#698B10', GradientType=0);*/
 
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	/*text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);*/
 
 	border: 1px solid #698B10;
 	border-color: #698B10 #698B10 #465F05;
