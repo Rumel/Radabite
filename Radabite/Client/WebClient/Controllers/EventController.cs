@@ -570,7 +570,8 @@ namespace Radabite.Client.WebClient.Controllers
 				v.Distance = v.CalcDistance(userLat, userLong);
 			}
 
-			viewModels = viewModels.Where(x => x.EndTime > DateTime.Now).OrderBy(x => (x.StartTime - DateTime.Now)).ToList();
+			viewModels = viewModels.Where(x => x.EndTime > TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time"))
+				.OrderBy(x => (x.StartTime - TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time"))).ToList();
 
 			return PartialView("_EventList", viewModels);
 		}
