@@ -30,7 +30,7 @@
 			<a class="radius button" data-reveal-id="DeleteEventModal" href="#" style="background-color:rgb(199, 15, 15)">Delete</a>
 		</div>
 	}
-	else if (Model.Guests.Where(x => x.GuestId == Model.CurrentUser.Id).Count() == 0)
+	else if (Model.Guests.Where(x => x.GuestId == Model.CurrentUser.Id).Count() == 0 && !Model.IsPrivate)
 	{
         <div class="offset-2 small-2 columns">
             <a class="radius button" onclick="InviteCurrentUser(this, '@Url.Action("/JoinEvent")')" href="#invitations" >Join This Event</a>
