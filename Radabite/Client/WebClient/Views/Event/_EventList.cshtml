@@ -34,12 +34,12 @@
 						</td>
 						<td>
 							@{
-							var diff = (e.StartTime) - DateTime.Now;
-							if(e.EndTime < DateTime.Now)
+							var diff = (e.StartTime) - TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time");
+							if(e.EndTime < TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time"))
 							{
 								<text>Ended</text>
 							}
-							else if (e.StartTime < DateTime.Now)
+							else if (e.StartTime < TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Standard Time"))
 							{
 								<text>Now</text>
 							}
