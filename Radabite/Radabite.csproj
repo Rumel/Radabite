@@ -455,6 +455,9 @@
     <Content Include="Client\WebClient\Scripts\foundation\foundation.topbar.js" />
     <Content Include="Client\WebClient\Scripts\jquery-1.8.2.js" />
     <Content Include="Client\WebClient\Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Client\WebClient\Scripts\jquery.eventCalendar.min.js.map">
+      <DependentUpon>jquery.eventCalendar.js</DependentUpon>
+    </Content>
     <None Include="Client\WebClient\Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Client\WebClient\Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Client\WebClient\Scripts\jquery-ui-1.8.24.min.js" />

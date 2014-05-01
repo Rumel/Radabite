@@ -331,14 +331,16 @@
 							eventSeconds = eventTime[2],
 							eventDate = new Date(eventYear, eventMonth, eventDay, eventHour, eventMinute, eventSeconds);
 					} else {
-						var eventDate = new Date(parseInt(event.date)),
+					    
+					    var eventDate = new Date(parseInt(event.date)),
 							eventYear = eventDate.getFullYear(),
 							eventMonth = eventDate.getMonth(),
 							eventDay = eventDate.getDate(),
 							eventMonthToShow = eventMonth + 1,
-							eventHour = eventDate.getHours(),
-							eventMinute = eventDate.getMinutes();
 
+							eventHour = (eventDate.getHours() % 12 == 0) ? 12 : eventDate.getHours() % 12,
+                            eventPeriod = eventDate.getHours() < 12 ? "AM" : "PM";
+					    eventMinute = eventDate.getMinutes();
 					}
 
 					if (parseInt(eventMinute) <= 9) {
@@ -357,13 +359,13 @@
 								if (month === false && eventDate < new Date()) {
 
 								} else {
-									eventStringDate = eventDay + "/" + eventMonthToShow + "/" + eventYear;
+								    eventStringDate = eventMonthToShow + "/" + eventDay + "/" + eventYear;
 									if (event.url) {
 										var eventTitle = '<a href="'+event.url+'" target="' + eventLinkTarget + '" class="eventTitle">' + event.title + '</a>';
 									} else {
 										var eventTitle = '<span class="eventTitle">'+event.title+'</span>';
 									}
-									events.push('<li id="' + key + '" class="'+event.type+'"><time datetime="'+eventDate+'"><em>' + eventStringDate + '</em><small>'+eventHour+":"+eventMinute+'</small></time>'+eventTitle+'<p class="eventDesc ' + eventDescClass + '">' + event.description + '</p></li>');
+									events.push('<li id="' + key + '" class="'+event.type+'"><time datetime="'+eventDate+'"><em>' + eventStringDate + '</em><small>'+eventHour+":"+eventMinute+" "+eventPeriod+'</small></time>'+eventTitle+'<p class="eventDesc ' + eventDescClass + '">' + event.description + '</p></li>');
 									i++;
 								}
 						}

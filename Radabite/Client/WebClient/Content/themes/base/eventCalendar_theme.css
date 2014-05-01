@@ -10,7 +10,7 @@
 	background-color:#fff;
  }
 .eventCalendar-wrap {
-	border:solid 1px #d3d3d3;
+	border:solid 1px #f2f2f2;
 	/*box-shadow:0 0 15px #999;*/
 	border-radius:5px;
 	margin-bottom:20px;
@@ -53,9 +53,9 @@
 	}
 		.eventsCalendar-currentTitle {
 			line-height:25px;
-			background-color:#138DA5;
-			outline:1px solid #138DA5;
-			border:1px solid #E3E3E3;
+			background-color:#008CBA;
+			outline:1px solid #008CBA;
+			border:1px solid #f2f2f2;
 			border-width:1px 0;
 		}
 			.eventsCalendar-currentTitle .monthTitle {
@@ -78,7 +78,7 @@
 								border:solid 1px #BCBCBC;
 				border-bottom-width:0;
 				border-radius:0;
-				background-color:#CCCCCC;
+				background-color:#f2f2f2;
 				/*
                 background-image: linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
 				background-image: -o-linear-gradient(top, #EEEEEE 42%, #CCCCCC 71%);
@@ -111,7 +111,7 @@
 				height:auto;
 			}
 				.eventsCalendar-daysList.showAsWeek li.empty {
-					background-color: #ccc;
+					background-color: #f2f2f2;
 					min-height:29px;
 				}
 			.eventsCalendar-day a {
@@ -152,23 +152,23 @@
 				}
 			.eventsCalendar-daysList li.today a {
 				color:#fff;
-				background:#449FB2;
+				background:#008CBA;
 				/*box-shadow:inset 5px 5px 10px #216B7A;
 				text-shadow: 2px 2px 2px #216B7A;*/
 			}
 				li.eventsCalendar-day.today a:hover {
-					background-color:#79BDCC;
+					background-color:#0079A1;
 					/*box-shadow:inset 5px 5px 10px #449FB2;
 					text-shadow: 2px 2px 2px #449FB2;*/
 				}
 			.eventsCalendar-daysList li.current a {
 				color:#fff;
-				background:#449FB2;
+				background:#008CBA;
 				/*box-shadow:inset 5px 5px 10px #216B7A;
 				text-shadow: 2px 2px 2px #216B7A;*/
 			}
 				li.eventsCalendar-day.current a:hover {
-					background-color:#79BDCC;
+					background-color:#0079A1;
 					/*box-shadow:inset 5px 5px 10px #449FB2;
 					text-shadow: 2px 2px 2px #449FB2;*/
 				}
@@ -227,7 +227,7 @@
 		.eventsCalendar-list li .eventTitle {
 			display:block;
 			clear:both;
-			color:#0E8EAB;
+			color:#008CBA;
 			font-weight:bold;
 			text-decoration:none;
 		}
@@ -300,12 +300,12 @@
 
 
 /*= ONLY FOR DEMO PAGE */
-body {
+/*body {
 	width:978px;
 	box-shadow:0 0 10px #777;
 	padding: 20px 40px;
 	margin:0 auto;
-}
+}*/
 a { color: #0E8EAB}
 /*
 .eventCalendar-wrap {
