@@ -157,7 +157,7 @@ namespace Radabite.Client.WebClient.Controllers
 
             userModel.Friends = ServiceManager.Kernel.Get<IUserManager>().GetAll().ToList();
 
-            var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().Where(x => x.IsPrivate == false).ToList();
+            var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().Where(x => x.IsPrivate == false && x.IsActive).ToList();
 
 			userModel.DiscoverEvents = events.Select(x => new EventModel()
 			{
@@ -504,7 +504,7 @@ namespace Radabite.Client.WebClient.Controllers
 		[HttpPost]
 		public PartialViewResult AllEvents(double userLat, double userLong)
 		{
-			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().Where(x => x.IsActive);
 
 			List<EventModel> viewModels = events.Select(x => new EventModel() 
 			{ 
@@ -528,7 +528,7 @@ namespace Radabite.Client.WebClient.Controllers
 		[HttpPost]
 		public PartialViewResult SortEventsLocation(double userLat, double userLong)
 		{
-			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().Where(x => x.IsActive);
 
 			List<EventModel> viewModels = events.Select(x => new EventModel()
 			{
@@ -553,7 +553,7 @@ namespace Radabite.Client.WebClient.Controllers
 		[HttpPost]
 		public PartialViewResult SortEventsTime(double userLat, double userLong)
 		{
-			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll();
+			var events = ServiceManager.Kernel.Get<IEventManager>().GetAll().Where(x => x.IsActive);
 
 			List<EventModel> viewModels = events.Select(x => new EventModel()
 			{
