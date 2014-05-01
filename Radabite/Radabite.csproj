@@ -353,6 +353,9 @@
     <Content Include="Client\WebClient\Content\Images\Twitter_logo_blue_alpha.png" />
     <Content Include="Client\WebClient\Content\Images\Twitter_logo_blue_small.png" />
     <Content Include="Client\WebClient\Content\Radabite.css" />
+    <Content Include="Client\WebClient\Content\themes\base\eventCalendar.css" />
+    <Content Include="Client\WebClient\Content\themes\base\eventCalendar_theme.css" />
+    <Content Include="Client\WebClient\Content\themes\base\eventCalendar_theme_responsive.css" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Client\WebClient\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -408,9 +411,13 @@
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Client\WebClient\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Client\WebClient\Content\favicon.ico" />
+    <Content Include="Client\WebClient\Content\themes\base\paragridma.css" />
     <Content Include="Client\WebClient\Content\themes\base\zocial.css" />
     <Content Include="Client\WebClient\Scripts\google-analytics-eventindex.js" />
     <Content Include="Client\WebClient\Scripts\google-analytics-tag.js" />
+    <Content Include="Client\WebClient\Scripts\jquery.eventCalendar.js" />
+    <Content Include="Client\WebClient\Scripts\jquery.eventCalendar.min.js" />
+    <Content Include="Client\WebClient\Scripts\jquery.timeago.js" />
     <Content Include="Global.asax" />
     <Content Include="Client\WebClient\Scripts\foundation\Foundation_readme.md" />
     <None Include="AppSettings.config">
@@ -448,6 +455,9 @@
     <Content Include="Client\WebClient\Scripts\foundation\foundation.topbar.js" />
     <Content Include="Client\WebClient\Scripts\jquery-1.8.2.js" />
     <Content Include="Client\WebClient\Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Client\WebClient\Scripts\jquery.eventCalendar.min.js.map">
+      <DependentUpon>jquery.eventCalendar.js</DependentUpon>
+    </Content>
     <None Include="Client\WebClient\Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Client\WebClient\Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Client\WebClient\Scripts\jquery-ui-1.8.24.min.js" />

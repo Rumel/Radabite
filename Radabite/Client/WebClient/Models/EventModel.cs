@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using Ninject;
+using System.Text;
 
 namespace Radabite.Models
 {
@@ -114,6 +115,7 @@ namespace Radabite.Models
 				return DateTime.MinValue;
 			}
 		}
+
 	}
 
 }

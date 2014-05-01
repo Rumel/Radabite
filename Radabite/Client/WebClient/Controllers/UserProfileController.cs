@@ -36,7 +36,8 @@ namespace Radabite.Client.WebClient.Controllers
 					Title = x.Title,
 					Latitude = x.Location.Latitude,
 					Longitude = x.Location.Longitude,
-					Distance = Double.NaN
+					Distance = Double.NaN,
+                    StartTime = x.StartTime
 				}).ToList();
                 userModel.Friends = friends;
                 return View(userModel);
